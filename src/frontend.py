@@ -53,8 +53,12 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         for ponto in models.Ponto.all().filter("nearhash =", hash):
             chave = str(ponto.linha.key())
             if not chave in linhas:
-                linhas[chave] = ponto.linha
-        self.response.out.write(simplejson.dumps(linhas))
+                linhas[chave] = {
+                                 "nome" : ponto.linha.nome,
+                                 "url" : ponto.linha.url}
+        self.response.out.write(simplejson.dumps(linhas.values()))
+        #for chave in linhas:
+        #    self.response.out.write(simplejson.dumps(linhas[chave].nome))
         
 
 #class AtualizaNovasPage(webapp.RequestHandler):
