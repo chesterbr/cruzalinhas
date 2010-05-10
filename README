@@ -1,0 +1,5 @@
+Este projeto tem como finalidade principal permitir que uma pessoa localize
+linhas de onibus de Sao Paulo em um mapa apenas clicando nele.
+
+Um sub-produto e' extrair dados de linhas da SPTrans - uma informacao publica
+que, por algum motivo, nao e' disponibilizada como deveria.
