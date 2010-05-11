@@ -1,4 +1,4 @@
-from google.appengine.ext import webapp
+from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 import scraper
 import models
@@ -6,6 +6,7 @@ import geohash
 from django.utils import simplejson
 
 from geohash import Geohash
+from  google.appengine.api import memcache
 
 
 class MainPage(webapp.RequestHandler):    
@@ -17,22 +18,19 @@ class ListaPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
         for linha in models.Linha.all():
-            self.response.out.write('<a href="/linha?linha=%s">%s</a><br/>' % (linha.nome, linha.nome))
+            self.response.out.write('<a href="/linha.json?linha=%s">%s</a><br/>' % (linha.nome, linha.nome))
 
 class LinhaPage(webapp.RequestHandler):        
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        linha = models.Linha.all().filter("nome =", self.request.get("linha")).fetch(1)[0]
-        a = None
-        for ponto in linha.pontos:
-            g = geohash.Geohash((ponto.lng, ponto.lat))
-            if a:
-                b = a + g
-            else:
-                b = None
-            self.response.out.write(str(ponto.lat) + "," + str(ponto.lng) + "," + 
-                                    str(g) + "," + str(b) + "," + str(ponto.nearhash) + "\n")
-            a = g
+        self.response.headers['Content-Type'] = 'application/json'
+        key = self.request.get("key")
+        client = memcache.Client()
+        linha_json = client.get(key)
+        if linha_json is None:
+            pontos = models.Linha.get(db.Key(key)).pontos
+            linha_json = simplejson.dumps([(ponto.lat,ponto.lng) for ponto in pontos])
+            client.add(key, linha_json)
+        self.response.out.write(linha_json) 
                         
 class RebuildPage(webapp.RequestHandler):
     def get(self):
@@ -45,7 +43,7 @@ class RebuildPage(webapp.RequestHandler):
         
 class LinhasQuePassamPage(webapp.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.headers['Content-Type'] = 'application/json'
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
         hash = str(geohash.Geohash((lng, lat)))[0:6]
@@ -54,12 +52,12 @@ class LinhasQuePassamPage(webapp.RequestHandler):
             chave = str(ponto.linha.key())
             if not chave in linhas:
                 linhas[chave] = {
+                                 "key" : str(ponto.linha.key()),
                                  "nome" : ponto.linha.nome,
                                  "url" : ponto.linha.url}
         self.response.out.write(simplejson.dumps(linhas.values()))
         #for chave in linhas:
         #    self.response.out.write(simplejson.dumps(linhas[chave].nome))
-        
 
 #class AtualizaNovasPage(webapp.RequestHandler):
 #    def get(self):
@@ -71,7 +69,7 @@ class LinhasQuePassamPage(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/lista', ListaPage),
-                                      ('/linha', LinhaPage),
+                                      ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage),
 #                                      ('/atualiza-novas', AtualizaNovasPage),
                                       ('/rebuild', RebuildPage)], debug=True)

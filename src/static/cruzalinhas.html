@@ -1,47 +1,18 @@
 <html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAeAPkt6ytSLZmZr8YPG6-HxQBEff_MiL7dIowlqmrSFTHeDDP1BQH2xk9mR11wqkfG2KFAsnn1dK_YQ"></script>
-<script type="text/javascript">
-  google.load("maps", "2.x",{"other_params":"sensor=true"});
-
-  var map;
-
-  // Cria o mapa e associa o click à criação de pontos de trajeto
-  function inicializa() {
-    map = new google.maps.Map2(document.getElementById("map_canvas"));
-    map.setCenter(new google.maps.LatLng(-23.548153,-46.633101), 13);
-	map.addControl(new GLargeMapControl());
-	GEvent.addListener(map, "click", function(overlay, latlng) {
-      if (latlng) {
-        marker = new GMarker(latlng, {draggable: true});
-        GEvent.addListener(marker, "dragend", function(latlng) {
-          getLinhas(this,latlng);
-        });
-        map.addOverlay(marker);
-        getLinhas(marker,latlng);
-      } else if (overlay instanceof GMarker) {
-        alert(overlay);
-      }
-
-	});
-  }
-  
-  // Recupera as linhas que passam num latlng e associa ao ponto de trajeto
-  function getLinhas(marker, latlng) {
-    $.get("/linhasquepassam.json", { lat: latlng.lat(), lng:latlng.lng() },
-      function(data){
-        alert("Data Loaded: " + data);
-     });
-   }
-  
-  google.setOnLoadCallback(inicializa);
-</script>
-</head>
-
-<body onunload="GUnload()">
-<div id="map_canvas" style="width: 1000px; height: 600px"></div>
-
-</body>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <script type="text/javascript" src="jquery-1.4.2.min.js">
+        </script>
+        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAeAPkt6ytSLZmZr8YPG6-HxQBEff_MiL7dIowlqmrSFTHeDDP1BQH2xk9mR11wqkfG2KFAsnn1dK_YQ">
+        </script>
+        <script type="text/javascript" src="marcadores.js">
+        </script>
+    </head>
+    <body onunload="GUnload()">
+        <div id="map_canvas" style="display:inline-block;width: 1000px; height: 600px">
+        </div>
+        <div id="div_lista" style="display:inline-block;vertical-align:top;width:200px;">
+            xx
+        </div>
+    </body>
 </html>
