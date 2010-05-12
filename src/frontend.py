@@ -31,16 +31,7 @@ class LinhaPage(webapp.RequestHandler):
             linha_json = simplejson.dumps([(ponto.lat,ponto.lng) for ponto in pontos])
             client.add(key, linha_json)
         self.response.out.write(linha_json) 
-                        
-class RebuildPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Populando...')
-        max = self.request.get("max")
-        max = int(max) if max else None
-        models.popula(scraper.getLinhas(), ignoraExistentes=True, max=max)
-        self.response.out.write('ok')
-        
+
 class LinhasQuePassamPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
@@ -56,15 +47,18 @@ class LinhasQuePassamPage(webapp.RequestHandler):
                                  "nome" : ponto.linha.nome,
                                  "url" : ponto.linha.url}
         self.response.out.write(simplejson.dumps(linhas.values()))
-        #for chave in linhas:
-        #    self.response.out.write(simplejson.dumps(linhas[chave].nome))
 
-#class AtualizaNovasPage(webapp.RequestHandler):
-#    def get(self):
-#        self.response.headers['Content-Type'] = 'text/plain'
-#        self.response.out.write('Atualizando...')
-#        models.popula(scraper.getLinhas())
-#        self.response.out.write('ok')
+# Crawler stuff
+                        
+class RebuildPage(webapp.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.out.write('Populando...')
+        max = self.request.get("max")
+        max = int(max) if max else None
+        models.popula(scraper.getLinhas(), ignoraExistentes=True, max=max)
+        self.response.out.write('ok')
+        
             
 
 application = webapp.WSGIApplication([('/', MainPage),

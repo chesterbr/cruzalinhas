@@ -25,7 +25,8 @@ var marcadores = {
         // Guarda ele na lista		
         this._marcadores[id] = {
             "marker": marker,
-            "linhas": null
+            "linhas": null,
+			"polylines": []
         }
         // Recupera as linhas que passam por ele (em background)
         m = this;
@@ -36,17 +37,18 @@ var marcadores = {
             m._marcadores[id].linhas = linhas;
             m.atualiza();
             for (i in linhas) {
-				var linha = linhas[i];
                 $.getJSON("/linha.json", {
-                    key: linha["key"]
+                    key: linhas[i].key
                 }, function(pontos){
-                    gpontos = []
-                    for (j in pontos) {
-                        gpontos.push(new GLatLng(pontos[j][0], pontos[j][1]));
-                    }
-                    glinha = new GPolyline(gpontos, "#8A2BE2", 5, 0.5);
-                    map.addOverlay(glinha);
-                    linha["polyline"] = glinha;
+					if (m._marcadores[id]) {
+						gpontos = []
+						for (j in pontos) {
+							gpontos.push(new GLatLng(pontos[j][0], pontos[j][1]));
+						}
+						glinha = new GPolyline(gpontos, "#8A2BE2", 5, 0.5);
+						map.addOverlay(glinha);
+						m._marcadores[id].polylines.push(glinha);
+					}
                 });
             }
         });
@@ -72,11 +74,10 @@ var marcadores = {
     },
     
     remove: function(id){
-        marcador = this._marcadores[id];
+       marcador = this._marcadores[id];
         if (marcador.linhas) {
-            for (j in marcador.linhas) {
-                linha = marcador.linhas[j];
-                map.removeOverlay(linha["polyline"]);
+            for (j in marcador.polylines) {
+				map.removeOverlay(marcador.polylines[j]);
             }
         }
         map.removeOverlay(marcador["marker"]);
