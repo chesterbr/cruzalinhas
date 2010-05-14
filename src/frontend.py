@@ -1,13 +1,12 @@
+from django.utils import simplejson
+from geohash import Geohash
+from google.appengine.api import memcache
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
+from models import Linha, Ponto
 import scraper
-import models
 import geohash
-from django.utils import simplejson
-
-from geohash import Geohash
-from  google.appengine.api import memcache
-
+import models
 
 class MainPage(webapp.RequestHandler):    
     def get(self):
@@ -17,8 +16,8 @@ class MainPage(webapp.RequestHandler):
 class ListaPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-        for linha in models.Linha.all():
-            self.response.out.write('<a href="/linha.json?linha=%s">%s</a><br/>' % (linha.nome, linha.nome))
+        for linha in Linha.all():
+            self.response.out.write('<a href="/linha.json?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
 
 class LinhaPage(webapp.RequestHandler):        
     def get(self):
@@ -27,8 +26,8 @@ class LinhaPage(webapp.RequestHandler):
         client = memcache.Client()
         linha_json = client.get(key)
         if linha_json is None:
-            pontos = models.Linha.get(db.Key(key)).pontos
-            linha_json = simplejson.dumps([(ponto.lat,ponto.lng) for ponto in pontos])
+            pontos = Linha.get(db.Key(key)).pontos
+            linha_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
             client.add(key, linha_json)
         self.response.out.write(linha_json) 
 
@@ -39,7 +38,7 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         lng = float(self.request.get('lng'))
         hash = str(geohash.Geohash((lng, lat)))[0:6]
         linhas = {}
-        for ponto in models.Ponto.all().filter("nearhash =", hash):
+        for ponto in Ponto.all().filter("nearhash =", hash):
             chave = str(ponto.linha.key())
             if not chave in linhas:
                 linhas[chave] = {
@@ -49,6 +48,17 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         self.response.out.write(simplejson.dumps(linhas.values()))
 
 # Crawler stuff
+
+class ZapPage(webapp.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.out.write('Apagando pontos...')
+        while Ponto.all().fetch(1):
+            db.delete(Ponto.all().fetch(100))
+        self.response.out.write('Apagando linhas...')
+        while Linha.all().fetch(1):
+            db.delete(Linha.all().fetch(100))
+        self.response.out.write('Ok')
                         
 class RebuildPage(webapp.RequestHandler):
     def get(self):
@@ -59,13 +69,12 @@ class RebuildPage(webapp.RequestHandler):
         models.popula(scraper.getLinhas(), ignoraExistentes=True, max=max)
         self.response.out.write('ok')
         
-            
-
+        
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/lista', ListaPage),
                                       ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage),
-#                                      ('/atualiza-novas', AtualizaNovasPage),
+                                      ('/zap', ZapPage),
                                       ('/rebuild', RebuildPage)], debug=True)
 
 

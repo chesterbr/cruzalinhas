@@ -7,12 +7,16 @@ handlers:
 - url: /static
   static_dir: static
   
-- url: /rebuild
+- url: /zap
   script: frontend.py
   login: admin
 
+#- url: /remote_api
+#  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+#  login: admin
+
 - url: /load
-  script: bulkloader.py
+  script: pontoloader.py
   login: admin
 
 - url: /.*

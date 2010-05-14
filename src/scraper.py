@@ -6,6 +6,8 @@ import re
 import time
 import urllib2
 from BeautifulSoup import BeautifulSoup
+import csv
+import random
 
 BASE_HREF = r"http://200.99.150.170/PlanOperWeb/"
 PAG_LINHAS = "linhaselecionada.asp"
@@ -35,6 +37,21 @@ def getLinhas():
                     "url" : url }
                 yield linha
 
+def geraCSV(linhas, stream):
+    writer = csv.writer(stream)    
+    for linha in linhas:
+        ordem = 0
+        _log("Sleeping...")
+        time.sleep(5 + random.uniform(1, 5))
+        for ponto in linha["pontos"]:
+            ordem += 1
+            writer.writerow([linha["nome"].encode("utf-8"),
+                             linha["url"],
+                             ordem,
+                             ponto[0],
+                             ponto[1]])
+
+
 def _getPontos(url):
     """Retorna o generator de uma coleção de pontos (latitude e longitude) para uma
     linha de ônibus, identificada pela URL"""
@@ -61,5 +78,10 @@ def _log(string):
     print(string)
     logging.debug(string)
 
-#if __name__ == "__main__":
-#    atualiza()
+            
+
+if __name__ == "__main__":
+    print "Gerando linhas.csv..."
+    arquivoCsv = open("linhas.csv", "wb")
+    geraCSV(getLinhas(), arquivoCsv)
+    arquivoCsv.close()
