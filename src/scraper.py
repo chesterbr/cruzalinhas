@@ -8,6 +8,8 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 import csv
 import random
+import sys
+from sre_parse import isdigit
 
 BASE_HREF = r"http://200.99.150.170/PlanOperWeb/"
 PAG_LINHAS = "linhaselecionada.asp"
@@ -43,6 +45,7 @@ def geraCSV(linhas, stream):
         ordem = 0
         _log("Sleeping...")
         time.sleep(5 + random.uniform(1, 5))
+        _log("Iniciando linha: %s" % linha["nome"])
         for ponto in linha["pontos"]:
             ordem += 1
             writer.writerow([linha["nome"].encode("utf-8"),
@@ -82,6 +85,14 @@ def _log(string):
 
 if __name__ == "__main__":
     print "Gerando linhas.csv..."
-    arquivoCsv = open("linhas.csv", "wb")
-    geraCSV(getLinhas(), arquivoCsv)
+    linhas = getLinhas()
+    nargs = len(sys.argv)    
+    if nargs > 2 or (nargs==2 and not isdigit(sys.argv[1])):
+        print "Uso: scraper.py [no. de linhas a pular no inicio]"
+        sys.exit()
+    if nargs == 2:
+        for i in range(0, int(sys.argv[1])):
+            _log("Pulando: %s" % linhas.next()["nome"])
+    arquivoCsv = open("linhas.csv", "ab")
+    geraCSV(linhas, arquivoCsv)
     arquivoCsv.close()
