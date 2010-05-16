@@ -18,13 +18,13 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 #
-"""Carrega um ou mais pontos a partir de um CSV no appengine. "linha" é o nome da linha
+"""Carrega uma ou mais linhas a partir de um csv no appengine
 
 Exemplo de chamada na linha de comando (trocar o valor de "cookie" por um pego
-após um login, e a URL para a do servidor conforme o caso):
+após um login, e a URL para a do servidor se for o caso):
 
-python2.5 /usr/local/bin/bulkload_client.py --filename=pontos.csv 
-  --url=http://localhost:8080/load-ponto --kind=Ponto 
+python2.5 /usr/local/bin/bulkload_client.py --filename=linhas.csv 
+  --url=http://localhost:8080/load-linha --kind=Linha 
   --cookie "dev_appserver_login=\"test@example.com:True:185804764220139124118\""
 
 """
@@ -33,27 +33,21 @@ from google.appengine.api import datastore_types
 from google.appengine.ext import search
 from models import Ponto, Linha
 import geohash
+from google.appengine.api.datastore_types import Text
 
-class PontoLoader(bulkload.Loader):
+class LinhaLoader(bulkload.Loader):
     def __init__(self):
-        bulkload.Loader.__init__(self, 'Ponto',
+        bulkload.Loader.__init__(self, 'Linha',
                          [('nome', lambda x: x.decode('utf-8')),
-                          ('ordem', int),
-                          ('lat', float),
-                          ('lng', float)])
+                          ('url', str)])
 
     def HandleEntity(self, entity):
-        linha = Linha.all().filter("nome =", entity["nome"]).fetch(1)[0]
-        ponto = Ponto(ordem=entity["ordem"], linha=linha,
-                      lat=entity["lat"], lng=entity["lng"])
-        pontosAnt = Ponto.all().filter("linha =", linha).filter(
-            "ordem =", ponto.ordem - 1).fetch(1)
-        if pontosAnt:
-            pontoAnt = pontosAnt[0]
-            ponto.setNearhash(pontoAnt)
-        ponto.put()
-        return None
+        for linha in Linha.all().filter("nome =", entity["nome"]).fetch(999):
+            for ponto in linha.pontos:
+                ponto.delete()
+            linha.delete()
+        return entity
 
 if __name__ == '__main__':
-    bulkload.main(PontoLoader())
+    bulkload.main(LinhaLoader())
 

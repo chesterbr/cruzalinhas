@@ -1,5 +1,29 @@
-"""Modulo que captura os dados do site da SPTrans"""
 # -*- coding: utf-8 -*-
+#
+# Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+# software and associated documentation files (the "Software"), to deal in the Software 
+# without restriction, including without limitation the rights to use, copy, modify, merge, 
+# publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
+# to whom the Software is furnished to do so, subject to the following conditions:
+#     
+# The above copyright notice and this permission notice shall be included in all copies or 
+# substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+# FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+# DEALINGS IN THE SOFTWARE.
+#
+"""Modulo que captura os dados do site da SPTrans
+
+Pode ser chamado de forma indepentente (o parâmetro opcional indica a quantidade de
+linhas a 'pular', útil para retomar capturas interrompidas), ou a partir de outros
+códigos (o método getLinhas() é a chave para isso) - neste caso, tome o cuidado de
+não sobrecarregar o site)"""
 import logging
 from contextlib import closing
 import re
@@ -42,17 +66,12 @@ def getLinhas():
 def geraCSV(linhas, stream):
     writer = csv.writer(stream)    
     for linha in linhas:
-        ordem = 0
         _log("Sleeping...")
-        time.sleep(5 + random.uniform(1, 5))
+        time.sleep(20 + random.uniform(1, 10))
         _log("Iniciando linha: %s" % linha["nome"])
-        for ponto in linha["pontos"]:
-            ordem += 1
-            writer.writerow([linha["nome"].encode("utf-8"),
-                             linha["url"],
-                             ordem,
-                             ponto[0],
-                             ponto[1]])
+        writer.writerow([linha["nome"].encode("utf-8"),
+                         linha["url"],
+                         [p for p in linha["pontos"]]])
 
 
 def _getPontos(url):

@@ -1,5 +1,64 @@
-Este projeto tem como finalidade principal permitir que uma pessoa localize
-linhas de onibus de Sao Paulo em um mapa apenas clicando nele.
+CRUZALINHAS - README
+--------------------
 
-Um sub-produto e' extrair dados de linhas da SPTrans - uma informacao publica
-que, por algum motivo, nao e' disponibilizada como deveria.
+= Introdução
+
+O cruzalinhas é ume experimento que tenta complementar a experiência de localização
+de rotas de transporte público em São Paulo.
+
+Ele estará disponível em breve em http://cruzalinhas.appspot.com, mas o código-fonte
+já está disponível em http://github.com/chesterbr/cruzalinhas.
+
+= Dados dos Trajetos
+
+Os itinerários das linhas de transporte público administradas pela SPTrans são
+referentes a um serviço PÚBLICO, pago com o SEU e o MEU dinheiro e deveriam estar
+disponíveis de uma forma mais acessível que o site deles. Aparentemente eles existem
+em algum lugar, pois bons serviços como o Google Maps têm essa informação, mas o
+cidadão comum não tem onde baixar.
+
+Esse tipo de falta de transparência no serviço público é inadmissível[1], fato que
+me levou a desenvolver o scraper.py, módulo independente deste sistema que captura
+os dados das linhas do site da SPTrans e salva no formato CSV. Você também pode
+usar a função getLinhas() para exportar os dados para outro formato, apenas tome
+cuidado para não sobrecarregar o site (uma espera de 20-30s entre requests é bom
+senso)
+
+[1] http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351
+
+= Licença
+
+O código-fonte está disponível sob a licença MIT (vide abaixo). Essencialmente,
+o uso é livre, devendo apenas a nota de copyright abaixo reproduzida em cópias/
+trabalhos derivados.
+
+Ele inclui cópias inalteradas das seguintes bibliotecas, em conformidade com suas
+licenças:
+
+BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson.
+geohash - Escrito por Schuyler Erle, em domínio público.
+
+Ele foi desenvolvido em Python tendo como f
+
+= Copyright
+
+ cruzalinhas
+ Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+ software and associated documentation files (the "Software"), to deal in the Software 
+ without restriction, including without limitation the rights to use, copy, modify, merge, 
+ publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
+ to whom the Software is furnished to do so, subject to the following conditions:
+     
+ The above copyright notice and this permission notice shall be included in all copies or 
+ substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ DEALINGS IN THE SOFTWARE.
+=======
+
