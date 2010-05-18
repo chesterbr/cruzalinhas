@@ -23,18 +23,19 @@ import subprocess
 import os
 import csv
 
-#### CONFIG
-# Apontar para development ou production
-#SERVIDOR = "localhost:8080"
-SERVIDOR = "cruzalinhas.appspot.com"
-
-# Colocar um cookie de autenticação válido
-#COOKIE = 'dev_appserver_login="test@example.com:True:185804764220139124118"'
-#### FIM CONFIG
-
 linhas = open("linhas.csv", "r")
+if len(sys.argv)!=4:
+    print "Uso: slow_gae_uploader.py <num_pular> <host> <cookie-param>"
+    print "  <num_pular> quantidade de linhas a pular do linhas.csv (0 para ler ele todo)"
+    print "  <host> localhost:8080 ou cruzalinhas.appspot.com"
+    print "  <cookie-param> chame http://<host>/load-linha acima que ele te dá o valor"
+    print "                 (é preciso logar como admin)"
+    print "Ex.: slow_gae_uploader.py 100 localhost:8080 --cookie='ACSID=blablebli'"
+    sys.exit()
+num_linhas_pular = int(sys.argv[1])
+host = sys.argv[2]
+cookie_param = sys.argv[3]
 print "Começou"
-num_linhas_pular = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 n = 0
 for linha in csv.reader(linhas):
     nome = linha[0]
@@ -50,10 +51,10 @@ for linha in csv.reader(linhas):
     subprocess.check_call(['python2.5',
                            '/usr/local/bin/bulkload_client.py',
                            '--filename=temp.csv',
-                           '--url=http://%s/load-linha' % SERVIDOR,
+                           '--url=http://%s/load-linha' % host,
                            '--kind=Linha',
                            '--batch_size=1',
-                           '--cookie', COOKIE])
+                           cookie_param])
     temp = open("temp.csv", "w")
     ordem = 1
     for ponto in eval(linha[2]):
@@ -63,10 +64,10 @@ for linha in csv.reader(linhas):
     subprocess.check_call(['python2.5',
                            '/usr/local/bin/bulkload_client.py',
                            '--filename=temp.csv',
-                           '--url=http://%s/load-ponto' % SERVIDOR,
+                           '--url=http://%s/load-ponto' % host,
                            '--kind=Ponto',
                            '--batch_size=50',
-                           '--cookie', COOKIE])
+                           cookie_param])
      
 linhas.close()
 os.remove("temp.csv")
