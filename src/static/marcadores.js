@@ -104,6 +104,16 @@ function inicializa(){
     });
 }
 
+$(document).ready(function() {
+	$('#form_busca').submit(function() {
+		var geocoder = new GClientGeocoder();
+		geocoder.getLatLng($('#text_busca').val(), function(latlng) {
+			map.panTo(latlng);
+			marcadores.add(latlng);
+		})
+		return false;
+	});
+});
 
 
 google.setOnLoadCallback(inicializa);
