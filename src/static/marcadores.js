@@ -1,7 +1,3 @@
-google.load("maps", "2.x", {
-    "other_params": "sensor=true"
-});
-
 var map;
 var marcadores = {
 
@@ -14,19 +10,20 @@ var marcadores = {
     add: function(latlng){
         // Cria um novo marcador
         var id = new Date().getTime();
-        marker = new GMarker(latlng, {
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
             draggable: true
         });
-        GEvent.addListener(marker, "dragend", function(latlng){
+        google.maps.event.addListener(marker, "dragend", function(event){
             m.remove(id);
-            m.add(latlng);
+            m.add(event.latLng);
         });
-        map.addOverlay(marker);
         // Guarda ele na lista		
         this._marcadores[id] = {
             "marker": marker,
             "linhas": null,
-			"polylines": []
+            "polylines": []
         }
         // Recupera as linhas que passam por ele (em background)
         m = this;
@@ -40,15 +37,20 @@ var marcadores = {
                 $.getJSON("/linha.json", {
                     key: linhas[i].key
                 }, function(pontos){
-					if (m._marcadores[id]) {
-						gpontos = []
-						for (j in pontos) {
-							gpontos.push(new GLatLng(pontos[j][0], pontos[j][1]));
-						}
-						glinha = new GPolyline(gpontos, "#8A2BE2", 5, 0.5);
-						map.addOverlay(glinha);
-						m._marcadores[id].polylines.push(glinha);
-					}
+                    if (m._marcadores[id]) {
+                        gpontos = []
+                        for (j in pontos) {
+                            gpontos.push(new google.maps.LatLng(pontos[j][0], pontos[j][1]));
+                        }
+                        glinha = new google.maps.Polyline({
+                            map: map,
+                            path: gpontos,
+                            strokeColor: "#8A2BE2",
+                            strokeWeight: 5,
+                            strokeOpacity: 0.5
+                        });
+                        m._marcadores[id].polylines.push(glinha);
+                    }
                 });
             }
         });
@@ -74,46 +76,41 @@ var marcadores = {
     },
     
     remove: function(id){
-       marcador = this._marcadores[id];
+        marcador = this._marcadores[id];
         if (marcador.linhas) {
             for (j in marcador.polylines) {
-				map.removeOverlay(marcador.polylines[j]);
+                marcador.polylines[j].setMap(null);
             }
         }
-        map.removeOverlay(marcador["marker"]);
-		delete this._marcadores[id];
-		this.atualiza();      
+        marcador["marker"].setMap(null);
+        delete this._marcadores[id];
+        this.atualiza();
     }
     
 }
 
 // Cria o mapa e associa o click à criação de pontos de trajeto
 function inicializa(){
-    map = new google.maps.Map2(document.getElementById("map_canvas"));
-    map.setCenter(new google.maps.LatLng(-23.548153, -46.633101), 13);
-    map.addControl(new GLargeMapControl());
-    GEvent.addListener(map, "click", function(overlay, latlng){
-        if (latlng) {
-            marcadores.add(latlng);
-        }
-        else 
-            if (overlay instanceof GMarker) {
-                alert(overlay);
-            }
-        
+    centro_sp = new google.maps.LatLng(-23.548153, -46.633101);
+    map = new google.maps.Map(document.getElementById("map_canvas"), {
+        zoom: 13,
+        center: centro_sp,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    google.maps.event.addListener(map, "click", function(event){
+        marcadores.add(event.latLng);
     });
 }
 
-$(document).ready(function() {
-	$('#form_busca').submit(function() {
-		var geocoder = new GClientGeocoder();
-		geocoder.getLatLng($('#text_busca').val(), function(latlng) {
-			map.panTo(latlng);
-			marcadores.add(latlng);
-		})
-		return false;
-	});
+$(document).ready(function(){
+    inicializa();
+    $('#form_busca').submit(function(){
+        var geocoder = new GClientGeocoder();
+        geocoder.getLatLng($('#text_busca').val(), function(latlng){
+            map.panTo(latlng);
+            marcadores.add(latlng);
+        })
+        return false;
+    });
 });
 
-
-google.setOnLoadCallback(inicializa);

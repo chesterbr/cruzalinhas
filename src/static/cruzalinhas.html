@@ -5,12 +5,12 @@
         <link href="layout.css" rel="Stylesheet" type="text/css" />
         <script type="text/javascript" src="jquery-1.4.2.min.js">
         </script>
-        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAeAPkt6ytSLZmZr8YPG6-HxQBEff_MiL7dIowlqmrSFTHeDDP1BQH2xk9mR11wqkfG2KFAsnn1dK_YQ">
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false">
         </script>
         <script type="text/javascript" src="marcadores.js">
         </script>
     </head>
-    <body onunload="GUnload()">
+    <body>
         <p class="titulo">
             cruzalinhas
         </p>
@@ -19,8 +19,7 @@
             </div>
             <div id="div_busca">
                 <form id="form_busca">
-					<input type="text" id="text_busca" />
-                    <input type="submit" value="Localizar">
+                    <input type="text" id="text_busca" /><input type="submit" value="Localizar">
                 </form>
             </div>
             <div id="map_canvas">
