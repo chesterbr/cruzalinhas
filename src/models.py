@@ -28,6 +28,11 @@ class Linha(db.Model):
     Contém a URL da SPTrans e uma lista de pontos do trajeto, na ordem de desenho"""
     nome = db.StringProperty(required=True)
     url = db.StringProperty(required=True)
+    def hashes(self):
+        """Recupera todos os nearhashes (vide abaixo) dos pontos dessa linha, sem repetir"""
+        set_hashes = set([ponto.nearhash for ponto in self.pontos])
+        set_hashes.remove(None) # O 1o. ponto tem nearhash nulo
+        return [hash for hash in set_hashes]
 
 class Ponto(db.Model):
     """Um ponto geográfico ordenado de uma linha."""
@@ -40,7 +45,13 @@ class Ponto(db.Model):
     nearhash = db.StringProperty(required=False)
     def setNearhash(self, pontoAnt):
         self.nearhash = str(geohash.Geohash((pontoAnt.lng, pontoAnt.lat)) + 
-                            geohash.Geohash((self.lng, self.lat)))[0:6]        
+                            geohash.Geohash((self.lng, self.lat)))[0:6] 
+                            
+def calculaNearhash(lng, lat):
+    """Calcula um geohash para uma coordenada compatível com a propriedade nearhash,
+    isto é, algo que, se igual a um nearhash da linha, indica que o ponto passa pela
+    mesma"""
+    return str(geohash.Geohash((lng, lat)))[0:6]       
     
 
                 

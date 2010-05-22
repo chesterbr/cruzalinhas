@@ -1,42 +1,42 @@
 CRUZALINHAS - README
 --------------------
 
-= Introdução
+= Introdu√ß√£o
 
-O cruzalinhas é ume experimento que tenta complementar a experiência de localização
-de rotas de transporte público em São Paulo.
+O cruzalinhas √© ume experimento que tenta complementar a experi√™ncia de localiza√ß√£o
+de rotas de transporte p√∫blico em S√£o Paulo.
 
-Ele estará disponível em breve em http://cruzalinhas.appspot.com, mas o código-fonte
-já está disponível em http://github.com/chesterbr/cruzalinhas.
+Ele estar√° dispon√≠vel em breve em http://cruzalinhas.appspot.com, mas o c√≥digo-fonte
+j√° est√° dispon√≠vel em http://github.com/chesterbr/cruzalinhas.
 
 = Dados dos Trajetos
 
-Os itinerários das linhas de transporte público administradas pela SPTrans são
-referentes a um serviço PÚBLICO, pago com o SEU e o MEU dinheiro e deveriam estar
-disponíveis de uma forma mais acessível que o site deles. Aparentemente eles existem
-em algum lugar, pois bons serviços como o Google Maps têm essa informação, mas o
-cidadão comum não tem onde baixar.
+Os itiner√°rios das linhas de transporte p√∫blico administradas pela SPTrans s√£o
+referentes a um servi√ßo P√öBLICO, pago com o SEU e o MEU dinheiro e deveriam estar
+dispon√≠veis de uma forma mais acess√≠vel que o site deles. Aparentemente eles existem
+em algum lugar, pois bons servi√ßos como o Google Maps t√™m essa informa√ß√£o, mas o
+cidad√£o comum n√£o tem onde baixar.
 
-Esse tipo de falta de transparência no serviço público é inadmissível[1], fato que
-me levou a desenvolver o scraper.py, módulo independente deste sistema que captura
-os dados das linhas do site da SPTrans e salva no formato CSV. Você também pode
-usar a função getLinhas() para exportar os dados para outro formato, apenas tome
-cuidado para não sobrecarregar o site (uma espera de 20-30s entre requests é bom
+Esse tipo de falta de transpar√™ncia no servi√ßo p√∫blico √© inadmiss√≠vel[1], fato que
+me levou a desenvolver o scraper.py, m√≥dulo independente deste sistema que captura
+os dados das linhas do site da SPTrans e salva no formato CSV. Voc√™ tamb√©m pode
+usar a fun√ß√£o getLinhas() para exportar os dados para outro formato, apenas tome
+cuidado para n√£o sobrecarregar o site (uma espera de 20-30s entre requests √© bom
 senso)
 
 [1] http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351
 
-= Licença
+= Licen√ßa
 
-O código-fonte está disponível sob a licença MIT (vide abaixo). Essencialmente,
-o uso é livre, devendo apenas a nota de copyright abaixo reproduzida em cópias/
+O c√≥digo-fonte est√° dispon√≠vel sob a licen√ßa MIT (vide abaixo). Essencialmente,
+o uso √© livre, devendo apenas a nota de copyright abaixo reproduzida em c√≥pias/
 trabalhos derivados.
 
-Ele inclui cópias inalteradas das seguintes bibliotecas, em conformidade com suas
-licenças:
+Ele inclui c√≥pias inalteradas das seguintes bibliotecas, em conformidade com suas
+licen√ßas:
 
 BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson.
-geohash - Escrito por Schuyler Erle, em domínio público.
+geohash - Escrito por Schuyler Erle, em dom√≠nio p√∫blico.
 
 Ele foi desenvolvido em Python tendo como f
 

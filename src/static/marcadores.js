@@ -4,6 +4,7 @@ var ICON_URLS = ["", "http://www.google.com/mapfiles/marker_black.png", "http://
 var marcadores = {
 
     _marcadores: [],
+    _cache_linhas: [],
     
     get: function(id){
         return _marcadores[id];
@@ -38,27 +39,9 @@ var marcadores = {
             lat: latlng.lat(),
             lng: latlng.lng()
         }, function(linhas){
-            m._marcadores[id].linhas = linhas;
-            m.atualiza();
-            for (i in linhas) {
-                $.getJSON("/linha.json", {
-                    key: linhas[i].key
-                }, function(pontos){
-                    if (m._marcadores[id]) {
-                        gpontos = []
-                        for (j in pontos) {
-                            gpontos.push(new google.maps.LatLng(pontos[j][0], pontos[j][1]));
-                        }
-                        glinha = new google.maps.Polyline({
-                            map: map,
-                            path: gpontos,
-                            strokeColor: "#8A2BE2",
-                            strokeWeight: 5,
-                            strokeOpacity: 0.5
-                        });
-                        m._marcadores[id].polylines.push(glinha);
-                    }
-                });
+            if (m._marcadores[id]) {
+                m._marcadores[id].linhas = linhas;
+                m.atualiza();
             }
         });
         this.atualiza();
@@ -66,37 +49,72 @@ var marcadores = {
     },
     
     atualiza: function(){
-        html = "";
-        this.itera(function(marcador){
+        var html = "";
+        var count = this.count();
+		for (key in this._cache_linhas) {
+			this.apagaLinha(key);
+		}
+        for (ordem = 1; ordem <= count; ordem++) {
+            var marcador = this.getMarcadorPelaOrdem(ordem);
             html += '<div style="clear:both;margin:4px;"><img src="' + ICON_URLS[marcador.ordem] + '" style="float:left;margin:2px;"/>';
             if (marcador.linhas) {
                 var vazio = true;
                 for (j in marcador.linhas) {
-                    html += "- " + marcador.linhas[j].nome + "<br/>";
-                    vazio = false;
+                    var mostra = false;
+                    var linha = marcador.linhas[j];
+                    if (count == 1) {
+                        // Só tem um marcador, mostra todas as linhas
+                        mostra = true;
+                    }
+                    else {
+                        // Se não for o último marcador, mostra só as que também passam no próximo
+                        if (marcador.ordem < count) {
+                            proximoMarcador = this.getMarcadorPelaOrdem(ordem + 1);
+                            if (!proximoMarcador || (!proximoMarcador.linhas)) {
+                                html += "<br/>Aguardando carregar próximo...";
+                                vazio = false;
+                                break;
+                            }
+                            else {
+                                for (k in proximoMarcador.linhas) {
+                                    if (linha.nome == proximoMarcador.linhas[k].nome) {
+                                        mostra = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (mostra) {
+                        html += "- " + linha.nome + (this.desenhaLinha(linha) ? "" : "@") + "<br/>";
+                        vazio = false;
+                    }
                 }
                 if (vazio) {
-                    html += "<br/>Nenhuma linha aqui";
+                    if ((ordem == count) && (count > 1)) {
+                        html += "Destino";
+                    }
+                    else {
+                        html += "<br/>Nenhuma linha aqui";
+                    }
                 }
             }
             else {
                 html += "<br/>Carregando...";
             }
             html += "</div>";
-        })
+        }
         $("#div_lista").html(html);
     },
     
-    itera: function(f){
+    getMarcadorPelaOrdem: function(ordem){
         var ms = this._marcadores;
-        var c = this.count();
-        for (i = 1; i <= c; i++) {
-            for (j in ms) {
-                if (ms[j].ordem == i) {
-                    f(ms[j]);
-                }
+        for (j in ms) {
+            if (ms[j].ordem == ordem) {
+                return ms[j];
             }
         }
+        return null;
     },
     
     count: function(){
@@ -108,7 +126,7 @@ var marcadores = {
     },
     
     remove: function(id){
-        marcador = this._marcadores[id];
+        var marcador = this._marcadores[id];
         if (marcador.linhas) {
             for (j in marcador.polylines) {
                 marcador.polylines[j].setMap(null);
@@ -116,8 +134,51 @@ var marcadores = {
         }
         marcador.marker.setMap(null);
         delete this._marcadores[id];
-        this.atualiza();
-    }
+        //this.atualiza();
+    },
+    
+	// Se a linha já está no cache desenha e retorna true
+	// Caso não esteja (ou esteja mas ainda não tenha carregado), retorna false
+	//   (e pede pra carregar se ainda não o fez)
+    desenhaLinha: function(linha){
+		var cache = this._cache_linhas;
+        var c = cache[linha.key];
+        if (!c) {
+            cache[linha.key] = {};
+            $.getJSON("/linha.json", {
+                key: linha.key
+            }, function(pontos){
+                gpontos = []
+                for (j in pontos) {
+                    gpontos.push(new google.maps.LatLng(pontos[j][0], pontos[j][1]));
+                }
+                cache[linha.key].pontos = gpontos;
+                marcadores.atualiza();
+            });
+        }
+		if (c && c.pontos) {
+			if (!c.polyline) {
+				c.polyline = new google.maps.Polyline({
+					map: map,
+					path: c.pontos,
+					strokeColor: "#8A2BE2",
+					strokeWeight: 5,
+					strokeOpacity: 0.5
+				});
+			}
+			return true;
+		}
+		return false;
+    },
+	
+	// Remove uma linha do mapa, se já estiver desenhada (mas não apaga do cache)
+	apagaLinha: function(key) {
+		c = this._cache_linhas[key];
+		if (c && c.polyline) {
+			c.polyline.setMap(null);
+			delete c.polyline;
+		}
+	}
     
 }
 

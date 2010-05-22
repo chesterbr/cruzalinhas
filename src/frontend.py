@@ -25,7 +25,6 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 from models import Linha, Ponto
 import scraper
-import geohash
 import models
 
 class MainPage(webapp.RequestHandler):    
@@ -57,7 +56,7 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
-        hash = str(geohash.Geohash((lng, lat)))[0:6]
+        hash = models.calculaNearhash(lng,lat)
         linhas = {}
         for ponto in Ponto.all().filter("nearhash =", hash):
             chave = str(ponto.linha.key())
@@ -65,8 +64,19 @@ class LinhasQuePassamPage(webapp.RequestHandler):
                 linhas[chave] = {
                                  "key" : str(ponto.linha.key()),
                                  "nome" : ponto.linha.nome,
-                                 "url" : ponto.linha.url}
+                                 "url" : ponto.linha.url,
+                                 "hashes" : self._hashes(ponto.linha)}
         self.response.out.write(simplejson.dumps(linhas.values()))
+    def _hashes(self, linha):
+        """Recupera todos os nearhashes de uma linha, usando o cache se possível"""
+        client = memcache.Client()
+        chave = "hashes_"+str(linha.key)
+        hashes = client.get(chave)
+        if hashes is None:
+            hashes = linha.hashes()
+            client.add(chave, hashes)
+        return hashes
+
 
 # Crawler stuff
 
