@@ -35,13 +35,28 @@ var marcadores = {
             polylines: [],
         }
         // Recupera as linhas que passam por ele (em background)
-        $.getJSON("/linhasquepassam.json", {
-            lat: latlng.lat(),
-            lng: latlng.lng()
-        }, function(linhas){
-            if (m._marcadores[id]) {
-                m._marcadores[id].linhas = linhas;
-                m.atualiza();
+        $.ajax({
+            url: "/linhasquepassam.json",
+            dataType: 'json',
+            data: {
+                lat: latlng.lat(),
+                lng: latlng.lng()
+            },
+            success: function(data){
+                if (m._marcadores[id]) {
+                    m._marcadores[id].linhas = data;
+                    m.atualiza();
+                }
+            },
+            retry_ms: 1000,
+            error: function(request, status, error){
+                if (m._marcadores[id]) {
+                    a = this;
+                    setTimeout(function(){
+                        $.ajax(a)
+                    }, this.retry_ms);
+                    this.retry_ms *= 2;
+                }
             }
         });
         this.atualiza();
@@ -51,9 +66,9 @@ var marcadores = {
     atualiza: function(){
         var html = "";
         var count = this.count();
-		for (key in this._cache_linhas) {
-			this.apagaLinha(key);
-		}
+        for (key in this._cache_linhas) {
+            this.apagaLinha(key);
+        }
         for (ordem = 1; ordem <= count; ordem++) {
             var marcador = this.getMarcadorPelaOrdem(ordem);
             html += '<div style="clear:both;margin:4px;"><img src="' + ICON_URLS[marcador.ordem] + '" style="float:left;margin:2px;"/>';
@@ -137,11 +152,11 @@ var marcadores = {
         //this.atualiza();
     },
     
-	// Se a linha já está no cache desenha e retorna true
-	// Caso não esteja (ou esteja mas ainda não tenha carregado), retorna false
-	//   (e pede pra carregar se ainda não o fez)
+    // Se a linha já está no cache desenha e retorna true
+    // Caso não esteja (ou esteja mas ainda não tenha carregado), retorna false
+    //   (e pede pra carregar se ainda não o fez)
     desenhaLinha: function(linha){
-		var cache = this._cache_linhas;
+        var cache = this._cache_linhas;
         var c = cache[linha.key];
         if (!c) {
             cache[linha.key] = {};
@@ -156,29 +171,29 @@ var marcadores = {
                 marcadores.atualiza();
             });
         }
-		if (c && c.pontos) {
-			if (!c.polyline) {
-				c.polyline = new google.maps.Polyline({
-					map: map,
-					path: c.pontos,
-					strokeColor: "#8A2BE2",
-					strokeWeight: 5,
-					strokeOpacity: 0.5
-				});
-			}
-			return true;
-		}
-		return false;
+        if (c && c.pontos) {
+            if (!c.polyline) {
+                c.polyline = new google.maps.Polyline({
+                    map: map,
+                    path: c.pontos,
+                    strokeColor: "#8A2BE2",
+                    strokeWeight: 5,
+                    strokeOpacity: 0.5
+                });
+            }
+            return true;
+        }
+        return false;
     },
-	
-	// Remove uma linha do mapa, se já estiver desenhada (mas não apaga do cache)
-	apagaLinha: function(key) {
-		c = this._cache_linhas[key];
-		if (c && c.polyline) {
-			c.polyline.setMap(null);
-			delete c.polyline;
-		}
-	}
+    
+    // Remove uma linha do mapa, se já estiver desenhada (mas não apaga do cache)
+    apagaLinha: function(key){
+        c = this._cache_linhas[key];
+        if (c && c.polyline) {
+            c.polyline.setMap(null);
+            delete c.polyline;
+        }
+    }
     
 }
 
@@ -198,10 +213,18 @@ function inicializa(){
 $(document).ready(function(){
     inicializa();
     $('#form_busca').submit(function(){
-        var geocoder = new GClientGeocoder();
-        geocoder.getLatLng($('#text_busca').val(), function(latlng){
-            map.panTo(latlng);
-            marcadores.add(latlng);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+            'address': $('#text_busca').val()
+        }, function(results, status){
+            if (status == google.maps.GeocoderStatus.OK) {
+                latlng = results[0].geometry.location;
+                map.panTo(latlng);
+                marcadores.add(latlng);
+            }
+            else {
+                alert("Não foi possível localizar o endereço (" + status + ")");
+            }
         })
         return false;
     });

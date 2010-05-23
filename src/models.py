@@ -45,7 +45,11 @@ class Ponto(db.Model):
     nearhash = db.StringProperty(required=False)
     def setNearhash(self, pontoAnt):
         self.nearhash = str(geohash.Geohash((pontoAnt.lng, pontoAnt.lat)) + 
-                            geohash.Geohash((self.lng, self.lat)))[0:6] 
+                            geohash.Geohash((self.lng, self.lat)))[0:6]
+                            
+class Hash(db.Model):
+    hash = db.StringProperty(required=True)
+    linhas = db.StringListProperty(required=True)                             
                             
 def calculaNearhash(lng, lat):
     """Calcula um geohash para uma coordenada compatível com a propriedade nearhash,
