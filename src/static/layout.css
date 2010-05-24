@@ -1,43 +1,98 @@
 body {
-    font: 18px Helvetica;
+    font: 16px Helvetica;
 }
 
 h1 {
 }
 
+#div_lightboxes {
+	display:none;
+}
+
+#div_instrucoes p {
+    font: 16px Helvetica;
+    margin-top: 0px;
+    color: grey;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
 .titulo {
     font-size: 36px;
     font-weight: bold;
+    margin-top: 0px;
+	text-align: center;
+}
+
+.menu {
+    margin-bottom: 12px;
+    font-size: 14px;
+	text-align: center;
+}
+
+#div_conteudo_wrapper {
+    float: right;
+    width: 100%;
+}
+
+#div_conteudo {
+    margin-left: 250px;
+}
+
+#div_barra_wrapper {
+    float: right;
+    width: 250px;
+    margin-right: -250px;
+}
+
+#div_lista {
+    margin: 4px;
+    font-size: 12px;
 }
 
 #div_busca {
-	margin-right: 255px;
     padding: 4px;
-	border: 1px solid #000000;
+    border: 1px solid #000000;
 }
 
 #div_busca input[type = text] {
     font: 18px Helvetica;
-	width: 89%;
+    width: 89%;
 }
 
 #div_busca input[type = submit] {
     font: 16px Helvetica;
-	vertical-align:middle;
-	float:right;
+    vertical-align: middle;
+    float: right;
     width: 10%;
 }
 
 #map_canvas {
-	border: 1px solid #000000;
-	border-top:0px;
-    margin-right: 255px;
+    border: 1px solid #000000;
+    border-top: 0px;
     height: 600px;
 }
 
-#div_lista {
-    height: 600px;
-    float: right;
-    width: 250px;
-	font-size:12px;
+.p_linha {
+    max-width: 220px;
+}
+
+.legenda_linha {
+    clear: both;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    min-width: 16px;
+    opacity: 0.5;
+}
+
+.link_remover {
+    font-size: xx-small;
+    vertical-align: top;
+}
+
+.destaca_linha {
+    background-color: #FFFF00;
 }

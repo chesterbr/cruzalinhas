@@ -1,5 +1,11 @@
+// Evitando que alguém entre pelo html antigo
+if (location.href.indexOf("/static/")!=-1) {
+	location.replace("/");
+}
+
 var map;
 var ICON_URLS = ["", "http://www.google.com/mapfiles/marker_black.png", "http://www.google.com/mapfiles/marker_brown.png", "http://www.google.com/mapfiles/marker_green.png", "http://www.google.com/mapfiles/marker_purple.png", "http://www.google.com/mapfiles/marker_yellow.png", "http://www.google.com/mapfiles/marker_grey.png", "http://www.google.com/mapfiles/marker_orange.png", "http://www.google.com/mapfiles/marker_white.png"];
+var IMG_LOADER= '<img src="/static/ajax-loader.gif"/>';
 
 var marcadores = {
 
@@ -24,11 +30,12 @@ var marcadores = {
         });
         m = this;
         google.maps.event.addListener(marker, "dragend", function(event){
-            m.remove(id);
+            m.soft_remove(id);
             m.add(event.latLng, ordem);
         });
         // Guarda ele na lista		
         this._marcadores[id] = {
+			id: id,
             marker: marker,
             linhas: null,
             ordem: ordem,
@@ -62,21 +69,32 @@ var marcadores = {
         this.atualiza();
         return id;
     },
-    
+	    
     atualiza: function(){
         var html = "";
         var count = this.count();
         for (key in this._cache_linhas) {
             this.apagaLinha(key);
         }
+		if (count==0) {
+			$("#div_lista").html($("#div_instrucoes").clone());
+			return;			
+		}
         for (ordem = 1; ordem <= count; ordem++) {
             var marcador = this.getMarcadorPelaOrdem(ordem);
-            html += '<div style="clear:both;margin:4px;"><img src="' + ICON_URLS[marcador.ordem] + '" style="float:left;margin:2px;"/>';
+			if (!marcador) {
+				// estamos no meio de uma remoção, relaxa
+				return;
+			}
+            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">(remover)</a></p>';
             if (marcador.linhas) {
                 var vazio = true;
                 for (j in marcador.linhas) {
                     var mostra = false;
                     var linha = marcador.linhas[j];
+//                    if (!this.passaMesmo(marcador, linha)) {
+//                        continue;
+//                    }
                     if (count == 1) {
                         // Só tem um marcador, mostra todas as linhas
                         mostra = true;
@@ -86,7 +104,7 @@ var marcadores = {
                         if (marcador.ordem < count) {
                             proximoMarcador = this.getMarcadorPelaOrdem(ordem + 1);
                             if (!proximoMarcador || (!proximoMarcador.linhas)) {
-                                html += "<br/>Aguardando carregar próximo...";
+                                html += IMG_LOADER;
                                 vazio = false;
                                 break;
                             }
@@ -101,21 +119,30 @@ var marcadores = {
                         }
                     }
                     if (mostra) {
-                        html += "- " + linha.nome + (this.desenhaLinha(linha) ? "" : "@") + "<br/>";
+						var gif_loading = (this.desenhaLinha(linha) ? "&nbsp;" : IMG_LOADER);
+                        html +=  '<div class="legenda_linha" style="background-color:' +
+								 this.corDaLinha(linha) +
+								 '">' + gif_loading + '</div>' +
+								 '<p class="p_linha p_linha_' + 
+								 linha.key +
+								 '" style="float:left;margin:1px"><a href="' + 
+								 linha.url + 
+								 '" target="_blank">' + 
+								 linha.nome + '</a>' + 
+								 '</p>';
                         vazio = false;
                     }
                 }
                 if (vazio) {
-                    if ((ordem == count) && (count > 1)) {
-                        html += "Destino";
-                    }
-                    else {
-                        html += "<br/>Nenhuma linha aqui";
-                    }
+					if (count == 1) {
+                        html += this.pmsg("Nenhuma linha passa aqui");
+                    } else if (ordem < count) {
+                        html += this.pmsg("Nenhuma linha entre os dois pontos");						
+					}
                 }
             }
             else {
-                html += "<br/>Carregando...";
+                html += IMG_LOADER;
             }
             html += "</div>";
         }
@@ -140,7 +167,8 @@ var marcadores = {
         return j;
     },
     
-    remove: function(id){
+	// Tira um marcador da lista (mas não preenche o buraco dele)
+    soft_remove: function(id){
         var marcador = this._marcadores[id];
         if (marcador.linhas) {
             for (j in marcador.polylines) {
@@ -151,7 +179,18 @@ var marcadores = {
         delete this._marcadores[id];
         //this.atualiza();
     },
-    
+
+    remove: function(id) {
+		var ordem = this._marcadores[id].ordem;
+		for(i=this.count(); i>ordem;i--) {
+			var m = this.getMarcadorPelaOrdem(i);
+			this.soft_remove(m.id);
+			this.add(m.marker.position, i-1);
+		}
+		this.soft_remove(id);
+		this.atualiza();
+	},
+
     // Se a linha já está no cache desenha e retorna true
     // Caso não esteja (ou esteja mas ainda não tenha carregado), retorna false
     //   (e pede pra carregar se ainda não o fez)
@@ -168,6 +207,7 @@ var marcadores = {
                     gpontos.push(new google.maps.LatLng(pontos[j][0], pontos[j][1]));
                 }
                 cache[linha.key].pontos = gpontos;
+				cache[linha.key].cor = marcadores.proximacor();
                 marcadores.atualiza();
             });
         }
@@ -176,10 +216,16 @@ var marcadores = {
                 c.polyline = new google.maps.Polyline({
                     map: map,
                     path: c.pontos,
-                    strokeColor: "#8A2BE2",
+                    strokeColor: c.cor,
                     strokeWeight: 5,
                     strokeOpacity: 0.5
                 });
+				google.maps.event.addListener(c.polyline, "mouseover", function(latlng) {
+					$(".p_linha_"+linha.key).addClass("destaca_linha");
+				});
+				google.maps.event.addListener(c.polyline, "mouseout", function(latlng) {
+					$(".p_linha_"+linha.key).removeClass("destaca_linha");
+				});
             }
             return true;
         }
@@ -193,7 +239,64 @@ var marcadores = {
             c.polyline.setMap(null);
             delete c.polyline;
         }
-    }
+    },
+	
+	pmsg: function(texto) {
+		return '<p style="margin:0px;font-style:italic;">'+texto+"</p>";
+	},
+	
+	_semente_cor: 1,
+	proximacor: function() {
+		this._semente_cor+=3;
+		if (this._semente_cor > 62) {
+			this._semente_cor -= 62;
+		}
+		var h = this._semente_cor.toString(4);
+   		while (h.length<3) h="0"+h;
+   		var c = h[0]*256*4+h[1]*16*4+h[2]*4;
+   		cor = c.toString(16)
+   		while (cor.length<3) cor="0"+cor;
+		return "#"+cor;
+	},
+	
+	corDaLinha: function(linha) {
+        var c = this._cache_linhas[linha.key];
+		if (c && c.cor) {
+			return c.cor;
+		} else {
+			return "#FFF";
+		}
+   		
+	}
+
+
+	
+	/*,
+
+    
+    // Verifica se o marcador passa pelo linha com precisão decente
+    passaMesmo: function(marcador, linha){
+        var linha_cache = this._cache_linhas[linha.key];
+        if (linha_cache) {
+            for (i in linha_cache.pontos) {
+                if (this.dist(linha_cache.pontos[i], 
+							  ponto, marcador.marker.position) < this.DIST_MIN) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    
+	DIST_MIN: 10, // distancia minima em metros p/ considerar match
+	
+    dist: function(a, b){
+        var R = 6371; // km
+        return Math.acos(Math.sin(lat1) * Math.sin(lat2) +
+        Math.cos(lat1) * Math.cos(lat2) *
+        Math.cos(lon2 - lon1)) *
+        R;
+    }*/
     
 }
 
@@ -206,11 +309,26 @@ function inicializa(){
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     google.maps.event.addListener(map, "click", function(event){
-        marcadores.add(event.latLng);
+		if (marcadores.count()<=5) {
+        	marcadores.add(event.latLng);
+		} else {
+			alert("Desculpe, não consigo colocar mais marcadores");
+		}
     });
+	marcadores.atualiza();
 }
 
 $(document).ready(function(){
+	box_cfg = {
+		'width'				: 600,
+		'height'			: 350,
+		'autoDimensions'	: false,
+		'autoScale'			: false
+	};
+	$("#link_oque").fancybox(box_cfg);
+	$("#link_porque").fancybox(box_cfg);
+	$("#link_como").fancybox(box_cfg);
+
     inicializa();
     $('#form_busca').submit(function(){
         var geocoder = new google.maps.Geocoder();

@@ -26,12 +26,15 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from models import Linha, Ponto, Hash
 import scraper
 import models
+import os
+from google.appengine.ext.webapp import template
 
 class MainPage(webapp.RequestHandler):    
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Hello, webapp World!')
-
+        self.response.headers['Content-Type'] = 'text/html'
+        path = os.path.join(os.path.dirname(__file__), 'static','cruzalinhas.html')
+        self.response.out.write(template.render(path, {}))
+        
 class ListaPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
@@ -59,8 +62,13 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         lng = float(self.request.get('lng'))
         # Recupera as chaves das linhas que passam pelo geohash do ponto
         hash = models.calculaNearhash(lng, lat)
-        result =  Hash.all().filter("hash =", hash).fetch(1)
-        linhas_keys = result[0].linhas if result else []        
+        chave_memcache = "hash_linhas_keys_" + hash;
+        client = memcache.Client()
+        linhas_keys = client.get(chave_memcache)
+        if linhas_keys is None:
+            result = Hash.all().filter("hash =", hash).fetch(1)
+            linhas_keys = result[0].linhas if result else []
+            client.add(chave_memcache, linhas_keys)        
         # Converte elas para objetos no formato da resposta e devolve como JSON
         linhas_obj = [self._linha_obj(key) for key in linhas_keys]
         self.response.out.write(simplejson.dumps(linhas_obj))
@@ -146,11 +154,11 @@ class ListaGeraHashPage(webapp.RequestHandler):
         
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/lista', ListaPage),
-                                      ('/gerahash', GeraHashPage),
-                                      ('/listagerahash', ListaGeraHashPage),
+#                                      ('/gerahash', GeraHashPage),
+#                                      ('/listagerahash', ListaGeraHashPage),
                                       ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage),
-                                      ('/zap', ZapPage),
+#                                      ('/zap', ZapPage),
                                       ('/clearcache', ClearCachePage)], debug=True)
 
 

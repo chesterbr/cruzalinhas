@@ -2,28 +2,110 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <link href="layout.css" rel="Stylesheet" type="text/css" />
-        <script type="text/javascript" src="jquery-1.4.2.min.js">
+        <title>cruzalinhas</title>
+        <link rel="Stylesheet" type="text/css" href="/static/layout.css"/>
+        <script type="text/javascript" src="/static/jquery-1.4.2.min.js">
         </script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false">
         </script>
-        <script type="text/javascript" src="marcadores.js">
+        <script type="text/javascript" src="/static/marcadores.js">
         </script>
+        <script type="text/javascript" src="/static/fancybox/jquery.mousewheel-3.0.2.pack.js">
+        </script>
+        <script type="text/javascript" src="/static/fancybox/jquery.fancybox-1.3.1.js">
+        </script>
+        <link rel="stylesheet" type="text/css" href="/static/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
     </head>
     <body>
-        <p class="titulo">
+        <div class="titulo">
             cruzalinhas
-        </p>
+        </div>
+        <div class="menu">
+            <a href="#div_oque" id="link_oque">o que é</a>
+            - <a href="#div_porque" id="link_porque">por que</a>
+            - <a href="#div_como" id="link_como">como funciona</a>
+            - <a href="http://chester.blog.br/sobre" target="_blank">quem fez</a>
+            - <a href="http://github.com/chesterbr/cruzalinhas" target="_blank">código fonte</a>
+        </div>
         <div>
-            <div id="div_lista">
+            <div id="div_conteudo_wrapper">
+                <div id ="div_conteudo">
+                    <div id="div_busca">
+                        <form id="form_busca">
+                            <input type="text" id="text_busca" /><input type="submit" value="Localizar">
+                        </form>
+                    </div>
+                    <div id="map_canvas">
+                        Carregando...
+                    </div>
+                </div>
             </div>
-            <div id="div_busca">
-                <form id="form_busca">
-                    <input type="text" id="text_busca" /><input type="submit" value="Localizar">
-                </form>
+            <div id="div_barra_wrapper">
+                <div id="div_barra">
+                    <div id="div_lista">
+                    </div>
+                </div>
             </div>
-            <div id="map_canvas">
-                Carregando...
+            <div id="div_lightboxes">
+                <div id="div_oque">
+                    <p>
+                        O cruzalinhas permite obter saber a lista <b>completa</b>
+                        de ônibus que passam por um lugar. É só colocar o marcador no mapa (clicando ou digitando o endereço na busca) e o sistema lista e desenha as linhas.
+                    </p>
+                    <p>
+                        Se você colocar outros marcadores, o sistema vai mostrar apenas as linhas que passam entre cada um deles. Com isso dá pra montar trajetos e comparar alternativas.
+                    </p>
+                    <p>
+                        O nome da linha leva até o site da SPTrans, onde a informação oficial pode ser consultada. Este serviço é experimental - <b>sempre confirme</b> antes de sair. 
+                    </p>
+                </div>
+                <div id="div_porque">
+                    <p>
+                        Quem usa transporte público em São Paulo sabe que existem algumas opções para se informar, tais como:
+                    </p>
+                    <ul>
+                        <li>
+                            <a href="http://www.sptrans.com.br/itinerarios/">SPTrans</a>: tem as informações oficiais;
+                        </li>
+                        <li>
+                            <a href="http://www.toape.com.br/">Tô a Pé</a>: mostra as linhas de forma mais amigável;
+                        </li>
+                        <li>
+                            <a href="http://maps.google.com">Google Maps</a>: a melhor opção para traçar rotas.
+                        </li>
+                    </ul>
+                    <p>
+                        A idéia não é substituir os sites acima, e sim oferecer um serviço complementar. Além disso, o software demonstra <a href="http://github.com/chesterbr/cruzalinhas/blob/master/src/scraper.py">como obter</a>
+                        os dados de itinerário das linhas - uma informação sobre serviço público que <a href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351">deveria estar disponível em formato apropriado</a>
+                        mas, por algum motivo, não está.
+                    </p>
+                </div>
+                <div id="div_como">
+                    <p>
+                        A aplicação foi feita em <a href="http://www.python.org/">Python</a>
+                        e hospedada no <a href="http://code.google.com/appengine/">Google App Engine</a>.
+                    </p>
+                    <p>
+                        Fazer uma busca por proximidade entre cada trajeto e um ponto beira o impossível: seria preciso analisar cada segmento de reta, isso dentro de uma <a href="http://www.movable-type.co.uk/scripts/latlong.html">geometria nada trivial</a>. Entra em cena o <a href="http://en.wikipedia.org/wiki/Geohash">Geohash</a>.
+                    </p>
+                    <p>
+                        O que o sistema faz é manter pré-calculado o geohash da caixa que contem cada segmento de reta, num tamanho (6 caracteres) que dá uma margem de manobra menor que 1 Km. A busca é feita sobre o geohash do ponto a ser localizado, reduzido para esse mesmo tamanho.
+                    </p>
+                    <p>
+                        Com isso, localiza-se as linhas, com uma margem de erro compatível com o fato de que o pino pode não cair exatamente sobre um trajeto (e que há interesse em pegar ônibus que passem "perto").
+                    </p>
+                    <p>
+                        Os hashes da linha também são usados localmente para que, caso haja mais de um ponto no mapa, o cliente possa identificar as linhas que conectam cada um deles.
+                    </p>
+                </div>
+                <div id="div_instrucoes">
+                    <p>
+                        Adicione um ponto no mapa (clicando ou usando a busca) e veja quais linhas passam nele.
+                    </p>
+                    <p>
+                        Coloque outros pontos e veja quais linhas levam de um a outro.
+                    </p>
+                </div>
             </div>
         </div>
     </body>
