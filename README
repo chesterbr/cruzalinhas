@@ -37,8 +37,15 @@ trabalhos derivados.
 Ele inclui cópias inalteradas das seguintes bibliotecas, em conformidade com suas
 licenças:
 
-BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson.
-geohash - Escrito por Schuyler Erle, em domínio público.
+BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson
+geohash - Escrito por Schuyler Erle, em domínio público
+jquery - Copyright (c) 2010 John Resig, http://jquery.com/
+fancybox - Copyright (c) 2008 - 2010 Janis Skarnelis
+
+O serviço é prestado na melhor intenção de ajudar as pessoas a se localizar, sem
+qualquer garantia, explícita ou implícita de funcionamento, atualização, precisão
+ou veracidade das informações prestadas. A fonte original é o site da SPTrans, que
+deve ser sempre consultado para validação da informação mais atualizada.
 
 = Copyright
 

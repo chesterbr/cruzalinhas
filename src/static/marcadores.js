@@ -305,6 +305,7 @@ function inicializa(){
     centro_sp = new google.maps.LatLng(-23.548153, -46.633101);
     map = new google.maps.Map(document.getElementById("map_canvas"), {
         zoom: 13,
+		scaleControl: true,
         center: centro_sp,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
@@ -319,15 +320,24 @@ function inicializa(){
 }
 
 $(document).ready(function(){
-	box_cfg = {
+	$("#link_oque").fancybox({
 		'width'				: 600,
-		'height'			: 350,
+		'height'			: 285,
 		'autoDimensions'	: false,
 		'autoScale'			: false
-	};
-	$("#link_oque").fancybox(box_cfg);
-	$("#link_porque").fancybox(box_cfg);
-	$("#link_como").fancybox(box_cfg);
+	});
+	$("#link_porque").fancybox({
+		'width'				: 600,
+		'height'			: 240,
+		'autoDimensions'	: false,
+		'autoScale'			: false
+	});
+	$("#link_como").fancybox({
+		'width'				: 600,
+		'height'			: 325,
+		'autoDimensions'	: false,
+		'autoScale'			: false
+	});
 
     inicializa();
     $('#form_busca').submit(function(){

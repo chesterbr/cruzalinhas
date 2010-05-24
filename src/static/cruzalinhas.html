@@ -12,7 +12,7 @@
         </script>
         <script type="text/javascript" src="/static/fancybox/jquery.mousewheel-3.0.2.pack.js">
         </script>
-        <script type="text/javascript" src="/static/fancybox/jquery.fancybox-1.3.1.js">
+        <script type="text/javascript" src="/static/fancybox/jquery.fancybox-1.3.1.pack.js">
         </script>
         <link rel="stylesheet" type="text/css" href="/static/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
     </head>
@@ -25,7 +25,7 @@
             - <a href="#div_porque" id="link_porque">por que</a>
             - <a href="#div_como" id="link_como">como funciona</a>
             - <a href="http://chester.blog.br/sobre" target="_blank">quem fez</a>
-            - <a href="http://github.com/chesterbr/cruzalinhas" target="_blank">código fonte</a>
+            - <a href="http://github.com/chesterbr/cruzalinhas" target="_blank">licença e código-fonte</a>
         </div>
         <div>
             <div id="div_conteudo_wrapper">
@@ -49,14 +49,18 @@
             <div id="div_lightboxes">
                 <div id="div_oque">
                     <p>
-                        O cruzalinhas permite obter saber a lista <b>completa</b>
-                        de ônibus que passam por um lugar. É só colocar o marcador no mapa (clicando ou digitando o endereço na busca) e o sistema lista e desenha as linhas.
+                        O cruzalinhas permite obter a lista <b>completa</b>
+                        das linhas de ônibus municipais que passam por um determinado lugar da cidade de São Paulo. É só colocar o marcador no mapa (clicando ou usando a caixa de busca) e o sistema lista e desenha as linhas.
                     </p>
                     <p>
                         Se você colocar outros marcadores, o sistema vai mostrar apenas as linhas que passam entre cada um deles. Com isso dá pra montar trajetos e comparar alternativas.
                     </p>
                     <p>
-                        O nome da linha leva até o site da SPTrans, onde a informação oficial pode ser consultada. Este serviço é experimental - <b>sempre confirme</b> antes de sair. 
+                        A localização pelo ponto é aproximada, então podem aparecer linhas próximas (aproveite isso para achar alternativas). Em caso de dúvida, clique no nome da linha e veja os dados dela no <a href="http://www.sptrans.com.br/itinerarios/">site da SPTrans</a>, onde a informação oficial pode ser consultada.
+                    </p>
+                    <p>
+                        Lembre-se sempre que o serviço é experimental - <b>confirme</b>
+                        antes de sair de casa. 
                     </p>
                 </div>
                 <div id="div_porque">
@@ -75,7 +79,10 @@
                         </li>
                     </ul>
                     <p>
-                        A idéia não é substituir os sites acima, e sim oferecer um serviço complementar. Além disso, o software demonstra <a href="http://github.com/chesterbr/cruzalinhas/blob/master/src/scraper.py">como obter</a>
+                        A idéia não é substituir os sites acima, e sim oferecer um serviço complementar.
+                    </p>
+                    <p>
+                        Além disso, o software demonstra <a href="http://github.com/chesterbr/cruzalinhas/blob/master/src/scraper.py">como obter</a>
                         os dados de itinerário das linhas - uma informação sobre serviço público que <a href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351">deveria estar disponível em formato apropriado</a>
                         mas, por algum motivo, não está.
                     </p>
@@ -86,7 +93,7 @@
                         e hospedada no <a href="http://code.google.com/appengine/">Google App Engine</a>.
                     </p>
                     <p>
-                        Fazer uma busca por proximidade entre cada trajeto e um ponto beira o impossível: seria preciso analisar cada segmento de reta, isso dentro de uma <a href="http://www.movable-type.co.uk/scripts/latlong.html">geometria nada trivial</a>. Entra em cena o <a href="http://en.wikipedia.org/wiki/Geohash">Geohash</a>.
+                        Fazer uma busca por proximidade entre um ponto e cada trajeto é complicado: a princípio, seria preciso analisar cada segmento de reta, isso dentro de uma <a href="http://www.movable-type.co.uk/scripts/latlong.html">geometria nada trivial</a>. Entra em cena o <a href="http://en.wikipedia.org/wiki/Geohash">geohash</a>.
                     </p>
                     <p>
                         O que o sistema faz é manter pré-calculado o geohash da caixa que contem cada segmento de reta, num tamanho (6 caracteres) que dá uma margem de manobra menor que 1 Km. A busca é feita sobre o geohash do ponto a ser localizado, reduzido para esse mesmo tamanho.
