@@ -4,10 +4,12 @@ CRUZALINHAS - README
 = Introdução
 
 O cruzalinhas é ume experimento que tenta complementar a experiência de localização
-de rotas de transporte público em São Paulo.
+de rotas de transporte público em São Paulo, mostrando todas as linhas que passam por
+um determinado local e/ou as linhas que passam entre dois ou mais locais.
 
-Ele estará disponível em breve em http://cruzalinhas.appspot.com, mas o código-fonte
-já está disponível em http://github.com/chesterbr/cruzalinhas.
+Ele pode ser acessado em http://cruzalinhas.appspot.com (onde podem ser obtidas
+informações sobre o funcionamento). O código-fonte é livre e pode ser baixado em
+http://github.com/chesterbr/cruzalinhas.
 
 = Dados dos Trajetos
 
