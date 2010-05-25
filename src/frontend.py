@@ -154,8 +154,8 @@ class ListaGeraHashPage(webapp.RequestHandler):
         
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/lista', ListaPage),
-                                      ('/gerahash', GeraHashPage),
-                                      ('/listagerahash', ListaGeraHashPage),
+#                                      ('/gerahash', GeraHashPage),
+#                                      ('/listagerahash', ListaGeraHashPage),
                                       ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage),
 #                                      ('/zap', ZapPage),
