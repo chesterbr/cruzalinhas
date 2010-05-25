@@ -6,6 +6,8 @@ if (location.href.indexOf("/static/")!=-1) {
 var map;
 var ICON_URLS = ["", "http://www.google.com/mapfiles/marker_black.png", "http://www.google.com/mapfiles/marker_brown.png", "http://www.google.com/mapfiles/marker_green.png", "http://www.google.com/mapfiles/marker_purple.png", "http://www.google.com/mapfiles/marker_yellow.png", "http://www.google.com/mapfiles/marker_grey.png", "http://www.google.com/mapfiles/marker_orange.png", "http://www.google.com/mapfiles/marker_white.png"];
 var IMG_LOADER= '<img src="/static/ajax-loader.gif"/>';
+var LINHAS_INICIAL = 8;
+var LINHAS_INCREMENTO = 8;
 
 var marcadores = {
 
@@ -38,6 +40,7 @@ var marcadores = {
 			id: id,
             marker: marker,
             linhas: null,
+			max_linhas: LINHAS_INICIAL,
             ordem: ordem,
             polylines: [],
         }
@@ -91,6 +94,7 @@ var marcadores = {
             html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover">(arraste no mapa ou <a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">remova</a>)</span></p>';
             if (marcador.linhas) {
                 var vazio = true;
+				var linhas_no_marcador = 0;
                 for (j in marcador.linhas) {
                     var mostra = false;
                     var linha = marcador.linhas[j];
@@ -121,6 +125,11 @@ var marcadores = {
                         }
                     }
                     if (mostra) {
+						linhas_no_marcador++;
+						if (linhas_no_marcador > marcador.max_linhas) {
+							html+='<p style="text-align:center"><a href="javascript:void(0)" onClick="marcadores.mais('+marcador.id+');return false;">mais...</a><br/></p>';
+							break;
+						}
 						var gif_loading = (this.desenhaLinha(linha) ? "&nbsp;" : IMG_LOADER);
                         html +=  '<div class="legenda_linha" style="background-color:' +
 								 this.corDaLinha(linha) +
@@ -168,6 +177,15 @@ var marcadores = {
         }
         return j;
     },
+
+	// Aumenta a quantidade de linhas mostrada num marcador e atualiza a listagem
+	mais: function(id) {
+        var marcador = this._marcadores[id];
+        if (marcador) {
+			marcador.max_linhas += LINHAS_INCREMENTO;
+		}
+		this.atualiza();
+	},
     
 	// Tira um marcador da lista (mas não preenche o buraco dele)
     soft_remove: function(id){
@@ -181,7 +199,7 @@ var marcadores = {
         delete this._marcadores[id];
         //this.atualiza();
     },
-
+	
     remove: function(id) {
 		var ordem = this._marcadores[id].ordem;
 		for(i=this.count(); i>ordem;i--) {
