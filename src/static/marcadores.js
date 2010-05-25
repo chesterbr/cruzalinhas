@@ -77,7 +77,9 @@ var marcadores = {
             this.apagaLinha(key);
         }
 		if (count==0) {
+			$("#div_lista").animate({width:'-=50'},0);
 			$("#div_lista").html($("#div_instrucoes").clone());
+			$("#div_lista").animate({width:'+=50'},1000);
 			return;			
 		}
         for (ordem = 1; ordem <= count; ordem++) {
@@ -86,7 +88,7 @@ var marcadores = {
 				// estamos no meio de uma remoção, relaxa
 				return;
 			}
-            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">(remover)</a></p>';
+            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover">(arraste no mapa ou <a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">remova</a>)</span></p>';
             if (marcador.linhas) {
                 var vazio = true;
                 for (j in marcador.linhas) {
@@ -135,9 +137,9 @@ var marcadores = {
                 }
                 if (vazio) {
 					if (count == 1) {
-                        html += this.pmsg("Nenhuma linha passa aqui");
+                        html += this.pmsg("nenhuma linha passa aqui");
                     } else if (ordem < count) {
-                        html += this.pmsg("Nenhuma linha entre os dois pontos");						
+                        html += this.pmsg("nenhuma linha liga com o ponto abaixo");						
 					}
                 }
             }
@@ -242,7 +244,7 @@ var marcadores = {
     },
 	
 	pmsg: function(texto) {
-		return '<p style="margin:0px;font-style:italic;">'+texto+"</p>";
+		return '<p style="color:red;margin:0px;font-style:italic;text-align:center;">'+texto+"</p>";
 	},
 	
 	_semente_cor: 1,
@@ -316,25 +318,32 @@ function inicializa(){
 			alert("Desculpe, não consigo colocar mais marcadores");
 		}
     });
+	$("#text_busca").focus(function () {
+		if ($(this).hasClass("input_instrucoes")) {
+			$(this).removeClass("input_instrucoes");
+			$(this).attr("value", "");
+		}
+	});
+
 	marcadores.atualiza();
 }
 
 $(document).ready(function(){
 	$("#link_oque").fancybox({
-		'width'				: 600,
-		'height'			: 285,
+		'width'				: 620,
+		'height'			: 280,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_porque").fancybox({
-		'width'				: 600,
-		'height'			: 240,
+		'width'				: 620,
+		'height'			: 250,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_como").fancybox({
-		'width'				: 600,
-		'height'			: 325,
+		'width'				: 620,
+		'height'			: 335,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
