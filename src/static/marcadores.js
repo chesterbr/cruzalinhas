@@ -127,7 +127,7 @@ var marcadores = {
                     if (mostra) {
 						linhas_no_marcador++;
 						if (linhas_no_marcador > marcador.max_linhas) {
-							html+='<p style="text-align:center"><a href="javascript:void(0)" onClick="marcadores.mais('+marcador.id+');return false;">mais...</a><br/></p>';
+							html+='<p style="text-align:center;min-width:150px;"><a href="javascript:void(0)" onClick="marcadores.mais('+marcador.id+');return false;">mais...</a><br/></p>';
 							break;
 						}
 						var gif_loading = (this.desenhaLinha(linha) ? "&nbsp;" : IMG_LOADER);
