@@ -91,7 +91,7 @@ var marcadores = {
 				// estamos no meio de uma remoção, relaxa
 				return;
 			}
-            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover">(arraste no mapa ou <a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">remova</a>)</span></p>';
+            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">remover do mapa</a></span></p>';
             if (marcador.linhas) {
                 var vazio = true;
 				var linhas_no_marcador = 0;
@@ -370,7 +370,7 @@ $(document).ready(function(){
     $('#form_busca').submit(function(){
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({
-            'address': $('#text_busca').val()
+            'address': $('#text_busca').val()+", São Paulo, SP"
         }, function(results, status){
             if (status == google.maps.GeocoderStatus.OK) {
                 latlng = results[0].geometry.location;
