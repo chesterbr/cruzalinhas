@@ -32,7 +32,7 @@ from google.appengine.ext.webapp import template
 class MainPage(webapp.RequestHandler):    
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-        path = os.path.join(os.path.dirname(__file__), 'static','cruzalinhas.html')
+        path = os.path.join(os.path.dirname(__file__), 'static', 'cruzalinhas.html')
         self.response.out.write(template.render(path, {}))
         
 class ListaPage(webapp.RequestHandler):
@@ -150,16 +150,76 @@ class ListaGeraHashPage(webapp.RequestHandler):
         for linha in Linha.all():
             self.response.out.write('<a href="/gerahash?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
                             
+# populando caches
+class ListaGeraCachePage(webapp.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        if self.request.get("hashes"):
+            for hash in Hash.all():
+                self.response.out.write('<a href="/cachehash?hash=%s">%s</a><br/>' % (hash.hash, hash.hash))
+        else:
+            for linha in Linha.all():
+                self.response.out.write('<a href="/cachelinha?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
+
+
+class CacheHashPage(webapp.RequestHandler):
+    def get(self):
+        hash = self.request.get("hash")
+        chave_memcache = "hash_linhas_keys_" + hash
+        client = memcache.Client()
+        linhas_keys = client.get(chave_memcache)
+        if linhas_keys is None:
+            result = Hash.all().filter("hash =", hash).fetch(999)
+            self.response.out.write("count %d " % len(result))
+            linhas_keys = result[0].linhas if result else []
+            client.add(chave_memcache, linhas_keys)   
+            self.response.out.write("gerou cache de %s " % chave_memcache)
+        else:
+            self.response.out.write("ja tinha cache de %s " % chave_memcache)
+                        
+class CacheLinhaPage(webapp.RequestHandler):
+    def get(self):
+        key = self.request.get("key")
+        client = memcache.Client()
+        chave_memcache = "linha_json_" + key
+        linha_obj = client.get(chave_memcache)
+        if linha_obj is None:
+            linha = Linha.get(db.Key(key))
+            linha_obj = {
+                          "key" : str(linha.key()),
+                          "nome" : linha.nome,
+                          "url" : linha.url,
+                          "hashes" : linha.hashes()}
+            client.add(chave_memcache, linha_obj)
+            self.response.out.write("gerou cache de %s " % chave_memcache)
+        else:
+            self.response.out.write("ja tinha cache de %s " % chave_memcache)
+        chave_memcache = "pontos_json_" + key;
+        pontos_json = client.get(chave_memcache)
+        if pontos_json is None:
+            linha = Linha.get(db.Key(key))
+            pontos = Ponto.all().filter("linha = ", linha).order("ordem")
+            pontos_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
+            client.add(chave_memcache, pontos_json)
+            self.response.out.write("gerou cache de %s " % chave_memcache)
+        else:
+            self.response.out.write("ja tinha cache de %s " % chave_memcache)
+        
         
         
 application = webapp.WSGIApplication([('/', MainPage),
-                                      ('/lista', ListaPage),
 #                                      ('/gerahash', GeraHashPage),
 #                                      ('/listagerahash', ListaGeraHashPage),
-                                      ('/linha.json', LinhaPage),
-                                      ('/linhasquepassam.json', LinhasQuePassamPage),
+
+#                                      ('/listageracache', ListaGeraCachePage),
+#                                      ('/cachehash', CacheHashPage),
+#                                      ('/cachelinha', CacheLinhaPage),
+#                                      
 #                                      ('/zap', ZapPage),
-                                      ('/clearcache', ClearCachePage)], debug=True)
+#                                      ('/clearcache', ClearCachePage)], debug=True)
+                                      ('/lista', ListaPage),
+                                      ('/linha.json', LinhaPage),
+                                      ('/linhasquepassam.json', LinhasQuePassamPage)], debug=True)
 
 
 def main():
