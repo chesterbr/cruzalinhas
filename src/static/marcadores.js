@@ -91,7 +91,7 @@ var marcadores = {
 				// estamos no meio de uma remoção, relaxa
 				return;
 			}
-            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">remover do mapa</a></span></p>';
+            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove('+marcador.id+'); return false">REMOVER DO MAPA</a></span></p>';
             if (marcador.linhas) {
                 var vazio = true;
 				var linhas_no_marcador = 0;
@@ -139,7 +139,7 @@ var marcadores = {
 								 '" style="float:left;margin:1px"><a href="' + 
 								 linha.url + 
 								 '" target="_blank">' + 
-								 linha.nome + '</a>' + 
+								 marcadores.ajustaNome(linha.nome) + '</a>' + 
 								 '</p>';
                         vazio = false;
                     }
@@ -287,7 +287,26 @@ var marcadores = {
 			return "#FFF";
 		}
    		
+	},
+	
+	// Deixa o nome da linha menos feio
+	ajustaNome: function(nome) {
+		// Converte 1a. letra pra upper, outras pra lower
+		var baixar = false;
+		var result = "";
+		for (i = 0; i < nome.length; i++) {
+			var c = nome[i];
+			if (baixar) {
+				result += c.toLowerCase();
+			} else {
+				result += c;
+			}
+			baixar = (c.toLowerCase()!=c);		
+		}
+		// Separa ida e volta
+		return result.replace("/"," / ");
 	}
+
 
 
 	
@@ -345,6 +364,7 @@ function inicializa(){
 
 	marcadores.atualiza();
 }
+
 
 $(document).ready(function(){
 	$("#link_oque").fancybox({
