@@ -315,33 +315,7 @@ var marcadores = {
 
 
 
-	
-	/*,
 
-    
-    // Verifica se o marcador passa pelo linha com precisão decente
-    passaMesmo: function(marcador, linha){
-        var linha_cache = this._cache_linhas[linha.key];
-        if (linha_cache) {
-            for (i in linha_cache.pontos) {
-                if (this.dist(linha_cache.pontos[i], 
-							  ponto, marcador.marker.position) < this.DIST_MIN) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    },
-    
-	DIST_MIN: 10, // distancia minima em metros p/ considerar match
-	
-    dist: function(a, b){
-        var R = 6371; // km
-        return Math.acos(Math.sin(lat1) * Math.sin(lat2) +
-        Math.cos(lat1) * Math.cos(lat2) *
-        Math.cos(lon2 - lon1)) *
-        R;
-    }*/
     
 }
 
@@ -387,13 +361,13 @@ $(document).ready(function(){
 	});
 	$("#link_como").fancybox({
 		'width'				: 630,
-		'height'			: 370,
+		'height'			: 390,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_sobre").fancybox({
 		'width'				: 500,
-		'height'			: 300,
+		'height'			: 340,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
