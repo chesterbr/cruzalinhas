@@ -368,20 +368,26 @@ function inicializa(){
 
 $(document).ready(function(){
 	$("#link_oque").fancybox({
-		'width'				: 620,
-		'height'			: 280,
+		'width'				: 630,
+		'height'			: 300,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_porque").fancybox({
-		'width'				: 620,
-		'height'			: 250,
+		'width'				: 630,
+		'height'			: 280,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_como").fancybox({
-		'width'				: 620,
-		'height'			: 335,
+		'width'				: 630,
+		'height'			: 370,
+		'autoDimensions'	: false,
+		'autoScale'			: false
+	});
+	$("#link_sobre").fancybox({
+		'width'				: 500,
+		'height'			: 300,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});

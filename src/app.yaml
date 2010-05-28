@@ -18,6 +18,14 @@ handlers:
 - url: /zap
   script: frontend.py
   login: admin
+
+- url: /listagerahash
+  script: frontend.py
+  login: admin
+    
+- url: /gerahash
+  script: frontend.py
+  login: admin
     
 - url: /load-linha
   script: linhaloader.py

@@ -208,8 +208,8 @@ class CacheLinhaPage(webapp.RequestHandler):
         
         
 application = webapp.WSGIApplication([('/', MainPage),
-#                                      ('/gerahash', GeraHashPage),
-#                                      ('/listagerahash', ListaGeraHashPage),
+                                      ('/gerahash', GeraHashPage),
+                                      ('/listagerahash', ListaGeraHashPage),
 
                                       ('/listageracache', ListaGeraCachePage),
                                       ('/cachehash', CacheHashPage),
