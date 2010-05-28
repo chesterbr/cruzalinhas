@@ -211,16 +211,15 @@ application = webapp.WSGIApplication([('/', MainPage),
 #                                      ('/gerahash', GeraHashPage),
 #                                      ('/listagerahash', ListaGeraHashPage),
 
-#                                      ('/listageracache', ListaGeraCachePage),
-#                                      ('/cachehash', CacheHashPage),
-#                                      ('/cachelinha', CacheLinhaPage),
+                                      ('/listageracache', ListaGeraCachePage),
+                                      ('/cachehash', CacheHashPage),
+                                      ('/cachelinha', CacheLinhaPage),
 #                                      
 #                                      ('/zap', ZapPage),
-#                                      ('/clearcache', ClearCachePage)], debug=True)
+                                      ('/clearcache', ClearCachePage),
                                       ('/lista', ListaPage),
                                       ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage)], debug=True)
-
 
 def main():
     run_wsgi_app(application)
