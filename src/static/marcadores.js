@@ -375,13 +375,13 @@ function inicializa(){
 $(document).ready(function(){
 	$("#link_oque").fancybox({
 		'width'				: 630,
-		'height'			: 300,
+		'height'			: 340,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
 	$("#link_porque").fancybox({
-		'width'				: 630,
-		'height'			: 280,
+		'width'				: 610,
+		'height'			: 340,
 		'autoDimensions'	: false,
 		'autoScale'			: false
 	});
