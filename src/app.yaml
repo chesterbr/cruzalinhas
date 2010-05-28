@@ -11,31 +11,17 @@ handlers:
   static_files: static/cruzalinhas.html
   upload: static/cruzalinhas.html
   
-- url: /clearcache
+- url: /
   script: frontend.py
-  login: admin
     
-- url: /zap
+- url: /linha.json
   script: frontend.py
-  login: admin
-
-- url: /listagerahash
-  script: frontend.py
-  login: admin
     
-- url: /gerahash
+- url: /linhasquepassam.json
   script: frontend.py
-  login: admin
-    
-- url: /load-linha
-  script: linhaloader.py
-  login: admin
-
-- url: /load-ponto
-  script: pontoloader.py
-  login: admin
 
 - url: /.*
   script: frontend.py
+  login: admin
 
 

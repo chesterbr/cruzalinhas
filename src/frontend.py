@@ -207,19 +207,25 @@ class CacheLinhaPage(webapp.RequestHandler):
         
         
         
-application = webapp.WSGIApplication([('/', MainPage),
-                                      ('/gerahash', GeraHashPage),
+application = webapp.WSGIApplication([
+                                      # Site (páginas abertas)
+                                      ('/', MainPage),
+                                      ('/linha.json', LinhaPage),
+                                      ('/linhasquepassam.json', LinhasQuePassamPage),
+                                      
+                                      # Geração de hashes
                                       ('/listagerahash', ListaGeraHashPage),
+                                      ('/gerahash', GeraHashPage),
 
+                                      # Cacheador (phasing out)
                                       ('/listageracache', ListaGeraCachePage),
                                       ('/cachehash', CacheHashPage),
                                       ('/cachelinha', CacheLinhaPage),
 #                                      
+                                      # Debug / Manutenção
 #                                      ('/zap', ZapPage),
                                       ('/clearcache', ClearCachePage),
-                                      ('/lista', ListaPage),
-                                      ('/linha.json', LinhaPage),
-                                      ('/linhasquepassam.json', LinhasQuePassamPage)], debug=True)
+                                      ('/lista', ListaPage)], debug=True)
 
 def main():
     run_wsgi_app(application)
