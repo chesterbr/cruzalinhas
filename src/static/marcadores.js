@@ -155,8 +155,14 @@ var marcadores = {
             else {
                 html += IMG_LOADER;
             }
-            html += "</div>";
+            html += "</div>";			
         }
+		if (count == 1) {
+			html += '<p class="p_dicas">Você pode arrastar o pino no mapa para ajustar o local.<br/><br/>Acrescente outros pinos para ver somente as linhas entre eles.</p>';
+		} else {
+			html += '<p class="p_dicas">Com dois ou mais pinos, só aparecem as linhas que passam entre eles.<br/><br/>Para apagar um pino, clique em REMOVER DO MAPA.</p>';				
+		}
+
         $("#div_lista").html(html);
     },
     

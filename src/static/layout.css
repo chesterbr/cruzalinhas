@@ -27,8 +27,9 @@ a:visited {
 }
 
 #div_instrucoes p span {
-	font-style: normal;
+    font-style: normal;
 }
+
 
 .titulo {
     font-size: 36px;
@@ -178,4 +179,14 @@ a:visited {
 
 .destaca_linha {
     background-color: #FFFF00;
+}
+
+.p_dicas {
+	float:left;
+    font: 14px Helvetica;
+    color: #404040;
+    font-style: italic;
+	margin-left:8px;
+	margin-top:20px;
+	margin-bottom:0px;
 }
