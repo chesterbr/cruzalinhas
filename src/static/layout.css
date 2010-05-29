@@ -30,7 +30,6 @@ a:visited {
     font-style: normal;
 }
 
-
 .titulo {
     font-size: 36px;
     font-weight: bold;
@@ -168,8 +167,15 @@ a:visited {
     margin: 0px;
     padding: 0px;
     float: left;
-    min-width: 16px;
     opacity: 0.5;
+    text-align: center;
+    margin-bottom: 1px;
+    vertical-align: middle;
+}
+
+.legenda_linha input {
+    margin: 3px;
+    padding: 0px;
 }
 
 .link_remover {
@@ -182,12 +188,17 @@ a:visited {
 }
 
 .p_dicas {
-	float:left;
+    float: left;
     font: 14px Helvetica;
     color: #404040;
     font-style: italic;
-	margin-right:8px;
-	margin-left:8px;
-	margin-top:20px;
-	margin-bottom:0px;
+    margin-right: 8px;
+    margin-left: 8px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.p_dicas input {
+    margin: 0px;
+    padding: 0px;
 }

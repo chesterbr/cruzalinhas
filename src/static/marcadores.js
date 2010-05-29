@@ -85,6 +85,7 @@ var marcadores = {
             max_linhas: LINHAS_INICIAL,
             ordem: ordem,
             polylines: [],
+			oculta_linha: []
         }
 		if (linhas) {
 			m._marcadores[id].linhas = linhas;
@@ -141,7 +142,7 @@ var marcadores = {
                 // estamos no meio de uma remoção, relaxa
                 return;
             }
-            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER DO MAPA</a></span></p>';
+            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span></p>';
             if (marcador.linhas) {
                 var vazio = true;
                 var linhas_no_marcador = 0;
@@ -177,11 +178,16 @@ var marcadores = {
                             html += '<div style="clear:both"><p style="text-align:center;"><a href="javascript:void(0)" onClick="marcadores.mais(' + marcador.id + ');return false;">mais...</a></p></div>';
                             break;
                         }
-                        var gif_loading = (this.desenhaLinha(linha) ? "&nbsp;" : IMG_LOADER);
+						var conteudo_legenda = IMG_LOADER;
+						if (marcador.oculta_linha[linha.key] || this.desenhaLinha(linha)) {
+							conteudo_legenda = '<input type="checkbox" title="oculta/exibe no mapa"' + 
+							                   (marcador.oculta_linha[linha.key] ? '' : 'checked="checked"') + 
+											   ' onClick="marcadores.alterna_linha(' + marcador.id + ',\'' + linha.key + '\')">'; 
+						}
                         html += '<div class="legenda_linha" style="background-color:' +
                         this.corDaLinha(linha) +
                         '">' +
-                        gif_loading +
+                        conteudo_legenda +
                         '</div>' +
                         '<p class="p_linha p_linha_' +
                         linha.key +
@@ -200,7 +206,7 @@ var marcadores = {
                     }
                     else 
                         if (ordem < count) {
-                            html += this.pmsg("nenhuma linha liga com o ponto abaixo");
+                            html += this.pmsg("nenhuma linha passa entre eles");
                         }
                 }
             }
@@ -209,12 +215,10 @@ var marcadores = {
             }
             html += "</div>";
         }
-        if (count == 1) {
-            html += '<p class="p_dicas">Você pode arrastar o pino no mapa para ajustar o local.<br/><br/>Acrescente outros pinos para ver somente as linhas entre eles.<br/><br/>A busca não leva em conta os pontos de ônibus, apenas a proximidade do trajeto.</p>';
-        }
-        else {
-            html += '<p class="p_dicas">Com dois ou mais pinos, só aparecem as linhas que passam entre eles.<br/><br/>Para apagar um pino, clique em REMOVER DO MAPA.<br/><br/>A busca não leva em conta os pontos de ônibus, apenas a proximidade do trajeto.</p>';
-        }
+        html += '<p class="p_dicas">Arraste o pino no mapa para ajustar o local, ou clique em REMOVER para jogar ele fora.<br/><br/>';
+        html += 'Com dois ou mais pinos, só aparecem as linhas que passam entre eles.<br/><br/>';
+        html += 'Definidos os pinos, use <input type="checkbox" disabled="true" checked="chekced"/> para esconder linhas indesejadas.<br/><br/>';
+		html += 'A busca não leva em conta os pontos de ônibus e estações, apenas a proximidade do trajeto.</p>';
         
         $("#div_lista").html(html);
     },
@@ -256,9 +260,9 @@ var marcadores = {
         }
         marcador.marker.setMap(null);
         delete this._marcadores[id];
-        //this.atualiza();
     },
     
+	// Remove um marcador pra valer (movendo os outros acima na lista)
     remove: function(id){
         var ordem = this._marcadores[id].ordem;
 		var ultima_ordem = this.count();
@@ -321,7 +325,16 @@ var marcadores = {
             delete c.polyline;
         }
     },
-    
+
+    // mostra/esconde a linha n do ordem-ésima marcador
+    alterna_linha: function(id, key) {
+        var marcador = this._marcadores[id];
+		if (marcador) {
+			marcador.oculta_linha[key] = !marcador.oculta_linha[key];
+		}
+		this.atualiza();
+    },
+	    
     pmsg: function(texto){
         return '<p style="color:red;margin:0px;font-style:italic;text-align:center;">' + texto + "</p>";
     },
