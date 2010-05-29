@@ -51,9 +51,17 @@ var marcadores = {
         return _marcadores[id];
     },
     
-    add: function(latlng, ordem){
-        // Cria um novo marcador
-        if (!ordem) {
+	// Adiciona um marcador no mapa (e na lista).
+	//
+	// Se for um marcador pré-existente que está em drag-and-drop, assume que o
+	// marcador anterior foi removido (soft) e recebe a posição que ele ocupava.
+	// Para drag and drop (que remove e recria), recebe a ordem na lista do que foi removido.
+	// Para preencher o "buraco" durante uma remoção, recebe a lista de linhas
+	//   do marcador original (vide remove())
+    add: function(latlng, preset_ordem, linhas){
+        // Cria o marker
+		var ordem = preset_ordem;
+        if (!preset_ordem) {
             ordem = this.count() + 1;
         }
         var id = new Date().getTime();
@@ -65,10 +73,11 @@ var marcadores = {
         });
         m = this;
         google.maps.event.addListener(marker, "dragend", function(event){
+			var ordem_orig = marcadores._marcadores[id].ordem;
             m.soft_remove(id);
-            m.add(event.latLng, ordem);
+            m.add(event.latLng, ordem_orig);
         });
-        // Guarda ele na lista	
+        // Guarda ele na lista
         this._marcadores[id] = {
             id: id,
             marker: marker,
@@ -77,32 +86,36 @@ var marcadores = {
             ordem: ordem,
             polylines: [],
         }
-        // Recupera as linhas que passam por ele (em background)
-        $.ajax({
-            url: "/linhasquepassam.json",
-            dataType: 'json',
-            data: {
-                lat: latlng.lat(),
-                lng: latlng.lng()
-            },
-            success: function(data){
-                if (m._marcadores[id]) {
-                    m._marcadores[id].linhas = data;
-                    m.atualiza();
-                }
-            },
-            retry_ms: 1000,
-            error: function(request, status, error){
-                if (m._marcadores[id]) {
-                    a = this;
-                    setTimeout(function(){
-                        $.ajax(a)
-                    }, this.retry_ms);
-                    this.retry_ms *= 2;
-                }
-            }
-        });
-        this.atualiza();
+		if (linhas) {
+			m._marcadores[id].linhas = linhas;
+		} else {
+            // Recupera as linhas que passam por ele (em background)
+	        $.ajax({
+	            url: "/linhasquepassam.json",
+	            dataType: 'json',
+	            data: {
+	                lat: latlng.lat(),
+	                lng: latlng.lng()
+	            },
+	            success: function(data){
+	                if (m._marcadores[id]) {
+	                    m._marcadores[id].linhas = data;
+						m.atualiza();
+	                }
+	            },
+	            retry_ms: 1000,
+	            error: function(request, status, error){
+	                if (m._marcadores[id]) {
+	                    a = this;
+	                    setTimeout(function(){
+	                        $.ajax(a)
+	                    }, this.retry_ms);
+	                    this.retry_ms *= 2;
+	                }
+	            }
+	        });
+			this.atualiza();
+		}
         return id;
     },
     
@@ -248,12 +261,14 @@ var marcadores = {
     
     remove: function(id){
         var ordem = this._marcadores[id].ordem;
-        for (i = this.count(); i > ordem; i--) {
-            var m = this.getMarcadorPelaOrdem(i);
-            this.soft_remove(m.id);
-            this.add(m.marker.position, i - 1);
-        }
+		var ultima_ordem = this.count();
         this.soft_remove(id);
+        for (i = ordem + 1; i <= ultima_ordem; i++) {
+            var m = this.getMarcadorPelaOrdem(i);
+			var linhas = m.linhas;
+            this.soft_remove(m.id);
+            this.add(m.marker.position, i - 1, linhas);
+        }
         this.atualiza();
     },
     
