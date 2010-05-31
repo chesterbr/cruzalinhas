@@ -40,7 +40,7 @@ var map;
 var ICON_URLS = ["", "http://www.google.com/mapfiles/marker_yellow.png", "http://www.google.com/mapfiles/marker_brown.png", "http://www.google.com/mapfiles/marker_green.png", "http://www.google.com/mapfiles/marker_purple.png", "http://www.google.com/mapfiles/marker_grey.png", "http://www.google.com/mapfiles/marker_orange.png", "http://www.google.com/mapfiles/marker_white.png"];
 var IMG_LOADER = '<img src="/static/ajax-loader.gif"/>';
 var LINHAS_INICIAL = 8;
-var LINHAS_INCREMENTO = 8;
+var LINHAS_INCREMENTO = 30;
 
 var marcadores = {
 
@@ -142,7 +142,11 @@ var marcadores = {
                 // estamos no meio de uma remoção, relaxa
                 return;
             }
-            html += '<div style="margin-bottom:4px;clear:both;"><p style="margin:0px; text-align:center;"><img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/><span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span></p>';
+            html += '<div style="margin-bottom:4px;clear:both;">';
+			html += ' <p style="margin:0px; text-align:center;">';
+			html += '  <img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/>';
+			html += '  <span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span>';
+			html += ' </p>';
             if (marcador.linhas) {
                 var vazio = true;
                 var linhas_no_marcador = 0;
