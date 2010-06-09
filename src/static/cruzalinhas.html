@@ -37,6 +37,7 @@
                 - <a href="#div_como" id="link_como">como funciona</a>
                 - <a href="#div_sobre" id="link_sobre">quem fez (contato)</a>
                 - <a href="http://github.com/chesterbr/cruzalinhas" target="_blank">código-fonte</a>
+                - <a href="#div_api" id="link_api">API</a>
             </div>
             <div>
                 <div id="div_conteudo_wrapper">
@@ -126,6 +127,45 @@
                 </p>
                 <p>
                     Os hashes da linha também são usados localmente para que, caso haja mais de um ponto no mapa, o cliente possa identificar as linhas que conectam cada um deles.
+                </p>
+            </div>
+            <div id="div_api">
+                <p>
+                    Da mesma forma que eu tinha uma necessidade que os outros sites não atendiam, esse site certamente não vai atender a todos. Se você quer fazer algo diferente com esses trajetos, essa é a sua chance: as chamadas abaixo permitem incluir as mesmas informações que aparecem
+                    no cruzalinhas no seu site*.
+                </p>
+                <p>
+                    Elas são chamadas AJAX simples, nas quais os parâmetros devem ser passados via GET, e o resultado é um <a href="http://www.json.org">objeto JSON</a>: 
+                </p>
+                <p class="p_api_desc">
+                    <b>URL:</b>
+                    http://cruzalinhas.appspot.com/linhasquepassam.json
+                    <br/>
+                    <b>Parâmetros: </b>latitude (<i>lat</i>) e longitude (<i>lng</i>).
+                    <br/>
+                    <b>Retorno: </b>
+                    Array cujos elementos contém o Nome, URL, chave (<i>key</i>) e lista de geohashes de cada linha.
+                    <br/>
+                    <b>Exemplo: </b>
+                    <a href="http://cruzalinhas.appspot.com/linhasquepassam.json?lat=-23.546953&lng=-46.638787">linhasquepassam.json?lat=-23.546953&lng=-46.638787</a>
+                    <br/>
+                </p>
+                <p class="p_api_desc">
+                    <b>URL:</b>
+                    http://cruzalinhas.appspot.com/linha.json
+                    <br/>
+                    <b>Parâmetros: </b>chave da linha (<i>key</i>)
+                    <br/>
+                    <b>Retorno: </b>
+                    Array com os pontos  (latitude, longitude) que compõem o trajeto.
+                    <br/>
+                    <b>Exemplo: </b>
+                    <a href="http://cruzalinhas.appspot.com/linha.json?key=agtjcnV6YWxpbmhhc3INCxIFTGluaGEYssUPDA">linha.json?key=agtjcnV6YWxpbmhhc3INCxIFTGluaGEYssUPDA</a>
+                    <br/>
+                </p>
+                <p class="p_termos">
+                    * TERMOS DE USO: Você pode usar essa API no seu site, desde que ele seja público e gratuito, preste serviços à população e <a href="http://en.wikipedia.org/wiki/Don%27t_be_evil">não pratique o mal</a>. Um link para o cruzalinhas (ex.: "powered by cruzalinhas", ou algo que o valha) é de bom tom, assim como mandar um e-mail me falando do seu site. O serviço de API, como todo o resto, é uma cortesia bem-intencionada, não havendo garantia de funcionamento ou precisão dos dados, e eu me reservo o direito de interromper o serviço (mas farei o possível para que isso não aconteça). Não é obrigatório, mas, se possível, faça <i>cache</i>
+                    das informações.
                 </p>
             </div>
             <div id="div_sobre">

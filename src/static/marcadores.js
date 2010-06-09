@@ -51,16 +51,16 @@ var marcadores = {
         return _marcadores[id];
     },
     
-	// Adiciona um marcador no mapa (e na lista).
-	//
-	// Se for um marcador pré-existente que está em drag-and-drop, assume que o
-	// marcador anterior foi removido (soft) e recebe a posição que ele ocupava.
-	// Para drag and drop (que remove e recria), recebe a ordem na lista do que foi removido.
-	// Para preencher o "buraco" durante uma remoção, recebe a lista de linhas
-	//   do marcador original (vide remove())
+    // Adiciona um marcador no mapa (e na lista).
+    //
+    // Se for um marcador pré-existente que está em drag-and-drop, assume que o
+    // marcador anterior foi removido (soft) e recebe a posição que ele ocupava.
+    // Para drag and drop (que remove e recria), recebe a ordem na lista do que foi removido.
+    // Para preencher o "buraco" durante uma remoção, recebe a lista de linhas
+    //   do marcador original (vide remove())
     add: function(latlng, preset_ordem, linhas){
         // Cria o marker
-		var ordem = preset_ordem;
+        var ordem = preset_ordem;
         if (!preset_ordem) {
             ordem = this.count() + 1;
         }
@@ -73,7 +73,7 @@ var marcadores = {
         });
         m = this;
         google.maps.event.addListener(marker, "dragend", function(event){
-			var ordem_orig = marcadores._marcadores[id].ordem;
+            var ordem_orig = marcadores._marcadores[id].ordem;
             m.soft_remove(id);
             m.add(event.latLng, ordem_orig);
         });
@@ -85,41 +85,42 @@ var marcadores = {
             max_linhas: LINHAS_INICIAL,
             ordem: ordem,
             polylines: [],
-			oculta_linha: []
+            oculta_linha: []
         }
-		if (linhas) {
-			m._marcadores[id].linhas = linhas;
-		} else {
+        if (linhas) {
+            m._marcadores[id].linhas = linhas;
+        } else {
             // Recupera as linhas que passam por ele (em background)
-	        $.ajax({
-	            url: "/linhasquepassam.json",
-	            dataType: 'json',
-	            data: {
-	                lat: latlng.lat(),
-	                lng: latlng.lng()
-	            },
-	            success: function(data){
-	                if (m._marcadores[id]) {
-	                    m._marcadores[id].linhas = data;
-						m.atualiza();
-	                }
-	            },
-	            retry_ms: 1000,
-	            error: function(request, status, error){
-	                if (m._marcadores[id]) {
-	                    a = this;
-	                    setTimeout(function(){
-	                        $.ajax(a)
-	                    }, this.retry_ms);
-	                    this.retry_ms *= 2;
-	                }
-	            }
-	        });
-			this.atualiza();
-		}
+            $.ajax({
+                url: "/linhasquepassam.json",
+                dataType: 'json',
+                data: {
+                    lat: latlng.lat(),
+                    lng: latlng.lng()
+                },
+                success: function(data){
+                    if (m._marcadores[id]) {
+                        m._marcadores[id].linhas = data;
+                        m.atualiza();
+                    }
+                },
+                retry_ms: 1000,
+                error: function(request, status, error){
+                    if (m._marcadores[id]) {
+                        a = this;
+                        setTimeout(function(){
+                            $.ajax(a)
+                        }, this.retry_ms);
+                        this.retry_ms *= 2;
+                    }
+                }
+            });
+            this.atualiza();
+        }
         return id;
     },
-    
+
+    mostrou_instrucoes: false,
     atualiza: function(){
         var html = "";
         var count = this.count();
@@ -127,15 +128,19 @@ var marcadores = {
             this.apagaLinha(key);
         }
         if (count == 0) {
-            $("#div_lista").animate({
-                width: '-=50'
-            }, 0);
-            $("#div_lista").html($("#div_instrucoes").clone());
-            $("#div_lista").animate({
-                width: '+=50'
-            }, 1000);
+            if (!this.mostrou_instrucoes) {
+                $("#div_lista").animate({
+                    width: '-=50'
+                }, 0);
+                $("#div_lista").html($("#div_instrucoes").clone());
+                $("#div_lista").animate({
+                    width: '+=50'
+                }, 1000);
+            }
+            this.mostrou_instrucoes = true;
             return;
         }
+        this.mostrou_instrucoes = false;
         for (ordem = 1; ordem <= count; ordem++) {
             var marcador = this.getMarcadorPelaOrdem(ordem);
             if (!marcador) {
@@ -143,10 +148,10 @@ var marcadores = {
                 return;
             }
             html += '<div style="margin-bottom:4px;clear:both;">';
-			html += ' <p style="margin:0px; text-align:center;">';
-			html += '  <img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/>';
-			html += '  <span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span>';
-			html += ' </p>';
+            html += ' <p style="margin:0px; text-align:center;">';
+            html += '  <img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/>';
+            html += '  <span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span>';
+            html += ' </p>';
             if (marcador.linhas) {
                 var vazio = true;
                 var linhas_no_marcador = 0;
@@ -182,12 +187,12 @@ var marcadores = {
                             html += '<div style="clear:both"><p style="text-align:center;"><a href="javascript:void(0)" onClick="marcadores.mais(' + marcador.id + ');return false;">mais...</a></p></div>';
                             break;
                         }
-						var conteudo_legenda = IMG_LOADER;
-						if (marcador.oculta_linha[linha.key] || this.desenhaLinha(linha)) {
-							conteudo_legenda = '<input type="checkbox" title="oculta/exibe no mapa"' + 
-							                   (marcador.oculta_linha[linha.key] ? '' : 'checked="checked"') + 
-											   ' onClick="marcadores.alterna_linha(' + marcador.id + ',\'' + linha.key + '\')">'; 
-						}
+                        var conteudo_legenda = IMG_LOADER;
+                        if (marcador.oculta_linha[linha.key] || this.desenhaLinha(linha)) {
+                            conteudo_legenda = '<input type="checkbox" title="oculta/exibe no mapa"' + 
+                                               (marcador.oculta_linha[linha.key] ? '' : 'checked="checked"') + 
+                                               ' onClick="marcadores.alterna_linha(' + marcador.id + ',\'' + linha.key + '\')">'; 
+                        }
                         html += '<div class="legenda_linha" style="background-color:' +
                         this.corDaLinha(linha) +
                         '">' +
@@ -222,7 +227,7 @@ var marcadores = {
         html += '<p class="p_dicas">Arraste o pino no mapa para ajustar o local, ou clique em REMOVER para jogar ele fora.<br/><br/>';
         html += 'Com dois ou mais pinos, só aparecem as linhas que passam entre eles.<br/><br/>';
         html += 'Definidos os pinos, use <input type="checkbox" disabled="true" checked="chekced"/> para esconder linhas indesejadas.<br/><br/>';
-		html += 'A busca não leva em conta os pontos de ônibus e estações, apenas a proximidade do trajeto.</p>';
+        html += 'A busca não leva em conta os pontos de ônibus e estações, apenas a proximidade do trajeto.</p>';
         
         $("#div_lista").html(html);
     },
@@ -266,14 +271,14 @@ var marcadores = {
         delete this._marcadores[id];
     },
     
-	// Remove um marcador pra valer (movendo os outros acima na lista)
+    // Remove um marcador pra valer (movendo os outros acima na lista)
     remove: function(id){
         var ordem = this._marcadores[id].ordem;
-		var ultima_ordem = this.count();
+        var ultima_ordem = this.count();
         this.soft_remove(id);
         for (i = ordem + 1; i <= ultima_ordem; i++) {
             var m = this.getMarcadorPelaOrdem(i);
-			var linhas = m.linhas;
+            var linhas = m.linhas;
             this.soft_remove(m.id);
             this.add(m.marker.position, i - 1, linhas);
         }
@@ -333,12 +338,12 @@ var marcadores = {
     // mostra/esconde a linha n do ordem-ésima marcador
     alterna_linha: function(id, key) {
         var marcador = this._marcadores[id];
-		if (marcador) {
-			marcador.oculta_linha[key] = !marcador.oculta_linha[key];
-		}
-		this.atualiza();
+        if (marcador) {
+            marcador.oculta_linha[key] = !marcador.oculta_linha[key];
+        }
+        this.atualiza();
     },
-	    
+        
     pmsg: function(texto){
         return '<p style="color:red;margin:0px;font-style:italic;text-align:center;">' + texto + "</p>";
     },
@@ -428,19 +433,25 @@ function inicializa(){
 $(document).ready(function(){
     $("#link_oque").fancybox({
         'width': 630,
-        'height': 340,
+        'height': 350,
         'autoDimensions': false,
         'autoScale': false
     });
     $("#link_porque").fancybox({
         'width': 610,
-        'height': 340,
+        'height': 350,
         'autoDimensions': false,
         'autoScale': false
     });
     $("#link_como").fancybox({
         'width': 630,
-        'height': 390,
+        'height': 400,
+        'autoDimensions': false,
+        'autoScale': false
+    });
+    $("#link_api").fancybox({
+        'width': 750,
+        'height': 500,
         'autoDimensions': false,
         'autoScale': false
     });

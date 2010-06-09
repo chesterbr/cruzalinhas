@@ -202,3 +202,20 @@ a:visited {
     margin: 0px;
     padding: 0px;
 }
+
+.p_api_desc {
+    margin-left: 20px;
+	border-left: 3px double grey;
+	padding-left: 4px;
+}
+
+.p_termos {
+	font-size: small;
+}
+
+.texto_novidade {
+    font-color: red;
+    font-size: xx-small;
+    vertical-align: top;
+	font-weight: bold;
+}
