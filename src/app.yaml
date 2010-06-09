@@ -20,6 +20,9 @@ handlers:
 - url: /linhasquepassam.json
   script: frontend.py
 
+- url: /robots.txt
+  script: frontend.py
+
 - url: /.*
   script: frontend.py
   login: admin

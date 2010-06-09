@@ -35,12 +35,6 @@ class MainPage(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'static', 'cruzalinhas.html')
         self.response.out.write(template.render(path, {}))
         
-class ListaPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        for linha in Linha.all():
-            self.response.out.write('<a href="/linha.json?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
-
 class LinhaPage(webapp.RequestHandler):        
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
@@ -108,8 +102,19 @@ class ZapPage(webapp.RequestHandler):
             db.delete(Linha.all().fetch(100))
         self.response.out.write('Ok')
 
+class RobotsPage(webapp.RequestHandler):
+    def get(self):
+        self.response.out.write('User-agent: *\n')
+        self.response.out.write('Disallow: /linhasquepassam.json\n')
+        self.response.out.write('Disallow: /linha.json\n')
 
 # Desnormalizando os dados que ja estao la (gambiarra)
+
+class ListaPage(webapp.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        for linha in Linha.all():
+            self.response.out.write('<a href="/linha.json?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
 
 class GeraHashPage(webapp.RequestHandler):
     def get(self):
@@ -208,8 +213,9 @@ class CacheLinhaPage(webapp.RequestHandler):
         
         
 application = webapp.WSGIApplication([
-                                      # Site (páginas abertas)
+                                      # Site (páginas abertas fora do /static)
                                       ('/', MainPage),
+                                      ('/robots.txt', RobotsPage),
                                       ('/linha.json', LinhaPage),
                                       ('/linhasquepassam.json', LinhasQuePassamPage),
                                       
