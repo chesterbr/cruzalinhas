@@ -451,7 +451,7 @@ $(document).ready(function(){
     });
     $("#link_api").fancybox({
         'width': 750,
-        'height': 500,
+        'height': 525,
         'autoDimensions': false,
         'autoScale': false
     });

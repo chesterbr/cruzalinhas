@@ -47,6 +47,9 @@ class LinhaPage(webapp.RequestHandler):
             pontos = Ponto.all().filter("linha = ", linha).order("ordem")
             pontos_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
             client.add(chave_memcache, pontos_json)
+        callback = self.request.get("callback");
+        if callback:
+            pontos_json = callback + "(" + pontos_json + ");"            
         self.response.out.write(pontos_json) 
 
 class LinhasQuePassamPage(webapp.RequestHandler):
@@ -65,7 +68,11 @@ class LinhasQuePassamPage(webapp.RequestHandler):
             client.add(chave_memcache, linhas_keys)        
         # Converte elas para objetos no formato da resposta e devolve como JSON
         linhas_obj = [self._linha_obj(key) for key in linhas_keys]
-        self.response.out.write(simplejson.dumps(linhas_obj))
+        linhas_json = simplejson.dumps(linhas_obj)
+        callback = self.request.get("callback");
+        if callback:
+            linhas_json = callback + "(" + linhas_json + ");"
+        self.response.out.write(linhas_json)
     def _linha_obj(self, key):
         """Monta info da linha no formato da resposta, usando o cache se possível"""
         client = memcache.Client()
