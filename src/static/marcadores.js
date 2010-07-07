@@ -1,34 +1,35 @@
-/*
- * marcadores.js
- * 
- * Contém o código que gerencia os marcadores, carregando as linhas que passam por
- * cada um deles e os dados de cada linha, além de lightboxes e outros detalhes de UI.
- * 
- * IMPORTANTE: Se você MODIFICAR esse arquivo, RODE o build_all_scripts.py, pois
- * o html carrega o all_scripts.js e não esse.
- * 
- * (o Eclipse/Aptana está configurado com um builder apropriado, se tudo correr bem
- * ele deve rodar automaticamente - chque se o .py acima está com permissão de
- * execução).
- * 
- * Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
- * software and associated documentation files (the "Software"), to deal in the Software 
- * without restriction, including without limitation the rights to use, copy, modify, merge, 
- * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
- * to whom the Software is furnished to do so, subject to the following conditions:
- *     
- * The above copyright notice and this permission notice shall be included in all copies or 
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
- * DEALINGS IN THE SOFTWARE.
- */
+
+//
+// marcadores.js
+// 
+// Contém o código que gerencia os marcadores, carregando as linhas que passam por
+// cada um deles e os dados de cada linha, além de lightboxes e outros detalhes de UI.
+// 
+// IMPORTANTE: Se você MODIFICAR esse arquivo, RODE o build_all_scripts.py, pois
+// o html carrega o all_scripts.js e não esse.
+// 
+// (o Eclipse/Aptana está configurado com um builder apropriado, se tudo correr bem
+// ele deve rodar automaticamente - chque se o .py acima está com permissão de
+// execução).
+// 
+// Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+// software and associated documentation files (the "Software"), to deal in the Software 
+// without restriction, including without limitation the rights to use, copy, modify, merge, 
+// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
+// to whom the Software is furnished to do so, subject to the following conditions:
+//     
+// The above copyright notice and this permission notice shall be included in all copies or 
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// DEALINGS IN THE SOFTWARE.
+//
 
 // Evitando que alguém entre pelo html antigo
 if (location.href.indexOf("/static/") != -1) {
@@ -89,7 +90,8 @@ var marcadores = {
         }
         if (linhas) {
             m._marcadores[id].linhas = linhas;
-        } else {
+        }
+        else {
             // Recupera as linhas que passam por ele (em background)
             $.ajax({
                 url: "/linhasquepassam.json",
@@ -119,7 +121,7 @@ var marcadores = {
         }
         return id;
     },
-
+    
     mostrou_instrucoes: false,
     atualiza: function(){
         var html = "";
@@ -189,9 +191,13 @@ var marcadores = {
                         }
                         var conteudo_legenda = IMG_LOADER;
                         if (marcador.oculta_linha[linha.key] || this.desenhaLinha(linha)) {
-                            conteudo_legenda = '<input type="checkbox" title="oculta/exibe no mapa"' + 
-                                               (marcador.oculta_linha[linha.key] ? '' : 'checked="checked"') + 
-                                               ' onClick="marcadores.alterna_linha(' + marcador.id + ',\'' + linha.key + '\')">'; 
+                            conteudo_legenda = '<input type="checkbox" title="oculta/exibe no mapa"' +
+                            (marcador.oculta_linha[linha.key] ? '' : 'checked="checked"') +
+                            ' onClick="marcadores.alterna_linha(' +
+                            marcador.id +
+                            ',\'' +
+                            linha.key +
+                            '\')">';
                         }
                         html += '<div class="legenda_linha" style="background-color:' +
                         this.corDaLinha(linha) +
@@ -334,16 +340,16 @@ var marcadores = {
             delete c.polyline;
         }
     },
-
+    
     // mostra/esconde a linha n do ordem-ésima marcador
-    alterna_linha: function(id, key) {
+    alterna_linha: function(id, key){
         var marcador = this._marcadores[id];
         if (marcador) {
             marcador.oculta_linha[key] = !marcador.oculta_linha[key];
         }
         this.atualiza();
     },
-        
+    
     pmsg: function(texto){
         return '<p style="color:red;margin:0px;font-style:italic;text-align:center;">' + texto + "</p>";
     },
@@ -431,6 +437,7 @@ function inicializa(){
 
 
 $(document).ready(function(){
+    // Prepara lightboxes
     $("#link_oque").fancybox({
         'width': 630,
         'height': 350,
@@ -486,5 +493,14 @@ $(document).ready(function(){
         })
         return false;
     });
+    
+    // Pré-abre lightboxes oriundos de links em hash
+    if (location.hash) {
+        window.setTimeout(function(){
+            $("#link_" + location.hash.substring(1)).trigger("click");
+        }, 1000);
+    }
+    
+    
 });
 
