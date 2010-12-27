@@ -1,4 +1,4 @@
-#Sat May 29 02:00:40 BRT 2010
+#Mon Dec 27 02:43:11 BRST 2010
 eclipse.preferences.version=1
 encoding//src/build_all_scripts.py=utf-8
 encoding//src/frontend.py=utf-8
@@ -7,5 +7,7 @@ encoding//src/models.py=utf-8
 encoding//src/pontoloader.py=utf-8
 encoding//src/scraper.py=utf-8
 encoding//src/slow_gae_uploader.py=utf-8
+encoding//src/sptscraper.py=utf-8
+encoding/<project>=utf-8
 encoding/README=UTF-8
 encoding/src=UTF-8
