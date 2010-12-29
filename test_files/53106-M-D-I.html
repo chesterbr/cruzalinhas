@@ -1,0 +1,513 @@
+<HTML>
+
+<HEAD>
+<META http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+<META http-equiv="Expires" content="0">
+<META http-equiv="Pragma" content="no-cache">
+<META name="Description" content="">
+<META name="Keywords" content="">
+<META name="Generator" content="Geologstica">
+
+<TITLE>Mapa</TITLE>
+
+<LINK rel="stylesheet" type="text/css" href="ABPriGrEstG.css">
+
+<SCRIPT language="Javascript" src="BibInfNav.js">
+</SCRIPT>
+
+<STYLE type="text/css">
+.menu-horizontal
+{
+   POSITION: RELATIVE;
+   TOP: 0;
+   COLOR: #808080;
+   FONT-SIZE: 8pt;
+   FONT-FAMILY: Verdana, Helvetica, Arial;
+   FONT-WEIGHT: Bold;
+   LETTER-SPACING: -1pt;
+   TEXT-DECORATION: None;
+}
+
+.sub-menu-horizontal
+{
+   POSITION: RELATIVE;
+   TOP: -2;
+   COLOR: #808080;
+   FONT-SIZE: 8pt;
+   FONT-FAMILY: Verdana, Helvetica, Arial;
+   FONT-WEIGHT: Bold;
+   LETTER-SPACING: -1pt;
+   TEXT-DECORATION: None;
+}
+
+.menu-rodape
+{
+   POSITION: RELATIVE;
+   TOP: -6;
+   COLOR: #808080;
+   FONT-SIZE: 8pt;
+   FONT-FAMILY: Verdana, Helvetica, Arial;
+   FONT-WEIGHT: Bold;
+   LETTER-SPACING: -1pt;
+   TEXT-DECORATION: None;
+}
+
+.divisao-menu-horizontal
+{
+   POSITION: RELATIVE;
+   TOP: 0;
+   COLOR: #808080;
+   FONT-SIZE: 10pt;
+}
+
+.divisao-sub-menu-horizontal
+{
+   POSITION: RELATIVE;
+   TOP: -2;
+   COLOR: #808080;
+   FONT-SIZE: 10pt;
+}
+
+.divisao-menu-rodape
+{
+   POSITION: RELATIVE;
+   TOP: -6;
+   COLOR: #808080;
+   FONT-SIZE: 10pt;
+}
+
+.azul-titulo-normal8
+{
+   FONT-SIZE: 8pt;
+   COLOR: #6666ff;
+   FONT-FAMILY: Verdana, Helvetica, Arial
+}
+
+.azul-titulo-negrito8
+{
+   FONT-SIZE: 8pt;
+   COLOR: #6666ff;
+   FONT-FAMILY: Verdana, Helvetica, Arial;
+   FONT-WEIGHT: Bold
+}
+</STYLE>
+<SCRIPT type="text/javascript" src="js/jquery.js"></SCRIPT><NOSCRIPT></NOSCRIPT>
+<SCRIPT src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlqRRxr5Fx33BjIp6sfsBbxRd-No0Xsl_cpxDMSgbQvn5LI3tyxQ0pMk8iB8IT2F2oM576ZnThZMiNg"
+      type="text/javascript"></SCRIPT>
+    <SCRIPT type="text/javascript">
+		function initialize() {
+                //key = ABQIAAAA8bC7BBfTFa3o8BNtdu9KdhSb_Evn9N6R8zwfSntLgm2mL33MIhRCRc6B427m2gPRPJoHiRz-ULnomQ);
+	    
+            
+            var yellowIcon = new GIcon();
+            yellowIcon.image = "http://maps.google.com/mapfiles/dd-start.png"
+            yellowIcon.iconSize = new GSize(20, 34);
+            yellowIcon.iconAnchor = new GPoint(9, 34);
+     
+            var v_NotLat = "";
+            var v_NotLong = "";
+            var CdPjOID = "53106";
+            document.JnSvGMapa.DfSenID.value = "0";
+            var endereco_tp = "R. FREDERICO ESTEBAN JUNIOR";
+            var endereco_ts = "AV.     OTTO BAUMGART                                                         , 0";
+            var sentido = document.JnSvGMapa.DfSenID.value;
+            var coor = "-23514845||-46616025||-23513295||-46615905||-23511126||-46615760||-23510866||-46615649||-23510866||-46615649||-23508684||-46615334||-23508474||-46615333||-23508164||-46615394||-23508164||-46615394||-23507491||-46615314||-23507491||-46615314||-23507317||-46615275||-23507181||-46615251||-23507066||-46615233||-23507066||-46615233||-23505674||-46615064||-23504538||-46614966||-23503798||-46615084||-23503753||-46615084||-23503753||-46615084||-23502164||-46615331||-23502164||-46615331||-23501568||-46615420||-23501568||-46615420||-23501366||-46615219||-23501366||-46615219||-23501074||-46615044||-23501074||-46615044||-23500797||-46614739||-23500797||-46614739||-23500415||-46614251||-23498929||-46613360||-23498929||-46613360||-23497212||-46612178||-23497212||-46612178||-23497037||-46611928||-23496578||-46611787||-23496578||-46611787||-23495726||-46611532||-23495726||-46611532||-23495479||-46611726||-23495479||-46611726||-23494595||-46611630||-23494595||-46611630||-23493538||-46611450||-23493538||-46611450||-23492956||-46611330||-23492583||-46611186||-23492583||-46611186||-23492217||-46611087||-23491077||-46610551||-23491077||-46610551||-23490410||-46610242||-23490410||-46610242||-23489757||-46609940||-23489757||-46609940||-23489572||-46609802||-23489572||-46609802||-23489090||-46609450||-23489090||-46609450||-23488142||-46608886||-23488142||-46608886||-23487458||-46608865||-23487458||-46608865||-23487325||-46608422||-23487325||-46608422||-23486879||-46607776||-23486879||-46607776||-23486797||-46607822||-23486797||-46607822||-23486434||-46608124||-23486434||-46608124||-23486332||-46608197||-23486332||-46608197||-23486239||-46608285||-23486239||-46608285||-23484448||-46609400||-23484448||-46609400||-23484311||-46609396||-23484311||-46609396||-23484225||-46609169||-23484225||-46609169||-23483922||-46608714||-23483922||-46608714||-23482611||-46608048||-23482611||-46608048||-23482183||-46608125||-23482183||-46608125||-23481924||-46608172||-23481924||-46608172||-23481772||-46608200||-23481772||-46608200||-23481319||-46608296||-23481319||-46608296||-23481247||-46608396||-23481251||-46608607||-23481291||-46608853||-23481291||-46608853||-23481476||-46609162||-23481740||-46609434||-23481740||-46609434||-23481554||-46609547||-23481554||-46609547||-23480903||-46610128||-23480733||-46610192||-23480733||-46610192||-23480256||-46610277||-23480256||-46610277||-23479791||-46610928||-23479791||-46610928||-23479531||-46610591||-23479258||-46609515||-23479258||-46609515||-23478972||-46608524||-23478972||-46608524||-23478658||-46608866||-23478658||-46608866||-23477922||-46609660||-23477922||-46609660||-23477507||-46610081||-23477507||-46610081||-23477244||-46610353||-23477244||-46610353||-23477190||-46610421||-23476711||-46610679||-23476485||-46610943||-23476215||-46611436||-23476215||-46611436||-23475799||-46612177||-23475799||-46612177||-23475724||-46612329||-23475408||-46612681||-23475408||-46612681||-23475188||-46612756||-23475188||-46612756||-23474463||-46613255||-23474162||-46613600||-23474162||-46613600||-23473922||-46613885||-23473922||-46613885||-23473278||-46613619||-23472825||-46613402||-23472825||-46613402||-23471489||-46612545||-23471489||-46612545||-23471060||-46612270||-23471060||-46612270||-23470153||-46611567||-23470153||-46611567||-23469369||-46610187||-23469369||-46610187||-23468771||-46608963||-23468771||-46608963||-23468718||-46608866||-23468718||-46608866||-23468318||-46608048||-23468318||-46608048||-23468029||-46607449||-23468029||-46607449||-23467699||-46606768||-23467699||-46606768||-23467303||-46605870||-23467303||-46605870||-23467265||-46605755||-23467265||-46605755||-23465057||-46604660||-23465057||-46604660||-23464967||-46604395||-23464967||-46604395||-23464479||-46603635||-23464479||-46603635||-23463581||-46603400||-23463581||-46603400||-23463077||-46603274||-23463077||-46603274||-23462835||-46603180||-23462835||-46603180||-23462345||-46603012||-23462345||-46603012||-23461820||-46602832||-23461820||-46602832||-23461279||-46602692||-23461279||-46602692||-23461097||-46602658||-23461097||-46602658||-23460991||-46602626||-23460991||-46602626||-23459906||-46602505||-23459906||-46602505||-23459528||-46602447||-23459528||-46602447||-23459068||-46602371||-23459068||-46602371||-23458514||-46602325||-23458514||-46602325||-23458169||-46602389||-23458169||-46602389||-23457772||-46602454||-23457772||-46602454||-23457540||-46602476||-23457540||-46602476||-23457172||-46602613||-23456593||-46602688||-23456344||-46602658||-23456344||-46602658||-23456128||-46602628||-23456128||-46602628||-23456049||-46602606||-23456049||-46602606||-23455839||-46602544||-23455839||-46602544||-23455639||-46602478||-23455639||-46602478||-23455432||-46602794||-23455053||-46602915||-23454696||-46602900||-23454696||-46602900||-23454437||-46603513||-23454437||-46603513||-23453837||-46604814||-23453837||-46604814||-23453598||-46605021||-23453552||-46605234||-23453671||-46605358||-23453671||-46605358||-23454087||-46605418||-23454087||-46605418||-23453867||-46606486||-23453867||-46606486||-23453805||-46606763||-23453805||-46606763||-23453624||-46607590||-23453624||-46607590||-23453499||-46608100||-23453499||-46608100||-23452948||-46607665||-23452716||-46607594||-23452205||-46607439||-23452205||-46607439||-23451305||-46607158||-23451305||-46607158||-23450800||-46607036||-23450800||-46607036||-23450614||-46607599||-23450375||-46607502||-23450123||-46607462||-23450123||-46607462||-23450354||-46607651||-23450506||-46607938||-23450555||-46608258||-23450555||-46608258||-23450133||-46608012||-23449773||-46608003||-23449773||-46608003||-23449227||-46608053||-23448735||-46607873||-23448735||-46607873||-23448477||-46608118||-23448477||-46608118||-23448686||-46608720||-23448686||-46608720||-23448609||-46609482||-23448704||-46609774||-23448704||-46609774||-23449007||-46610267||-23449221||-46610482||-23449221||-46610482||-23449669||-46610722||-23449669||-46610722||-23449713||-46610749||-23450165||-46610956||-23450165||-46610956||-23450636||-46611181||-23450636||-46611181||-23450594||-46611817||-23450594||-46611817||-23450551||-46612406||-23450551||-46612406||-23449678||-46612384||-23449678||-46612384||-23449149||-46612375||-23449149||-46612375||-23448662||-46612361||-23448662||-46612361||-23448629||-46612920||-23448610||-46613234||-23448610||-46613234||-23448520||-46614813||-23448520||-46614813||-23448092||-46614972||-23447496||-46615016||-23447496||-46615016||-23447256||-46614947||-23447081||-46614823||-23447081||-46614823||-23446978||-46614694||-23446978||-46614694||-23446681||-46614431||-23446541||-46614098||-23446541||-46614098||-23446572||-46613615||-23446572||-46613615||-23446635||-46612434||-23446635||-46612434||-23446710||-46611929||-23446710||-46611929||-23446728||-46611601||-23446728||-46611601||-23446799||-46611059";
+            var tipo = "Mapa";
+            var distancias = "172,1014||240,6754||30,9465||0||243,7912||23,25796||34,89368||0||74,98205||0||19,67821||15,26052||12,86831||0||155,1289||126,2108||82,83727||4,984399||0||177,7826||0||66,63065||0||30,36398||0||36,95028||0||43,7222||0||65,37863||188,0631||0||225,2487||0||32,05797||52,8355||0||97,88878||0||33,77877||0||98,39373||0||118,4988||0||65,61225||43,85069||0||41,77715||137,6164||0||80,3317||0||78,62499||0||24,86979||0||64,36233||0||119,7601||0||75,78393||0||47,58976||0||82,4286||0||10,22493||0||50,6749||0||13,53598||0||13,67062||0||228,7308||0||15,17857||0||25,0685||0||0||57,32778||160,3436||0||48,04952||0||29,08361||0||17,07529||0||51,1197||0||0||12,9592||21,55956||25,51787||0||37,63247||40,33546||23,61353||0||93,38592||19,93056||0||53,53691||0||84,11252||0||44,88176||114,0033||0||106,0771||0||49,2951||0||114,9942||0||62,94599||0||40,25588||0||0||9,166248||59,23646||36,79484||58,5727||0||88,61815||0||17,61035||50,17921||0||25,54152||0||95,1101||48,51319||0||39,4239||76,32506||54,84982||0||171,9261||0||55,1971||0||123,4854||0||165,5792||0||141,5052||0||11,51784||0||94,58673||0||69,0618||0||78,59004||0||101,6889||0||12,48012||0||268,9127||0||28,85099||0||94,60546||0||102,3111||0||57,28354||0||28,47049||0||56,91757||0||60,98309||0||61,59975||0||20,45382||0||12,18665||0||120,7986||0||42,281||0||51,53365||0||61,53551||0||38,76434||0||44,46672||0||25,79212||0||43,09288||64,5808||27,74671||0||24,1175||0||9,033424||0||24,10507||0||23,1539||0||0||39,59851||43,75734||39,56752||0||68,88975||0||148,6149||0||33,88179||22,35191||18,28186||0||46,4783||0||111,8114||0||29,12408||0||86,84528||0||53,91766||75,49441||26,69866||58,76778||0||103,7283||0||57,30135||0||61,10384||28,26399||28,20686||0||0||32,05384||33,81374||33,14454||53,06733||39,88079||0||60,6851||57,50951||0||37,989||0||0||65,72359||0||78,32726||31,63738||0||60,52869||32,31629||0||55,34576||0||5,59947||54,34425||0||57,00513||0||65,15217||0||60,37156||96,71121||0||58,59413||0||53,9543||0||0||57,23572||32,15376||0||161,6508||50,10805||66,16018||0||27,49914||23,15549||0||17,43186||0||42,47528||37,3927||0||49,47322||0||120,8787||0||52,26622||0||33,57507||0||55,93806||0";
+            var first =  true;
+			var v_Icone = new GIcon();
+			var geoCodes = coor.split("||");
+			var n = geoCodes.length
+			var v_lat_origem = "";
+			var v_long_origem = "";
+			//var message = msg.split("||");
+			//var rua = ruas.split("||");
+			var dist = distancias.split("||")
+			var desc = "";
+			var v_dsc = desc.split("||");
+			var v_desc = "";	
+		    var v_centroLat = -23.552658;
+            var v_centroLon = -46.707001;
+            var v_zoom = 10;
+			var ttPontos = [];
+            function criarMarca(point,msg) {
+				var marker = new GMarker(point);
+				var myHtml = msg;
+				GEvent.addListener(marker,"mouseover", function() {
+					marker.openInfoWindowHtml(myHtml)
+			    });
+			    GEvent.addListener(marker,"mouseout", function() {
+					marker.closeInfoWindow()
+			    });
+			return marker;
+		    }
+			function InfoWin(latlng, myHtml){
+				map.openInfoWindowHtml(latlng, myHtml);
+			}
+			function createMarker(latlng,icone,msg) {
+				var marker = new GMarker(latlng,icone);
+				var myHtml = msg;
+				GEvent.addListener(marker,"mouseover", function() {
+					marker.openInfoWindowHtml(myHtml, {maxWidth: '300'})
+			    });
+			    GEvent.addListener(marker,"mouseout", function() {
+					marker.closeInfoWindow()
+			    });
+			return marker;
+		    }
+		    function fitMap( map, points ) {
+               var bounds = new GLatLngBounds();
+               for (var i=0; i< points.length; i++) {
+                  bounds.extend(points[i]);
+               }
+               map.setZoom(map.getBoundsZoomLevel(bounds));
+               map.setCenter(bounds.getCenter());
+            }
+		   
+	        for (i = 0; i <= n-1; i++)
+	        {
+		        geoCodes[i] = parseInt(geoCodes[i])/1000000
+	        }
+	        var k = 1;
+	        var l = 0;
+	        var j = 0;
+	            if(!isNaN(geoCodes[j]) && !isNaN(geoCodes[k]))
+	            {
+	            if(tipo == "Mapa")
+	            {
+	                v_centroLat = (geoCodes[j]+geoCodes[n-2])/2;
+	                v_centroLon = (geoCodes[k]+geoCodes[n-1])/2;
+	            }
+	            else if (tipo =="TP")
+	            {
+	                if(sentido =="1")
+	                {
+	                   v_centroLat = geoCodes[j];
+	                   v_centroLon = geoCodes[k];
+	                }
+	                else
+	                {
+	                    v_centroLat = geoCodes[n-2];
+	                    v_centroLon = geoCodes[n-1];
+	                }
+                }
+                else if(tipo =="TS")
+                {
+                    if(sentido == "1")
+                    {
+                        v_centroLat = geoCodes[n-2];
+	                    v_centroLon = geoCodes[n-1];
+                    }
+                    else
+                    {
+                        v_centroLat = geoCodes[j];
+	                    v_centroLon = geoCodes[k];
+                    }       
+                    
+                }
+             }
+               
+                if(tipo == "TP" || tipo == "TS")
+		        {
+		            v_zoom = 16;
+		        }
+		        else
+		        {
+		            if(dist != "")
+		            {
+		                if(parseInt(dist[(n/2)-1])>=0 && parseInt(dist[(n/2)-1])<=2)
+		                {
+			                v_zoom = 13;
+		                }
+		                else
+		                {
+			                if(parseInt(dist[(n/2)-1])>2 && parseInt(dist[(n/2)-1])<=12)
+			                {
+				                v_zoom = 12;
+			                }
+			                else
+			                {
+				                v_zoom = 11;
+			                }
+		                }
+		            }
+		        }
+	   
+	   	if (GBrowserIsCompatible()) {
+			
+			
+			var w = $("#map_canvas").css("width");		
+			w = w.replace('px', '');
+			
+			if('' != 'iframeExpandido')
+			{
+     	    	var map = new GMap2(document.getElementById("map_canvas"),
+            			{ size: new GSize(391,708) } );
+			}
+			else
+			{
+				var map = new GMap2(document.getElementById("map_canvas"),
+            			{ size: new GSize(649,708) } );
+			}
+            map.setCenter(new GLatLng(v_centroLat,v_centroLon), v_zoom);
+        	map.addControl(new GLargeMapControl());
+ 
+        	var mapControl = new GMapTypeControl();
+        	map.addControl(mapControl);
+        	map.enableScrollWheelZoom(); 
+        	var pontosRota = [];
+			
+			k = 1;
+			l = 0;
+			j = 0;
+			var c = 0;
+			
+			    if(v_lat_origem != "" && v_long_origem != "")
+			    {
+			         v_lat_origem = parseInt(v_lat_origem)/1000000
+			         v_long_origem = parseInt(v_long_origem)/1000000
+			         var point = new GLatLng(v_lat_origem,v_long_origem);
+			         var marker = new GMarker(point,{icon:yellowIcon});
+                     map.addOverlay(marker);
+                     pontosRota.push(point);
+                }
+                
+				var v_Icone = new GIcon();
+				
+                while (l < n/2)
+			    {
+					if(!isNaN(geoCodes[j]) && !isNaN(geoCodes[k]))
+					{
+						var point = new GLatLng(geoCodes[j],geoCodes[k]);
+						v_desc = v_dsc[l];
+						if('' != '1' && CdPjOID == "")
+						{
+							map.addOverlay(criarMarca(point,v_desc));
+						}
+						else
+						{
+						    if(CdPjOID != "")
+		                    {
+		                        if(l==0)
+				            {
+				                   if(sentido == "2")
+				                   {
+				                        v_Icone.image           = "img/itinerario/layout/TS.png";
+				                        v_Icone.shadow = 'img/itinerario/layout/TSshadow.png';
+                                        v_Icone.iconSize = new GSize(20,34);
+                                        v_Icone.shadowSize = new GSize(37,34);
+                                        v_Icone.iconAnchor = new GPoint(0,34);
+                                        v_Icone.infoWindowAnchor = new GPoint(10,0);
+                                        v_Icone.printImage = 'img/itinerario/layout/TSprintImage.gif';
+                                        v_Icone.mozPrintImage = 'img/itinerario/layout/TSmozPrintImage.gif';
+                                        v_Icone.printShadow = 'img/itinerario/layout/TSprintShadow.gif';
+                                        v_Icone.transparent = 'img/itinerario/layout/TStransparent.png';
+				                        v_desc = ("Ponto Final"+"<br>"+endereco_ts).toString();
+					                    //InfoWin(point, v_desc);
+				                   }			
+				                   else
+				                   {
+				                        v_Icone.image           = "img/itinerario/layout/TP.png";
+				                        v_Icone.shadow = 'img/itinerario/layout/TPshadow.png';
+                                        v_Icone.iconSize = new GSize(20,34);
+                                        v_Icone.shadowSize = new GSize(37,34);
+                                        v_Icone.iconAnchor = new GPoint(0,34);
+                                        v_Icone.infoWindowAnchor = new GPoint(10,0);
+                                        v_Icone.printImage = 'img/itinerario/layout/TPprintImage.gif';
+                                        v_Icone.mozPrintImage = 'img/itinerario/layout/TPmozPrintImage.gif';
+                                        v_Icone.printShadow = 'img/itinerario/layout/TPprintShadow.gif';
+                                        v_Icone.transparent = 'img/itinerario/layout/TPtransparent.png';  					   
+				                        v_desc = ("Ponto Inicial"+"<br>"+endereco_tp).toString();
+					                   // InfoWin(point, v_desc);
+				                   }
+    					   
+        					
+				            map.addOverlay(createMarker(point,v_Icone,v_desc));
+    					    
+    					    
+                        		}
+				                if(l == n/2-1)
+				                {
+				                    if(sentido == "2")
+				                    {
+				                        v_Icone.image           = "img/itinerario/layout/TP.png";
+				                        v_Icone.shadow = 'img/itinerario/layout/TPshadow.png';
+                                        v_Icone.iconSize = new GSize(20,34);
+                                        v_Icone.shadowSize = new GSize(37,34);
+                                        v_Icone.iconAnchor = new GPoint(0,34);
+                                        v_Icone.infoWindowAnchor = new GPoint(10,0);
+                                        v_Icone.printImage = 'img/itinerario/layout/TPprintImage.gif';
+                                        v_Icone.mozPrintImage = 'img/itinerario/layout/TPmozPrintImage.gif';
+                                        v_Icone.printShadow = 'img/itinerario/layout/TPprintShadow.gif';
+                                        v_Icone.transparent = 'img/itinerario/layout/TPtransparent.png'; 
+				                        v_desc = ("Ponto Inicial"+"<br>"+endereco_tp).toString();
+					                    //InfoWin(point, v_desc);
+				                    }
+				                    else
+				                    {
+				                        v_Icone.image           = "img/itinerario/layout/TS.png";
+				                        v_Icone.shadow = 'img/itinerario/layout/TSshadow.png';
+                                        v_Icone.iconSize = new GSize(20,34);
+                                        v_Icone.shadowSize = new GSize(37,34);
+                                        v_Icone.iconAnchor = new GPoint(0,34);
+                                        v_Icone.infoWindowAnchor = new GPoint(10,0);
+                                        v_Icone.printImage = 'img/itinerario/layout/TSprintImage.gif';
+                                        v_Icone.mozPrintImage = 'img/itinerario/layout/TSmozPrintImage.gif';
+                                        v_Icone.printShadow = 'img/itinerario/layout/TSprintShadow.gif';
+                                        v_Icone.transparent = 'img/itinerario/layout/TStransparent.png'; 
+		                                v_desc = ("Ponto Final"+"<br>"+endereco_ts).toString();
+					                    //InfoWin(point, v_desc);
+				                    }
+        				            
+            					   
+				                    map.addOverlay(createMarker(point,v_Icone,v_desc));
+    					        }
+		                    }
+		                    else
+		                    {
+							    if(l == 0)
+							    {
+								    v_Icone.image            = "img/itinerario/layout/A.png";
+								    v_Icone.iconSize = new GSize(20,34);
+                                    v_Icone.iconAnchor = new GPoint(0,34);
+                                    v_Icone.infoWindowAnchor = new GPoint(10,0);
+							    }
+							    else
+							    {
+							        if(l == n/2 -1)
+								    {
+								        v_Icone.image            = "img/itinerario/layout/B.png";
+								        v_Icone.iconSize = new GSize(20,34);
+                                        v_Icone.iconAnchor = new GPoint(0,34);
+                                        v_Icone.infoWindowAnchor = new GPoint(10,0);
+								    }
+								    else
+								    {
+								        v_Icone.image            = "img/itinerario/layout/bus.png";
+							            v_Icone.iconSize         = new GSize(36, 41);
+  			    		                v_Icone.iconAnchor       = new GPoint(17, 40);
+  			    		                v_Icone.infoWindowAnchor = new GPoint(15, 1);
+								    }
+							    }
+				    		   
+    						
+                     		    map.addOverlay(createMarker(point,v_Icone,v_desc));
+							    ttPontos.push(point);
+							}
+						}
+						pontosRota.push(point);
+					}
+                    
+                    j = j+2;
+				    k = k+2;
+				    l = l+1;
+			    }
+				if('' == '1')
+				{
+					var pontos = '';
+					var pontosPe = '';
+					linhas = pontos.split('$$');
+					percPe = pontosPe.split('$$');
+					var pontosLinha = [];
+					var pontosPe = [];
+					var point = "";
+					var line = "";
+					var linColor = new Array("#FF0000", "#00FF00", "#0000FF", "#8A2BE2", "#DFFF00", "#FFDF00", "#00FFFF", "#FF00CC", "#CCCCFF", "#CC7722");
+					
+					if(linhas[0] != "")
+					{
+					for(nlin = 0; nlin < linhas.length; nlin++){
+						k = 1;
+						l = 0;
+						j = 0;
+						
+						line = ""
+						pontosLinha = [];
+						pontos = linhas[nlin].split('||');
+						
+						while (l < pontos.length/2){
+						
+							point = new GLatLng(pontos[j]/1000000,pontos[k]/1000000);
+							pontosLinha.push(point);
+							ttPontos.push(point);
+							j = j+2;
+							k = k+2;
+							l = l+1;
+						}
+					
+						line = new GPolyline(pontosLinha,linColor[nlin%10], 5, 0.5);
+		            	map.addOverlay(line);
+					}
+					}
+					if(percPe[0] != "")
+					{
+					for(nPe = 0; nPe < percPe.length; nPe++){
+						k = 1;
+						l = 0;
+						j = 0;
+						
+						line = ""
+						pontosPe = [];
+						pontos = percPe[nPe].split('||');
+						
+						while (l < pontos.length/2){
+						
+							point = new GLatLng(pontos[j]/1000000,pontos[k]/1000000);
+							pontosPe.push(point);
+							ttPontos.push(point);
+							j = j+2;
+							k = k+2;
+							l = l+1;
+						}
+					
+						line = new GPolyline(pontosPe,'#000000', 5, 0.5);
+		            	map.addOverlay(line);
+					}
+					}
+					fitMap(map,ttPontos);
+				}
+			    if(CdPjOID != "")
+		        {
+		            var line = new GPolyline(pontosRota);
+		            map.addOverlay(line);
+		            fitMap(map,pontosRota);
+			    }
+			if(pontosRota.length > 1)          
+			    fitMap(map,pontosRota);
+			if(v_NotLat != "" && v_NotLong != "") 
+			{
+			    v_NotLat = parseInt(v_NotLat)/1000000
+			    v_NotLong = parseInt(v_NotLong)/1000000
+			    var point = new GLatLng(v_NotLat,v_NotLong);
+			    map.setCenter(point,18);
+			}
+			
+		}
+		
+			
+	}
+	
+	
+    
+    </SCRIPT>
+</HEAD>
+
+<BODY style="font-family:Arial, Helvetica, sans-serif" marginheight="0" marginwidth="0" topmargin="0" leftmargin="0" bgcolor="#ffffff" onLoad="initialize()" onUnload="GUnload()">
+            <FORM id="JnSvGMapa" name="JnSvGMapa" action="ABInfSvItiGoogleM.asp" target="Conteudo">
+            <INPUT type="hidden" name="DfSenID">
+            <TABLE border="0" cellspacing="0" cellpadding="0" bgcolor="#f3f3f3">
+                
+               <TR>
+                  <TD>
+                  
+                  <DIV id="map_canvas" style="width:391px ; height: 708px"></DIV>
+                  </TD>
+               </TR>
+               
+              
+              
+            </TABLE>
+            </FORM>
+</BODY>
+
+</HTML>
