@@ -54,19 +54,25 @@ class TestSptScraper(unittest.TestCase):
 #        self.assertTrue(lista_linhas[0]["id"]>0)
 #        self.assertTrue(lista_linhas[0]["nome"])
          
-#    def testa_download_linha(self):
-#        os.mkdir(DIR)
-#        shutil.copyfile("../test_files/index.html", os.path.join(DIR, "index.html"))
-#        lista_linhas = self.scraper.lista_linhas()
-#        id = lista_linhas[0]["id"]
-#        self.scraper.download_linha(id)
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-U-I.html")))
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-S-I.html")))
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-D-I.html")))
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-U-V.html")))
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-S-V.html")))
-#        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-D-V.html")))
-#        # TODO linha-I 
+    def testa_download_linha(self):
+        os.mkdir(DIR)
+        shutil.copyfile("../test_files/index.html", os.path.join(DIR, "index.html"))
+        lista_linhas = self.scraper.lista_linhas()
+        id = lista_linhas[0]["id"]
+        self.scraper.download_linha(id)
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-U-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-S-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-D-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-U-V.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-S-V.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-M-D-V.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-U-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-S-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-D-I.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-U-V.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-S-V.html")))
+        self.assertTrue(os.path.exists(os.path.join(self.scraper.data_dir, id+"-I-D-V.html")))
+        #shutil.copytree(DIR, "../tmp2")
         
     def test_get_pontos_linha(self):
         shutil.copytree("../test_files", DIR)

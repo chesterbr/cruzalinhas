@@ -24,6 +24,7 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 import urlparse
 import re
+import time
 
 class SptScraper:
 
@@ -84,16 +85,21 @@ class SptScraper:
            
            Por ora, apenas o mapa está implementado """
         
-        # 0 = ida, 1 = volta
-        #ABInfSvItiGoogleM.asp?DfSenID=0&CdPjOID=57225&TpDiaID=0&Tipo=Mapa
         self._assert_data_dir()
         for sentido in [0,1]:
             for dia in [0,1,2]:
-                url = self.base_href + "ABInfSvItiGoogleM.asp?DfSenID=%s&CdPjOID=%s&TpDiaID=%s&Tipo=Mapa" % (sentido, id, dia)
-                nomearq = "%s-M-%s-%s.html" % (id, "USD"[dia], "IV"[sentido])
-                html = urllib2.urlopen(url).read()
-                arq = open(os.path.join(self.data_dir, nomearq), "w")
-                arq.writelines(html)
+                for tipo in "MI":
+                    if tipo == "M":
+                        url = self.base_href + "ABInfSvItiGoogleM.asp?DfSenID=%s&CdPjOID=%s&TpDiaID=%s&Tipo=Mapa" % (sentido, id, dia)
+                    else:
+                        url = self.base_href + "detalheLinha.asp?TpDiaID=%s&CdPjOID=%s&TpDiaIDpar=%s&DfSenID=%s" % (dia, id, dia, sentido + 1)
+                    nomearq = "%s-%s-%s-%s.html" % (id, tipo, "USD"[dia], "IV"[sentido])
+                    html = urllib2.urlopen(url).read()
+                    arq = open(os.path.join(self.data_dir, nomearq), "w")
+                    arq.writelines(html)
+                    time.sleep(1)
+        
+        # 
                 
     def get_pontos(self, id):
         """Recupera os pontos do mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
