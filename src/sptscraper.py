@@ -102,10 +102,22 @@ class SptScraper:
            
                >>>pontos = get_pontos(1234)
                >>>pontos["U"]["I"]   # dia útil, sentido: ida
-               ((10.1, -20.2), (30.3, -40.4), ...)
+               [[10.1, -20.2], [30.3, -40.4], ...]
                
-            """
-        pass
+        """
+        pontos = dict()
+        for dia in "USD":
+            pontos[dia] = dict()
+            for sentido in "IV":
+                nomearq = "%s-M-%s-%s.html" % (id, dia, sentido)
+                html = open(os.path.join(self.data_dir, nomearq)).read()
+                lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
+                if not lista_js:
+                    pontos[dia][sentido] = []
+                else:
+                    lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
+                    pontos[dia][sentido] = zip(lista[::2], lista[1::2])
+        return pontos
     
                 
 def geraCSV(linhas, stream):
