@@ -77,6 +77,37 @@ class SptScraper:
                 linhas.append(linha)
         return linhas
 
+    def download_linha(self, id):
+        """Baixa os arquivos relacionados a uma linha identificado por "id". Os arquivos são
+           salvos no formato id-tipo-dia-sentido.html, onde tipo é M(apa) ou I(nfo), dia é
+           U(til), S(abado) ou D(omingo/feriado) e sentido é I(da) ou V(olta)
+           
+           Por ora, apenas o mapa está implementado """
+        
+        # 0 = ida, 1 = volta
+        #ABInfSvItiGoogleM.asp?DfSenID=0&CdPjOID=57225&TpDiaID=0&Tipo=Mapa
+        self._assert_data_dir()
+        for sentido in [0,1]:
+            for dia in [0,1,2]:
+                url = self.base_href + "ABInfSvItiGoogleM.asp?DfSenID=%s&CdPjOID=%s&TpDiaID=%s&Tipo=Mapa" % (sentido, id, dia)
+                nomearq = "%s-M-%s-%s.html" % (id, "USD"[dia], "IV"[sentido])
+                html = urllib2.urlopen(url).read()
+                arq = open(os.path.join(self.data_dir, nomearq), "w")
+                arq.writelines(html)
+                
+    def get_pontos(self, id):
+        """Recupera os pontos do mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
+           caracteres de dia da semana, e os valores são dicts cujas chaves são so caracteres de sentido, e
+           os valores desses últimos são uma lista de pontos (um ponto é uma lista). Ex.:
+           
+               >>>pontos = get_pontos(1234)
+               >>>pontos["U"]["I"]   # dia útil, sentido: ida
+               ((10.1, -20.2), (30.3, -40.4), ...)
+               
+            """
+        pass
+    
+                
 def geraCSV(linhas, stream):
     writer = csv.writer(stream)    
     for linha in linhas:
