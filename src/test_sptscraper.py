@@ -49,11 +49,16 @@ class TestSptScraper(unittest.TestCase):
         shutil.copytree("../test_files", DIR)
         lista_linhas = self.scraper.lista_linhas()
         self.assertTrue(lista_linhas)
+        self.assertTrue(lista_linhas[0]["id"].isdigit())
+        self.assertTrue(lista_linhas[0]["id"]>0)
         self.assertTrue(lista_linhas[0]["nome"])
-        self.assertTrue(lista_linhas[0]["url"])
+
         
     def test_get_html_linha(self):
         shutil.copytree("../test_files", DIR)
+
+if __name__ == '__main__':
+    unittest.main()
         
         
         

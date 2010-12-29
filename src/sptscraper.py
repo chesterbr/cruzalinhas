@@ -22,6 +22,7 @@
 import os
 import urllib2
 from BeautifulSoup import BeautifulSoup
+import urlparse
 import re
 
 class SptScraper:
@@ -60,7 +61,7 @@ class SptScraper:
     
     def lista_linhas(self):
         """Retorna uma lista com o nome e a URL de cada linha, a partir da página-índice
-        (que já deve ter sido baixada via download_index) 
+        (que já deve ter sido baixada via download_index) """
         html = open(os.path.join(self.data_dir, self.index_file)).read()
         soup = BeautifulSoup(html)
         linhas = []
@@ -68,10 +69,11 @@ class SptScraper:
             if elem["class"] == "linkLinha":
                 nome = elem.string.replace("Linha: ", "").strip()
             elif elem["class"] == "linkDetalhes":
-                url = self.base_href + elem["href"]
+                parsed_url = urlparse.urlparse(self.base_href + elem["href"])
+                params = dict([part.split('=') for part in parsed_url[4].split('&')])
                 linha = {
                     "nome" : nome,
-                    "url" : url }
+                    "id" : params["CdPjOID"] }
                 linhas.append(linha)
         return linhas
 
