@@ -102,7 +102,7 @@ class SptScraper:
         # 
                 
     def get_pontos(self, id):
-        """Recupera os pontos do mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
+        """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
            caracteres de dia da semana, e os valores são dicts cujas chaves são so caracteres de sentido, e
            os valores desses últimos são uma lista de pontos (um ponto é uma lista). Ex.:
            
@@ -124,7 +124,12 @@ class SptScraper:
                     lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
                     pontos[dia][sentido] = zip(lista[::2], lista[1::2])
         return pontos
-    
+
+    def get_info_linha(selfself, id):
+        """Recupera informações de uma linha (nome, número, horários, tempos, ruas,
+           etc.) a partir do HTML dela em um dictionary. Vide teste unitário para todas
+           as informações retornadas"""
+        pass
                 
 def geraCSV(linhas, stream):
     writer = csv.writer(stream)    
