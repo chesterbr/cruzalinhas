@@ -98,17 +98,17 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(info["nome"]["volta"], "CEMITERIO DO HORTO")
         self.assertEqual(info["numero"], "1016-10")
         self.assertEqual(info["area"], "2")
-        self.assertEqual(info["consorcio"], "CONSÓRCIO TRANSCOOPER FÊNIX")
-        self.assertEqual(info["empresa"], "TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE")        
-        self.assertEqual(horario["ida"]["sabado"], "05:00-00:20")
-        self.assertEqual(horario["volta"]["domingo"], "06:30-00:50")
-        self.assertEqual(tempo["ida"]["util"]["manha"], "35")
-        self.assertEqual(tempo["volta"]["sabado"]["entrepico"], "30")
-        self.assertEqual(tempo["volta"]["domingo"]["tarde"], "25")
-        self.assertEqual(ruas["ida"]["domingo"][1]["logradouro"], "AV. SEN. JOSE ERMIRIO DE MORAES")
-        self.assertEqual(ruas["ida"]["domingo"][2]["faixa"], "1-249")
-        self.assertTrue(ruas["ida"]["domingo"][2]["evento"]) # feira livre
-        self.assertFalse(ruas["ida"]["domingo"][3]["evento"])
+        self.assertEqual(info["consorcio"], u"CONSÓRCIO TRANSCOOPER FÊNIX")
+        self.assertEqual(info["empresa"], u"TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE")        
+        self.assertEqual(info["horario"]["ida"]["sabado"], "05:00-00:20")
+        self.assertEqual(info["horario"]["volta"]["domingo"], "06:30-00:50")
+        self.assertEqual(info["tempo"]["ida"]["util"]["manha"], "35")
+        self.assertEqual(info["tempo"]["volta"]["sabado"]["entrepico"], "30")
+        self.assertEqual(info["tempo"]["volta"]["domingo"]["tarde"], "25")
+        self.assertEqual(info["ruas"]["ida"]["domingo"][1]["logradouro"], "AV. SEN. JOSE ERMIRIO DE MORAES")
+        self.assertEqual(info["ruas"]["ida"]["domingo"][2]["faixa"], "1-249")
+        self.assertTrue(info["ruas"]["ida"]["domingo"][2]["evento"]) # feira livre
+        self.assertFalse(info["ruas"]["ida"]["domingo"][3]["evento"])
         # TODO partidas (olhar no site e ver como deve ser
         # mas é algo na linha partidas[sentido][dia][n] contendo faixa, # de partidas e horários dos veículos adaptados
         # TODO pensar se vamos ter flag para veículos adaptados

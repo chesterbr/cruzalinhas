@@ -125,11 +125,61 @@ class SptScraper:
                     pontos[dia][sentido] = zip(lista[::2], lista[1::2])
         return pontos
 
-    def get_info_linha(selfself, id):
+    def get_info_linha(self, id):
         """Recupera informações de uma linha (nome, número, horários, tempos, ruas,
            etc.) a partir do HTML dela em um dictionary. Vide teste unitário para todas
            as informações retornadas"""
-        pass
+        # Info básica (tanto faz qual HTML usar, ela repete em todos)
+        arq_info = "%s-I-U-I.html" % id
+        html = open(os.path.join(self.data_dir, arq_info)).read()
+        soup = BeautifulSoup(html)
+        info = {}
+        nomes = soup.find("dl", id="dadosLinha").dd.ul.findAll("li")
+        nomes[1].strong.extract()
+        nomes[2].strong.extract()
+        info["nome"] = {}
+        info["nome"]["ida"] = nomes[1].string.strip()
+        info["nome"]["volta"] = nomes[2].string.strip()
+        info["numero"] = soup.find("input", id="noLinha")["value"]
+        info["area"] = soup.find("input", id="areCod")["value"]
+        info["consorcio"] = soup.find("input", id="consorcio")["value"]
+        info["empresa"] = soup.find("input", id="empresa")["value"]
+        
+        return info
+ #
+#        self.assertEqual(info["nome"]["ida"], "CENTER NORTE")
+#        self.assertEqual(info["nome"]["volta"], "CEMITERIO DO HORTO")
+#        self.assertEqual(info["numero"], "1016-10")
+#        self.assertEqual(info["area"], "2")
+#        self.assertEqual(info["consorcio"], "CONSÓRCIO TRANSCOOPER FÊNIX")
+#        self.assertEqual(info["empresa"], "TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE")        
+#        
+#        
+#         <div class="clear"></div>
+#
+#                                        <input type="text" id="noLinha" disabled="disabled" value="1016-10" />
+#                                        <input type="text" id="nomeLinha" disabled="disabled" value="CENTER NORTE-CEMITERIO DO HORTO" />
+#                                        <br /><br />
+#                                        <label for="areCod" class="areCod">Área:</label><label for="consorcio" class="consorcio">Consórcio:</label><label for="empresa" class="empresa">Empresa:</label>
+#                                        <div class="clear"></div>
+#                                        <input type="text" id="areCod" disabled="disabled" value="2" />
+#                                        <input type="text" id="consorcio" disabled="disabled" value="CONSÓRCIO TRANSCOOPER FÊNIX" />
+#
+#                                        <input type="text" id="empresa" disabled="disabled" value="TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE" />
+#
+#        
+#        numLinhas = 0
+#        for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
+#            if elem["class"] == "linkLinha":
+#                numLinhas += 1
+#        if numLinhas > 0:
+#            self._assert_data_dir()
+#            arq = open(os.path.join(self.data_dir, self.index_file), "w")
+#            arq.writelines(html)
+#        return numLinhas
+
+        
+        
                 
 def geraCSV(linhas, stream):
     writer = csv.writer(stream)    
