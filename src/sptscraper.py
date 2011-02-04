@@ -34,6 +34,10 @@ class SptScraper:
     index_file = "index.html"
     data_dir = "data"
     
+    DIAS = ["util", "sabado", "domingo"]
+    SENTIDOS = ["ida", "volta"]
+    PERIODOS = ["manha", "entrepico", "tarde"]
+    
     def _assert_data_dir(self):
         if not os.path.exists(self.data_dir):
             os.mkdir(self.data_dir)
@@ -127,8 +131,8 @@ class SptScraper:
 
     def get_info_linha(self, id):
         """Recupera informações de uma linha (nome, número, horários, tempos, ruas,
-           etc.) a partir do HTML dela em um dictionary. Vide teste unitário para todas
-           as informações retornadas"""
+           etc.) a partir do HTML dela. Retorna uma hierarquia de dicts, vide teste 
+           unitário para ver as infos que retornam neles"""
         # Info básica (tanto faz qual HTML usar, ela repete em todos)
         arq_info = "%s-I-U-I.html" % id
         html = open(os.path.join(self.data_dir, arq_info)).read()
@@ -144,15 +148,21 @@ class SptScraper:
         info["area"] = soup.find("input", id="areCod")["value"]
         info["consorcio"] = soup.find("input", id="consorcio")["value"]
         info["empresa"] = soup.find("input", id="empresa")["value"]
-        info["horario"] = {"I" : {}, "V" : {}}
+        info["horario"] = {"ida": {}, "volta": {}}
         horarios = soup.find("table", id="tabelaHorarios").findAll("tr")
-        info["horario"]["I"]["U"] = horarios[1].findAll("td")[1].string
-        info["horario"]["V"]["U"] = horarios[1].findAll("td")[2].string
-        info["horario"]["I"]["S"] = horarios[2].findAll("td")[1].string
-        info["horario"]["V"]["S"] = horarios[2].findAll("td")[2].string
-        info["horario"]["I"]["D"] = horarios[3].findAll("td")[1].string
-        info["horario"]["V"]["D"] = horarios[3].findAll("td")[2].string
-        
+        for sentido in [0,1]:
+            for dia in [0,1,2]:
+                info["horario"][self.SENTIDOS[sentido]][self.DIAS[dia]] = \
+                    horarios[dia+1].findAll("td")[sentido+1].string
+        info["tempo"] = {"ida": {"util": {}, "sabado": {}, "domingo": {}},
+                         "volta": {"util": {}, "sabado": {}, "domingo": {}}}
+        tempos = soup.find("table", id="tabelaTempo").findAll("tr")
+        for sentido in [0,1]:
+            for dia in [0,1,2]:
+                for periodo in [0,1,2]:
+                    info["tempo"][self.SENTIDOS[sentido]][self.DIAS[dia]][self.PERIODOS[periodo]] = \
+                        tempos[dia+2].findAll("td")[1+periodo+3*sentido].string.strip()
+
         
         return info
     
