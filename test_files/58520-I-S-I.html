@@ -1,0 +1,1312 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Itiner&aacute;rios</title>
+<meta name='description' content='Defina um trajeto, encontre uma linha ou local e descubra roteiros interessantes pela cidade. A SPTrans leva você.' />
+<meta name='keywords' content='Itinerário, itinerario, rota, roteiro, caminho, como ir, trajeto, de, para' />
+
+<link rel="stylesheet" type="text/css" href="css/reset-min.css" />
+<link rel="stylesheet" type="text/css" href="css/overall.css" />
+<link rel="stylesheet" type="text/css" href="css/fontes.css" />
+<link rel="stylesheet" type="text/css" href="css/header.css" />
+<link rel="stylesheet" type="text/css" href="css/areaMnu.css" />
+<link rel="stylesheet" type="text/css" href="css/spTransInternas.css" />
+<link rel="stylesheet" type="text/css" href="css/itinerarios.css" />
+<link rel="stylesheet" type="text/css" href="css/footer.css" />
+<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/font-resize.js"></script>
+
+<script type="text/javascript" language="javascript" src="js/linha.js"></script>
+    <script type="text/javascript" language="javascript" src="inc/BibUtil.js"></script>
+    <script type="text/javascript" language="javascript" src="inc/BibInfNav.js"></script>
+    
+    
+    <script type="text/javascript" language="javascript">
+	
+	function mudarSentido()
+	{
+		v_pag = "detalheLinha.asp?TpDiaID=1&CdPjOID=58520&TpDiaIDpar=1";
+		
+		if (document.JnItinerario.SlOpcaoSentidoIdaID.checked)
+			v_pag = v_pag + "&DfSenID=1";
+		if (document.JnItinerario.SlOpcaoSentidoVoltaID.checked)
+			v_pag = v_pag + "&DfSenID=2";
+		
+		document.JnItinerario.action = v_pag;
+		document.JnItinerario.submit();
+	}
+	
+    function alterarOpcoes(v_tipo)
+{
+	v_CdPjOID = 58520;
+	
+	if ( v_tipo != undefined )
+		v_pag = "detalheLinha.asp?TpDiaID="+v_tipo+"&CdPjOID=58520&TpDiaIDpar=1";
+	document.JnItinerario.action = v_pag;
+	document.JnItinerario.submit();
+}
+
+function alterarOpcoesPar(v_tipo)
+{
+	v_CdPjOID = 58520;
+	
+	if ( v_tipo != undefined )
+		v_pag = "detalheLinha.asp?TpDiaIDpar="+v_tipo+"&CdPjOID=58520&TpDiaID=1";
+	document.JnItinerario.action = v_pag;
+	document.JnItinerario.submit();
+}
+</script>
+
+<style type="text/css">
+	.tabelaHorarios input{
+		vertical-align: sub;
+	}
+	.tabelaHorarios p{
+		display: inline-block;
+		width: 70px;
+		height: 20px;
+	}
+	.tabelaHorarios .col1{
+		text-align: center;
+	}
+	.tabelaHorarios tr, .tabelaHorarios td, .tabelaHorarios th{
+			text-align: center;
+	}
+	.tabelaHorarios .minutos{
+		text-align: left;
+	}
+</style>
+
+</head>
+
+<body id="bodyItinerario">
+<form name="JnItinerario" method="post">
+<div id="body" class="detalheLinhaPop">
+
+                <div id="itinerarios">
+
+                        <h1 id="headerDetalhesLinhas"><a href="#" id="fontResize">Aumentar fonte</a><a href="javascript:window.print();" id="printPage">Imprimir</a></h1>
+
+                        <div id="linhaPopAlign">
+                                <div class="clear"></div>
+                                <div id="detalhesLinha">
+                                        <div id="novidadesContent">
+                                                <h2>detalhe da linha</h2>
+                                                <p>Veja abaixo os detalhes sobre a linha escolhida.</p>
+                                        <div class="clear"></div>
+                                        </div>
+                                <div class="clear"></div>
+                                </div>
+                                
+                                <div class="clear"></div>
+                                
+                                <div id="dadosGerais">
+                                        <label for="noLinha" class="noLinha">N&uacute;mero da Linha:</label><label for="nomeLinha" class="nomeLinha">Nome da Linha:</label>
+                                        <div class="clear"></div>
+                                        <input type="text" id="noLinha" disabled="disabled" value="576M-10" />
+                                        <input type="text" id="nomeLinha" disabled="disabled" value="PINHEIROS-V. CLARA" />
+                                        <br /><br />
+                                        <label for="areCod" class="areCod">Área:</label><label for="consorcio" class="consorcio">Consórcio:</label><label for="empresa" class="empresa">Empresa:</label>
+                                        <div class="clear"></div>
+                                        <input type="text" id="areCod" disabled="disabled" value="6" />
+                                        <input type="text" id="consorcio" disabled="disabled" value="CONSÓRCIO UNISUL" />
+                                        <input type="text" id="empresa" disabled="disabled" value="TUPI TRANSPORTES URBANOS PIRATININGA LTDA." />
+                                </div>
+                                
+                                <div class="clear"></div>
+                                
+                                <div class="bgResultadoBusca">
+                                        <div class="bordaCinza"><!-- --></div>
+
+                                        <div id="conteudoResultado">
+
+                                                <dl id="dadosLinha">
+                                                        <dt>Dados Gerais</dt>
+                                                        <dd>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Linha</li>
+                                                                        <li><strong>LETREIRO DE IDA:</strong> PINHEIROS</td></li>
+                                                                        <li><strong>LETREIRO DE VOLTA:</strong> V. CLARA</td></li>
+                                                                </ul>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Hor&aacute;rios de opera&ccedil;&atilde;o</li>
+                                                                        <li class="lastItem">
+                                                                        
+                                                                                <table cellpadding="0" cellspacing="0" id="tabelaHorarios">
+                                                                                        <tr>
+                                                                                                <th width="130">Dias</th>
+                                                                                                <th width="226">Ponto Inicial</th>
+                                                                                                <th width="238">Ponto Final</th>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <td width="130">Segunda a sexta</td>
+                                                                                                <td width="226">04:30-23:15</td>
+                                                                                                <td width="238">05:30-00:20</td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                                <td width="130">S&aacute;bado</td>
+                                                                                                <td width="226">04:45-23:30</td>
+                                                                                                <td width="238">05:53-00:15</td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                                <td width="130">Domingo</td>
+                                                                                                <td width="226">05:00-23:30</td>
+                                                                                                <td width="238">06:00-00:15</td>
+                                                                                        </tr>
+                                                                                </table>
+                                                                        </li>
+                                                                </ul>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Partidas</li>
+                                                                        <li class="lastItem">
+                                                                                <table cellpadding="0" cellspacing="0">
+                                                                                        <tr>
+                                                                                            <td width="150">
+                                                                                                <b>Sentido</b>
+                                                                                            </td>
+                                                                                            <td width="150">
+                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoIdaID" value="1" onclick="mudarSentido()" checked="checked" /> Ponto Inicial
+                                                                                            </td>
+                                                                                            <td width="100">
+                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoVoltaID" value="2" onclick="mudarSentido()" /> Ponto Final
+                                                                                            </td>
+                                                                                            <td width="100">
+                                                                                                <b>Tipo de Dia</b>
+                                                                                            </td>
+                                                                                            <td width="90">
+                                                                                                <select name="LtTpDia" onchange=											"alterarOpcoesPar(document.JnItinerario.LtTpDia.value)">
+                               </select>
+                               <script language="JavaScript">
+							   		preencherCombo("JnItinerario", "LtTpDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","1");
+                               </script>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                </table>
+                                                                                <br />
+                                                                                <table cellpadding="0" cellspacing="0" class="tabelaHorarios" border="0">
+                                                                                        <tr>
+                                                                                                <th width="100">Faixa Hor&aacute;ria</th>
+                                                                                                <th width="100">Total de Partidas</th>
+                                                                                                <th width="400">Hor&aacute;rios programados dos ve&iacute;culos adaptados <img src="img/layout/icoAcess.gif" /></th>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>04:00 - 04:59</td>
+                                                                                                <td>1</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>05:00 - 05:59</td>
+                                                                                                <td>4</td>
+                                                                                                <td>05:45</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>06:00 - 06:59</td>
+                                                                                                <td>5</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>07:00 - 07:59</td>
+                                                                                                <td>4</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>08:00 - 08:59</td>
+                                                                                                <td>4</td>
+                                                                                                <td>08:05</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>09:00 - 09:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>10:00 - 10:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>11:00 - 11:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td>11:10</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>12:00 - 12:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>13:00 - 13:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>14:00 - 14:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td>14:30</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>15:00 - 15:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>16:00 - 16:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>17:00 - 17:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td>17:50</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>18:00 - 18:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>19:00 - 19:59</td>
+                                                                                                <td>3</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>20:00 - 20:59</td>
+                                                                                                <td>2</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>21:00 - 21:59</td>
+                                                                                                <td>2</td>
+                                                                                                <td>21:10</td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>22:00 - 22:59</td>
+                                                                                                <td>2</td>
+                                                                                                <td></td>
+                                                                                        </tr>
+                                                                                        
+																						
+                                                                                        <tr>
+                                                                                                <td>23:00 - 23:59</td>
+                                                                                                <td>1</td>
+                                                                                                <td>23:30</td>
+                                                                                        </tr>
+                                                                                        
+                                                                                </table>
+                                                                        </li>
+                                                                </ul>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Tempo estimado de viagem (em minutos)</li>
+                                                                        <li class="lastItem">
+                                                                                <table cellpadding="0" cellspacing="0" id="tabelaTempo" border="0">
+                                                                                		<tr>
+                                                                                                <th rowspan="2" width="130">Dias</th>
+                                                                                                <th colspan="3">PONTO INICIAL</th>
+                                                                                                <th colspan="3">PONTO FINAL</th>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <th width="70">Manh&atilde;</th>
+                                                                                                <th width="85">entrepico</th>
+                                                                                                <th width="70" class="linhaV">tarde</th>
+                                                                                                <th width="70">Manh&atilde;</th>
+                                                                                                <th width="85">entrepico</th>
+                                                                                                <th width="70">tarde</th>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <td>Segunda a sexta</td>
+                                                                                                <td>
+                                                                                                134
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                105
+                                                                                                </td>
+                                                                                                <td class="linhaV">
+                                                                                                114
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                94
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                113
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                142
+                                                                                                </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <td>S&aacute;bado</td>
+                                                                                                <td>
+                                                                                               74
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                82
+                                                                                                </td>
+                                                                                                <td class="linhaV">
+                                                                                                70
+                                                                                                </td>
+                                                                                                <td>70</td>
+                                                                                                <td>
+                                                                                                86
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                83
+                                                                                                </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <td>Domingo</td>
+                                                                                                <td>
+                                                                                                61
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                69
+                                                                                                </td>
+                                                                                                <td class="linhaV">
+                                                                                                71
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                65
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                73
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                70
+                                                                                                </td>
+                                                                                        </tr>
+                                                                                </table>
+                                                                        </li>
+                                                                </ul>
+                                                        </dd>
+                                                </dl>
+                                                <dl id="itinerarioLinha">
+                                                        <dt>
+                                                                Dados Gerais
+                               <select name="LtTipoDia" onchange="alterarOpcoes(document.JnItinerario.LtTipoDia.value)">
+                               </select>
+                               <script language="JavaScript">
+							   		preencherCombo("JnItinerario", "LtTipoDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","1");
+                               </script>
+                                                        </dt>
+                                                        <dd>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Ponto inicial</li>
+                                                                        <li class="lastItem">
+                                                                                <table cellpadding="0" cellspacing="0">
+                                                                                        
+                                            <tr>
+                                                <td width="317">
+                                                    R. PE. ANTONIO DE GOUVEIA
+                                                </td>
+                                                <td width="140">
+                                                    1 - 315
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AL. DR. SILVIO DE CAMPOS
+                                                </td>
+                                                <td width="140">
+                                                    52 - 109
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. VENTURA GARCIA CALDERON
+                                                </td>
+                                                <td width="140">
+                                                    836 - 258
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. DUARTE DE BRITO
+                                                </td>
+                                                <td width="140">
+                                                    68 - 480
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. FULFARO
+                                                </td>
+                                                <td width="140">
+                                                    418 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. ENG. ARMANDO DE ARRUDA PEREIRA
+                                                </td>
+                                                <td width="140">
+                                                    5603 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    VIAD. JABAQUARA
+                                                </td>
+                                                <td width="140">
+                                                    133 - 193
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AC. ACESSO A
+                                                </td>
+                                                <td width="140">
+                                                    0 - 0
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. PEDRO BUENO
+                                                </td>
+                                                <td width="140">
+                                                    0 - 1582
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. JOAO PEDRO CARDOSO
+                                                </td>
+                                                <td width="140">
+                                                    577 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. DR. LINO DE MORAES LEME
+                                                </td>
+                                                <td width="140">
+                                                    1 - 177
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. TAMOIOS
+                                                </td>
+                                                <td width="140">
+                                                    1012 - 212
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. WASHINGTON LUIZ
+                                                </td>
+                                                <td width="140">
+                                                    5902 - 7300
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    PCA. HUSSAM EDDINE HARIRI
+                                                </td>
+                                                <td width="140">
+                                                    114 - 493
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. WASHINGTON LUIZ
+                                                </td>
+                                                <td width="140">
+                                                    7501 - 6303
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. LOURICAL
+                                                </td>
+                                                <td width="140">
+                                                    1 - 58
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. RAFAEL IORIO
+                                                </td>
+                                                <td width="140">
+                                                    1 - 193
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. DR. JESUINO MACIEL
+                                                </td>
+                                                <td width="140">
+                                                    2019 - 1215
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. ZACARIAS DE GOES
+                                                </td>
+                                                <td width="140">
+                                                    724 - 384
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. OTAVIO TARQUINIO DE SOUZA
+                                                </td>
+                                                <td width="140">
+                                                    660 - 899
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. CDE. DE PORTO ALEGRE
+                                                </td>
+                                                <td width="140">
+                                                    277 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AL. DOS NHAMBIQUARAS
+                                                </td>
+                                                <td width="140">
+                                                    2150 - 659
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. MOEMA
+                                                </td>
+                                                <td width="140">
+                                                    469 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. JURITI
+                                                </td>
+                                                <td width="140">
+                                                    944 - 1
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AC. ACESSO A
+                                                </td>
+                                                <td width="140">
+                                                    1 - 4
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. HELIO PELLEGRINO
+                                                </td>
+                                                <td width="140">
+                                                    227 - 1564
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. BRIG. FARIA LIMA
+                                                </td>
+                                                <td width="140">
+                                                    4657 - 2931
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																									<img border="0" src="img/eventos/IgTpEveInterdicoes.gif" width="15" height="15" alt="Programa Ligação Cicloviária entre Parques"></img>
+                                                                                    
+                                                                                    <a style="text-decoration:underline; cursor:hand" onclick="MostraEvento('2444_i');">Evento no local</a>
+                                                    <div class="eventoContent" id="Eve_2444_i" style="display:none;">
+                                                    
+        												<p>
+                                                            Programa Ligação Cicloviária entre Parques</p>
+                                                            
+                                                        <p>
+                                                            Desde 30/08/2009, todos os domingos esse evento é realizado no período das 07h00 às 14h00, ligando o Parque do Povo ao Parque do Ibirapuera e Parque do Povo ao Clube da Bicicleta. Em 23/01/2011 haverá ampliação do atendimento até o Parque Villa Lobos e prevendo aumento de usuários propomos a alteração de itinerário das linhas envolvidas ao longo do dia, conforme segue:</p>
+                                                        
+                                                        <p>
+                                                            Interdições CET  Semanal</p>
+                                                        
+                                                        <p>
+                                                            Domingo</p>
+                                                            
+                                                            
+                                                        
+                                                    </div>
+                                                                                    
+																					
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    PCA. LUIS CARLOS PARANA
+                                                </td>
+                                                <td width="140">
+                                                    2927 - 2929
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. BRIG. FARIA LIMA
+                                                </td>
+                                                <td width="140">
+                                                    2927 - 1101
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. DOS PINHEIROS
+                                                </td>
+                                                <td width="140">
+                                                    1571 - 1247
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. CUNHA GAGO
+                                                </td>
+                                                <td width="140">
+                                                    1 - 523
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. CARD. ARCOVERDE
+                                                </td>
+                                                <td width="140">
+                                                    2298 - 0
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. DR. MANOEL CARLOS FERRAZ DE ALMEIDA
+                                                </td>
+                                                <td width="140">
+                                                    0 - 108
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+																						
+                                                </td>
+                                            </tr>
+                                            
+                                                                                </table>
+                                                                        </li>
+                                                                </ul>
+                                                                <ul>
+                                                                        <li class="itemTitulo">Ponto Final</li>
+                                                                        <li class="lastItem">
+                                                                                <table cellpadding="0" cellspacing="0">
+                                                                                        
+                                            <tr>
+                                                <td width="317">
+                                                    R. DR. MANOEL CARLOS FERRAZ DE ALMEIDA
+                                                </td>
+                                                <td width="140">
+                                                    1 - 108								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. TEODORO SAMPAIO
+                                                </td>
+                                                <td width="140">
+                                                    2404 - 2563								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. CUNHA GAGO
+                                                </td>
+                                                <td width="140">
+                                                    301 - 523								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. CARD. ARCOVERDE
+                                                </td>
+                                                <td width="140">
+                                                    2256 - 2298								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. BALTAZAR CARRASCO
+                                                </td>
+                                                <td width="140">
+                                                    1 - 199								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AC. ACESSO A
+                                                </td>
+                                                <td width="140">
+                                                    200 - 225								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. BRIG. FARIA LIMA
+                                                </td>
+                                                <td width="140">
+                                                    736 - 4656								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                			<img border="0" src="img/eventos/IgTpEveInterdicoes.gif" width="15" height="15" alt="Programa Ligação Cicloviária entre Parques"></img>
+                                                                                    
+                                                                                    <a style="text-decoration:underline; cursor:hand" onclick="MostraEvento('2444_v');">Evento no local</a>
+                                                    <div class="eventoContent" id="Eve_2444_v" style="display:none">
+                                                        
+        												<p>
+                                                            Programa Ligação Cicloviária entre Parques</p>
+                                                            
+                                                        <p>
+                                                            Desde 30/08/2009, todos os domingos esse evento é realizado no período das 07h00 às 14h00, ligando o Parque do Povo ao Parque do Ibirapuera e Parque do Povo ao Clube da Bicicleta. Em 23/01/2011 haverá ampliação do atendimento até o Parque Villa Lobos e prevendo aumento de usuários propomos a alteração de itinerário das linhas envolvidas ao longo do dia, conforme segue:</p>
+                                                        
+                                                        <p>
+                                                            Interdições CET  Semanal</p>
+                                                        
+                                                        <p>
+                                                            Domingo</p>
+                                                            
+                                                            
+                                                    </div>
+																					
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. HELIO PELLEGRINO
+                                                </td>
+                                                <td width="140">
+                                                    1562 - 1								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. INHAMBU
+                                                </td>
+                                                <td width="140">
+                                                    194 - 1								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. REPUBLICA DO LIBANO
+                                                </td>
+                                                <td width="140">
+                                                    1716 - 2330								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. INDIANOPOLIS
+                                                </td>
+                                                <td width="140">
+                                                    0 - 308								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AL. DOS MARACATINS
+                                                </td>
+                                                <td width="140">
+                                                    1 - 1863								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. ANTONIO DE MACEDO SOARES
+                                                </td>
+                                                <td width="140">
+                                                    1 - 836								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. VIEIRA DE MORAES
+                                                </td>
+                                                <td width="140">
+                                                    840 - 2216								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. WASHINGTON LUIZ
+                                                </td>
+                                                <td width="140">
+                                                    6189 - 0								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. PALMARES
+                                                </td>
+                                                <td width="140">
+                                                    1 - 201								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    PC. JOAO DA CUNHA MARQUES
+                                                </td>
+                                                <td width="140">
+                                                    0 - 0								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AC. RETORNO
+                                                </td>
+                                                <td width="140">
+                                                    0 - 0								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. WASHINGTON LUIZ
+                                                </td>
+                                                <td width="140">
+                                                    5394 - 5814								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. TAMOIOS
+                                                </td>
+                                                <td width="140">
+                                                    175 - 970								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. DR. LINO DE MORAES LEME
+                                                </td>
+                                                <td width="140">
+                                                    0 - 187								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. JOAO PEDRO CARDOSO
+                                                </td>
+                                                <td width="140">
+                                                    0 - 576								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    PCA. OLGA SIMON POYARES
+                                                </td>
+                                                <td width="140">
+                                                    0 - 0								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. PEDRO BUENO
+                                                </td>
+                                                <td width="140">
+                                                    1585 - 1								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. ENG. ARMANDO DE ARRUDA PEREIRA
+                                                </td>
+                                                <td width="140">
+                                                    0 - 5603								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    AV. FULFARO
+                                                </td>
+                                                <td width="140">
+                                                    1 - 418								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. DUARTE DE BRITO
+                                                </td>
+                                                <td width="140">
+                                                    480 - 68								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. VENTURA GARCIA CALDERON
+                                                </td>
+                                                <td width="140">
+                                                    258 - 573								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. LEONEL MALVEZZI
+                                                </td>
+                                                <td width="140">
+                                                    161 - 227								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. FRANCISCO ALVES DE AZEVEDO
+                                                </td>
+                                                <td width="140">
+                                                    1 - 500								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="317">
+                                                    R. PE. ANTONIO DE GOUVEIA
+                                                </td>
+                                                <td width="140">
+                                                    1 - 315								
+                                                </td>
+                                                <td width="245" class="linhaEvento">
+                                                
+                                                </td>
+                                            </tr>
+                                            
+                                                                                </table>
+                                                                        </li>
+                                                                </ul>
+                                                        </dd>
+                                                </dl>
+                                        </div>
+                        
+                                </div>
+                        </div>
+
+
+                </div>
+
+	<!-- Content -->
+	        <div class="clear"></div>
+                <div id="footer">
+                        <div id="copyRight">
+        	                <img src="img/marcas/prefeituradeSP.gif" alt="Prefeitura de São Paulo Secretaria de Transportes." />
+                                <img src="img/itinerario/title/logoSptrans.gif" id="sptransUnicoDetalhes" alt="SPTrans" />
+                        </div>
+                </div>
+        </div>
+</form></body>
+</html>
