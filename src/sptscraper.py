@@ -44,6 +44,9 @@ class SptScraper:
     SENTIDOS = ["ida", "volta"]
     PERIODOS = ["manha", "entrepico", "tarde"]
     
+    DICT_DIAS = dict(zip("USD", DIAS))
+    DICT_SENTIDOS = dict(zip("IV", SENTIDOS))
+    
     _conn = None
     _cursor = None
     
@@ -116,26 +119,27 @@ class SptScraper:
                 
     def get_pontos(self, id):
         """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
-           caracteres de dia da semana, e os valores são dicts cujas chaves são so caracteres de sentido, e
-           os valores desses últimos são uma lista de pontos (um ponto é uma lista). Ex.:
+           dias da semana ("util", "sabado" ou "domingo"), e os valores também são dicts, desta vez cujas
+           chaves são "ida" ou "volta", e no último nível temos a lista de pontos. Ex.:
            
                >>>pontos = get_pontos(1234)
-               >>>pontos["U"]["I"]   # dia útil, sentido: ida
+               >>>pontos["util"]["ida"]   # dia útil, sentido: ida
                [[10.1, -20.2], [30.3, -40.4], ...]
                
         """
         pontos = dict()
         for dia in "USD":
-            pontos[dia] = dict()
+            pontos[self.DICT_DIAS[dia]] = dict()
             for sentido in "IV":
                 nomearq = "%s-M-%s-%s.html" % (id, dia, sentido)
                 html = open(os.path.join(self.data_dir, nomearq)).read()
                 lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
                 if not lista_js:
-                    pontos[dia][sentido] = []
+                    pontosDS = []
                 else:
                     lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
-                    pontos[dia][sentido] =  [[a,b] for (a,b) in zip(lista[::2], lista[1::2])]
+                    pontosDS = [[a,b] for (a,b) in zip(lista[::2], lista[1::2])]
+                pontos[self.DICT_DIAS[dia]][self.DICT_SENTIDOS[sentido]] = pontosDS
         return pontos
 
     def get_info_linha(self, id):

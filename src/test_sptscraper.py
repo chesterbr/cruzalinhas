@@ -19,24 +19,29 @@ class TestSptScraper(unittest.TestCase):
     def setUp(self):
         self.scraper = sptscraper.SptScraper()
         self.scraper.data_dir = DIR
+        if os.path.exists(self.scraper.db_name):
+            os.remove(self.scraper.db_name)
+
         
     def tearDown(self):
         if os.path.exists(DIR):
             shutil.rmtree(DIR)
+        if os.path.exists(self.scraper.db_name):
+            os.remove(self.scraper.db_name)
         
-#    def test_clean_html(self):
-#        if not os.path.exists(DIR):
-#            os.mkdir(DIR)        
-#        html = os.path.join(DIR, "teste" + str(random.randint(1, 1000)) +".html")
-#        txt = os.path.join(DIR, "teste" + str(random.randint(1, 1000)) +".txt")
-#        open(html, 'w').close()
-#        open(txt, 'w').close()
-#        self.assertTrue(os.path.exists(html)) 
-#        self.assertTrue(os.path.exists(txt)) 
-#        self.scraper.clean_html()
-#        self.assertFalse(os.path.exists(html)) 
-#        self.assertTrue(os.path.exists(txt)) 
-#        self.assertFalse(os.path.exists(os.path.join(self.scraper.data_dir, self.scraper.index_file)))
+    def test_clean_html(self):
+        if not os.path.exists(DIR):
+            os.mkdir(DIR)        
+        html = os.path.join(DIR, "teste" + str(random.randint(1, 1000)) +".html")
+        txt = os.path.join(DIR, "teste" + str(random.randint(1, 1000)) +".txt")
+        open(html, 'w').close()
+        open(txt, 'w').close()
+        self.assertTrue(os.path.exists(html)) 
+        self.assertTrue(os.path.exists(txt)) 
+        self.scraper.clean_html()
+        self.assertFalse(os.path.exists(html)) 
+        self.assertTrue(os.path.exists(txt)) 
+        self.assertFalse(os.path.exists(os.path.join(self.scraper.data_dir, self.scraper.index_file)))
 #
 #    def test_download_index(self):
 #        num_linhas = self.scraper.download_index()
@@ -83,15 +88,15 @@ class TestSptScraper(unittest.TestCase):
         id = ID_LINHA_1
         pontos = self.scraper.get_pontos(id)
         #todo nomes por extenso?
-        self.assertEqual(pontos["U"]["I"], pontos["S"]["I"])
-        self.assertEqual(pontos["U"]["V"], pontos["D"]["V"])
-        self.assertNotEquals(pontos["U"]["I"], pontos["D"]["V"])
-        self.assertTrue(math.fabs(float(pontos["U"]["I"][0][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["U"]["I"][0][1])) < 90)
-        self.assertTrue(math.fabs(float(pontos["S"]["V"][1][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["S"]["V"][1][1])) < 90)
-        self.assertTrue(math.fabs(float(pontos["D"]["I"][2][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["D"]["I"][2][1])) < 90)
+        self.assertEqual(pontos["util"]["ida"], pontos["sabado"]["ida"])
+        self.assertEqual(pontos["util"]["volta"], pontos["domingo"]["volta"])
+        self.assertNotEquals(pontos["util"]["ida"], pontos["domingo"]["volta"])
+        self.assertTrue(math.fabs(float(pontos["util"]["ida"][0][0])) < 90)
+        self.assertTrue(math.fabs(float(pontos["util"]["ida"][0][1])) < 90)
+        self.assertTrue(math.fabs(float(pontos["sabado"]["volta"][1][0])) < 90)
+        self.assertTrue(math.fabs(float(pontos["sabado"]["volta"][1][1])) < 90)
+        self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][0])) < 90)
+        self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][1])) < 90)
         
     def test_get_info_linha(self):
         shutil.copytree("../test_files", DIR)
@@ -119,7 +124,6 @@ class TestSptScraper(unittest.TestCase):
         
     def test_crud_banco(self):
         shutil.copytree("../test_files", DIR)
-        os.remove(self.scraper.db_name)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
         pontos1 = self.scraper.get_pontos(id1)
