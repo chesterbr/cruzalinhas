@@ -26,6 +26,7 @@ import urlparse
 import re
 import sqlite3
 import time
+import optparse
 try:
     import json
 except ImportError:
@@ -37,7 +38,7 @@ class SptScraper:
     pag_linhas = "linhaselecionada.asp"
     
     index_file = "index.html"
-    data_dir = "data"
+    html_dir = "html"
     db_name = "linhas.sqlite"
     silent = False
     
@@ -51,16 +52,16 @@ class SptScraper:
     _conn = None
     _cursor = None
     
-    def _assert_data_dir(self):
-        if not os.path.exists(self.data_dir):
-            os.mkdir(self.data_dir)
+    def _assert_html_dir(self):
+        if not os.path.exists(self.html_dir):
+            os.mkdir(self.html_dir)
     
     def clean_html(self):
         """Apaga os downloads já realizados"""
-        self._assert_data_dir()
-        for file in os.listdir(self.data_dir):
+        self._assert_html_dir()
+        for file in os.listdir(self.html_dir):
             if file.endswith(".html"):
-                os.unlink(os.path.join(self.data_dir,file))
+                os.unlink(os.path.join(self.html_dir,file))
         
     def download_index(self):
         """Baixa a página-índice (que contém a lista das linhas), verifica sua integridade
@@ -72,15 +73,18 @@ class SptScraper:
             if elem["class"] == "linkLinha":
                 numLinhas += 1
         if numLinhas > 0:
-            self._assert_data_dir()
-            arq = open(os.path.join(self.data_dir, self.index_file), "w")
+            self._assert_html_dir()
+            arq = open(os.path.join(self.html_dir, self.index_file), "w")
             arq.writelines(html)
         return numLinhas
     
     def lista_linhas(self):
         """Retorna uma lista com o nome e a URL de cada linha, a partir da página-índice
         (que já deve ter sido baixada via download_index) """
-        html = open(os.path.join(self.data_dir, self.index_file)).read()
+        html_file = os.path.join(self.html_dir, self.index_file)
+        if not os.path.exists(html_file):
+            return []
+        html = open(html_file).read()
         soup = BeautifulSoup(html)
         linhas = []
         for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
@@ -102,7 +106,7 @@ class SptScraper:
            
            Por ora, apenas o mapa está implementado """
         
-        self._assert_data_dir()
+        self._assert_html_dir()
         for sentido in [0,1]:
             for dia in [0,1,2]:
                 for tipo in "MI":
@@ -112,7 +116,7 @@ class SptScraper:
                         url = self.base_href + "detalheLinha.asp?TpDiaID=%s&CdPjOID=%s&TpDiaIDpar=%s&DfSenID=%s" % (dia, id, dia, sentido + 1)
                     nomearq = "%s-%s-%s-%s.html" % (id, tipo, "USD"[dia], "IV"[sentido])
                     html = urllib2.urlopen(url).read()
-                    arq = open(os.path.join(self.data_dir, nomearq), "w")
+                    arq = open(os.path.join(self.html_dir, nomearq), "w")
                     arq.writelines(html)
                     time.sleep(1)
         
@@ -133,7 +137,7 @@ class SptScraper:
             pontos[self.DICT_DIAS[dia]] = dict()
             for sentido in "IV":
                 nomearq = "%s-M-%s-%s.html" % (id, dia, sentido)
-                html = open(os.path.join(self.data_dir, nomearq)).read()
+                html = open(os.path.join(self.html_dir, nomearq)).read()
                 lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
                 if not lista_js:
                     pontosDS = []
@@ -149,7 +153,7 @@ class SptScraper:
            unitário para ver as infos que retornam neles"""
         # Info básica (tanto faz qual HTML usar, ela repete em todos)
         arq_info = "%s-I-U-I.html" % id
-        html = open(os.path.join(self.data_dir, arq_info)).read()
+        html = open(os.path.join(self.html_dir, arq_info)).read()
         soup = BeautifulSoup(html)
         info = {}
         nomes = soup.find("dl", id="dadosLinha").dd.ul.findAll("li")
@@ -328,3 +332,14 @@ class SptScraper:
 #    arquivoCsv = open("linhas.csv", "ab")
 #    geraCSV(linhas, arquivoCsv)
 #    arquivoCsv.close()
+
+    def main(self):
+        p = optparse.OptionParser()
+        #p.add_option('--info', '-p', default="world")
+        options, arguments = p.parse_args()
+#        print "sptscraper"
+        print "Entries at the local downloaded index: %s" % (len(self.lista_linhas()))
+        print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())
+         
+if __name__ == '__main__':
+    SptScraper().main()
