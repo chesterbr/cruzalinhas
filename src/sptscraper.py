@@ -24,7 +24,12 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 import urlparse
 import re
+import sqlite3
 import time
+try:
+    import json
+except ImportError:
+    import simplejson as json 
 
 class SptScraper:
 
@@ -33,10 +38,14 @@ class SptScraper:
     
     index_file = "index.html"
     data_dir = "data"
+    db_name = "linhas.sqlite"
     
     DIAS = ["util", "sabado", "domingo"]
     SENTIDOS = ["ida", "volta"]
     PERIODOS = ["manha", "entrepico", "tarde"]
+    
+    _conn = None
+    _cursor = None
     
     def _assert_data_dir(self):
         if not os.path.exists(self.data_dir):
@@ -126,7 +135,7 @@ class SptScraper:
                     pontos[dia][sentido] = []
                 else:
                     lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
-                    pontos[dia][sentido] = zip(lista[::2], lista[1::2])
+                    pontos[dia][sentido] =  [[a,b] for (a,b) in zip(lista[::2], lista[1::2])]
         return pontos
 
     def get_info_linha(self, id):
@@ -166,58 +175,111 @@ class SptScraper:
         
         return info
     
+    def _init_banco(self):
+        self._conn = sqlite3.connect(self.db_name)
+        self._cursor = self._conn.cursor()
+        self._cursor.execute("create table if not exists linhas(id integer primary key, deleted boolean, last_update integer, last_upload integer, info text, pontos text)")
+    
+    def _close_banco(self):
+        self._cursor.close() 
+        self._conn.close()
+    
+    def lista_banco(self):
+        self._init_banco()
+        self._cursor.execute("select id from linhas order by id");
+        lista_ids = self._cursor.fetchall()
+        self._close_banco()
+        return [i[0] for i in lista_ids]
+    
+    def atualiza_banco(self, id, info, pontos):
+        """Insert ou update do registro do banco correspondente àquele ID"""
+        dados = self.get_banco(id)
+        self._init_banco()
+        if not dados:
+            ti = (id, 1, json.dumps(info), json.dumps(pontos),)
+            self._cursor.execute("insert into linhas (id,deleted,last_update,info,pontos) values (?,'false',?,?,?)", ti)
+        elif (dados["info"] != info) or (dados["pontos"] != pontos):
+            tu = (dados["last_update"] + 1, json.dumps(info), json.dumps(pontos),id,)
+            self._cursor.execute("update linhas set deleted='false',last_update=?,info=?,pontos=? where id=?", tu)
+        self._conn.commit()
+        self._close_banco()
+    
+    def deleta_banco(self, id):
+        """Marca um registro no banco como deletado (não apaga fisicamente)"""
+        dados = self.get_banco(id)
+        if dados["deleted"] == "true":
+            return        
+        self._init_banco()
+        t = (dados["last_update"] + 1, id,)
+        self._cursor.execute("update linhas set deleted='true',last_update=? where id=?", t)
+        self._conn.commit()
+        self._close_banco()       
+    
+    def get_banco(self, id):
+        self._init_banco()
+        t = (id,)
+        self._cursor.execute("select * from linhas where id = ?", t);
+        r = self._cursor.fetchone()
+        self._close_banco()
+        if not r:
+            return None
+        result = dict(zip([x[0] for x in self._cursor.description], r))
+        result["info"] = json.loads(result["info"])
+        result["pontos"] = json.loads(result["pontos"])
+        return result
+         
             
-        
-                
-def geraCSV(linhas, stream):
-    writer = csv.writer(stream)    
-    for linha in linhas:
-        _log("Sleeping...")
-        time.sleep(20 + random.uniform(1, 10))
-        _log("Iniciando linha: %s" % linha["nome"])
-        writer.writerow([linha["nome"].encode("utf-8"),
-                         linha["url"],
-                         [p for p in linha["pontos"]]])
-
-
-def _getPontos(url):
-    """Retorna o generator de uma coleção de pontos (latitude e longitude) para uma
-    linha de ônibus, identificada pela URL"""
-    _log("Processando linha: " + url)
-    urlDs = re.sub(r"&TpDiaID=.", "&TpDiaID=0", url, 1) # Garante rota de dia da semana
-    if url != urlDs:
-        url = urlDs
-        _log("Link convertido para segunda-feira:" + url)
-    html = urllib2.urlopen(url).read()
-    # Os pontos estão na string JavaScript coor, que consiste em uma lista de  
-    # latitudes e longitudes, separados por || e convertidos para inteiros
-    # (i.e., multiplicados por 1 milhão). 
-    lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
-    if not lista_js:
-        _log("Aviso: linha sem pontos. URL: " + url)
-        return
-    lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
-    i = iter(lista)
-    for lat in i:
-        yield (lat, i.next())
-#    return [(lat, i.next()) for lat in i]
-
-def _log(string):
-    print(string)
-    logging.debug(string)
-
-            
-
-if __name__ == "__main__":
-    print "Gerando linhas.csv..."
-    linhas = getLinhas()
-    nargs = len(sys.argv)    
-    if nargs > 2 or (nargs==2 and not isdigit(sys.argv[1])):
-        print "Uso: scraper.py [no. de linhas a pular no inicio]"
-        sys.exit()
-    if nargs == 2:
-        for i in range(0, int(sys.argv[1])):
-            _log("Pulando: %s" % linhas.next()["nome"])
-    arquivoCsv = open("linhas.csv", "ab")
-    geraCSV(linhas, arquivoCsv)
-    arquivoCsv.close()
+#        
+#                
+#def geraCSV(linhas, stream):
+#    writer = csv.writer(stream)    
+#    for linha in linhas:
+#        _log("Sleeping...")
+#        time.sleep(20 + random.uniform(1, 10))
+#        _log("Iniciando linha: %s" % linha["nome"])
+#        writer.writerow([linha["nome"].encode("utf-8"),
+#                         linha["url"],
+#                         [p for p in linha["pontos"]]])
+#
+#
+#def _getPontos(url):
+#    """Retorna o generator de uma coleção de pontos (latitude e longitude) para uma
+#    linha de ônibus, identificada pela URL"""
+#    _log("Processando linha: " + url)
+#    urlDs = re.sub(r"&TpDiaID=.", "&TpDiaID=0", url, 1) # Garante rota de dia da semana
+#    if url != urlDs:
+#        url = urlDs
+#        _log("Link convertido para segunda-feira:" + url)
+#    html = urllib2.urlopen(url).read()
+#    # Os pontos estão na string JavaScript coor, que consiste em uma lista de  
+#    # latitudes e longitudes, separados por || e convertidos para inteiros
+#    # (i.e., multiplicados por 1 milhão). 
+#    lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
+#    if not lista_js:
+#        _log("Aviso: linha sem pontos. URL: " + url)
+#        return
+#    lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
+#    i = iter(lista)
+#    for lat in i:
+#        yield (lat, i.next())
+##    return [(lat, i.next()) for lat in i]
+#
+#def _log(string):
+#    print(string)
+#    logging.debug(string)
+#
+#            
+#
+#if __name__ == "__main__":
+#    print "Gerando linhas.csv..."
+#    linhas = getLinhas()
+#    nargs = len(sys.argv)    
+#    if nargs > 2 or (nargs==2 and not isdigit(sys.argv[1])):
+#        print "Uso: scraper.py [no. de linhas a pular no inicio]"
+#        sys.exit()
+#    if nargs == 2:
+#        for i in range(0, int(sys.argv[1])):
+#            _log("Pulando: %s" % linhas.next()["nome"])
+#    arquivoCsv = open("linhas.csv", "ab")
+#    geraCSV(linhas, arquivoCsv)
+#    arquivoCsv.close()
