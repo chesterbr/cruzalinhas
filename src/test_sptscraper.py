@@ -7,6 +7,7 @@ import shutil
 import random
 import math
 import time
+from mock import Mock
 
 DIR = "../tmp/"
 ID_LINHA_1 = 53106   
@@ -19,6 +20,7 @@ class TestSptScraper(unittest.TestCase):
     def setUp(self):
         self.scraper = sptscraper.SptScraper()
         self.scraper.data_dir = DIR
+        self.scraper.silent = True
         if os.path.exists(self.scraper.db_name):
             os.remove(self.scraper.db_name)
 
@@ -86,7 +88,7 @@ class TestSptScraper(unittest.TestCase):
     def test_get_pontos_linha(self):
         shutil.copytree("../test_files", DIR)
         id = ID_LINHA_1
-        pontos = self.scraper.get_pontos(id)
+        pontos = self.scraper.get_pontos_linha(id)
         #todo nomes por extenso?
         self.assertEqual(pontos["util"]["ida"], pontos["sabado"]["ida"])
         self.assertEqual(pontos["util"]["volta"], pontos["domingo"]["volta"])
@@ -126,18 +128,18 @@ class TestSptScraper(unittest.TestCase):
         shutil.copytree("../test_files", DIR)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
-        pontos1 = self.scraper.get_pontos(id1)
+        pontos1 = self.scraper.get_pontos_linha(id1)
         id2 = ID_LINHA_2
         info2 = self.scraper.get_info_linha(id2)
-        pontos2 = self.scraper.get_pontos(id2)
+        pontos2 = self.scraper.get_pontos_linha(id2)
         # insert / list
-        ids_banco = self.scraper.lista_banco()
+        ids_banco = self.scraper.lista_ids_banco()
         self.assertEqual(0, len(ids_banco))
         self.scraper.atualiza_banco(id1, info1, pontos1)
-        ids_banco = self.scraper.lista_banco()
+        ids_banco = self.scraper.lista_ids_banco()
         self.assertEqual(1, len(ids_banco))
         self.scraper.atualiza_banco(id2, info2, pontos2)
-        ids_banco = self.scraper.lista_banco()
+        ids_banco = self.scraper.lista_ids_banco()
         self.assertEqual(2, len(ids_banco))
         # get
         dados = self.scraper.get_banco(ids_banco[0])
@@ -177,13 +179,67 @@ class TestSptScraper(unittest.TestCase):
         self.assertNotEqual("true", dados["deleted"])
         dados = self.scraper.get_banco(ids_banco[1])
         self.assertEqual("true", dados["deleted"])
+        self.assertEqual(dict(), dados["info"])
+        self.assertEqual(dict(), dados["pontos"])
         self.assertNotEqual(last_update, dados["last_update"])       
         last_update = dados["last_update"]
-        ids_banco = self.scraper.lista_banco()
+        ids_banco = self.scraper.lista_ids_banco()
         self.assertEqual(2, len(ids_banco))
         self.scraper.deleta_banco(id2)
         dados = self.scraper.get_banco(ids_banco[1])
-        self.assertEqual(last_update, dados["last_update"])       
+        self.assertEqual(last_update, dados["last_update"])    
+        
+    def test_html_to_banco(self):
+        shutil.copytree("../test_files", DIR)
+        id1 = ID_LINHA_1
+        info1 = self.scraper.get_info_linha(id1)
+        pontos1 = self.scraper.get_pontos_linha(id1)
+        id2 = ID_LINHA_2
+        info2 = self.scraper.get_info_linha(id2)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.html_to_banco([id1,id2])
+        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        mock_fn_upload = Mock()
+        mock_fn_upload.return_value = True 
+        self.scraper.upload_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.html_to_banco([id1,id2])
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.html_to_banco([id1])
+        self.assertEqual(1, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.upload_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        
+
+    def test_upload_banco(self):
+        shutil.copytree("../test_files", DIR)
+        id1 = ID_LINHA_1
+        info1 = self.scraper.get_info_linha(id1)
+        pontos1 = self.scraper.get_pontos_linha(id1)
+        id2 = ID_LINHA_2
+        info2 = self.scraper.get_info_linha(id2)
+        pontos2 = self.scraper.get_pontos_linha(id2)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.atualiza_banco(id1, info1, pontos1)
+        self.assertEqual(1, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.atualiza_banco(id2, info1, pontos1)
+        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.atualiza_banco(id2, info2, pontos2)
+        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        mock_fn_upload = Mock()
+        mock_fn_upload.return_value = True 
+        self.scraper.upload_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.atualiza_banco(id1, info1, pontos1)
+        self.scraper.upload_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.atualiza_banco(id1, info1, pontos2)
+        self.scraper.deleta_banco(id2)
+        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.upload_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+
+        
         
 
 if __name__ == '__main__':

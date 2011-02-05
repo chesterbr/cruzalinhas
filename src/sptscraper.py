@@ -39,6 +39,7 @@ class SptScraper:
     index_file = "index.html"
     data_dir = "data"
     db_name = "linhas.sqlite"
+    silent = False
     
     DIAS = ["util", "sabado", "domingo"]
     SENTIDOS = ["ida", "volta"]
@@ -117,12 +118,12 @@ class SptScraper:
         
         # 
                 
-    def get_pontos(self, id):
+    def get_pontos_linha(self, id):
         """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
            dias da semana ("util", "sabado" ou "domingo"), e os valores também são dicts, desta vez cujas
            chaves são "ida" ou "volta", e no último nível temos a lista de pontos. Ex.:
            
-               >>>pontos = get_pontos(1234)
+               >>>pontos = get_pontos_linha(1234)
                >>>pontos["util"]["ida"]   # dia útil, sentido: ida
                [[10.1, -20.2], [30.3, -40.4], ...]
                
@@ -188,7 +189,7 @@ class SptScraper:
         self._cursor.close() 
         self._conn.close()
     
-    def lista_banco(self):
+    def lista_ids_banco(self):
         self._init_banco()
         self._cursor.execute("select id from linhas order by id");
         lista_ids = self._cursor.fetchall()
@@ -200,8 +201,8 @@ class SptScraper:
         dados = self.get_banco(id)
         self._init_banco()
         if not dados:
-            ti = (id, 1, json.dumps(info), json.dumps(pontos),)
-            self._cursor.execute("insert into linhas (id,deleted,last_update,info,pontos) values (?,'false',?,?,?)", ti)
+            ti = (id, json.dumps(info), json.dumps(pontos),)
+            self._cursor.execute("insert into linhas (id,deleted,last_update,last_upload,info,pontos) values (?,'false',1,0,?,?)", ti)
         elif (dados["info"] != info) or (dados["pontos"] != pontos):
             tu = (dados["last_update"] + 1, json.dumps(info), json.dumps(pontos),id,)
             self._cursor.execute("update linhas set deleted='false',last_update=?,info=?,pontos=? where id=?", tu)
@@ -215,7 +216,7 @@ class SptScraper:
             return        
         self._init_banco()
         t = (dados["last_update"] + 1, id,)
-        self._cursor.execute("update linhas set deleted='true',last_update=? where id=?", t)
+        self._cursor.execute("update linhas set deleted='true',last_update=?,info='{}',pontos='{}'  where id=?", t)
         self._conn.commit()
         self._close_banco()       
     
@@ -231,7 +232,49 @@ class SptScraper:
         result["info"] = json.loads(result["info"])
         result["pontos"] = json.loads(result["pontos"])
         return result
-         
+    
+    def html_to_banco(self, lista_ids):
+        lista_ordenada = sorted(lista_ids)
+        for id in lista_ordenada:
+            info = self.get_info_linha(id)
+            pontos = self.get_pontos_linha(id)
+            self.atualiza_banco(id, info, pontos)
+        for id in self.lista_ids_banco():
+            if id not in lista_ordenada:
+                self.deleta_banco(id) 
+                
+    def upload_banco(self, fn_upload):
+        for id in self.lista_ids_banco():
+            dados = self.get_banco(id)
+            if dados["last_update"] != dados["last_upload"]:
+                if dados["deleted"] == "true":
+                    msg = "Linha id=%s (DELETED)" % id
+                else: 
+                    msg = "Linha id=%s, codigo=%s" % (id, dados["info"]["numero"])
+                self._log("Iniciando upload - %s" % msg)                
+                if fn_upload(dados):
+                    t = (id,)
+                    self._init_banco()
+                    self._cursor.execute("update linhas set last_upload=last_update where id=?", t)
+                    self._conn.commit()
+                    self._close_banco()  
+                    self._log("Upload OK - %s" % msg)
+                else:
+                    self._log("Erro no upload - %s" % msg)
+    
+    def conta_linhas_alteradas_banco(self):
+        """Diz quantas linhas temos que subir (porque mudaram)"""
+        self._init_banco()
+        self._cursor.execute("select count(*) from linhas where last_update != last_upload");
+        r = self._cursor.fetchone()
+        self._close_banco()
+        return r[0]
+    
+    
+    def _log(self, string):
+        if not self.silent:
+            print(string)
+            #logging.debug(string)
             
 #        
 #                
@@ -268,9 +311,7 @@ class SptScraper:
 #        yield (lat, i.next())
 ##    return [(lat, i.next()) for lat in i]
 #
-#def _log(string):
-#    print(string)
-#    logging.debug(string)
+
 #
 #            
 #
