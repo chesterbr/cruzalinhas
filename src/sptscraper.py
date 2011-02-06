@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+# Copyright (c) 2010-2011 Carlos Duarte do Nascimento (Chester)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this 
 # software and associated documentation files (the "Software"), to deal in the Software 
@@ -18,7 +18,10 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 #
-
+""" Utilitário que baixa e interpreta os dados de itinerários de ônibus
+    do site da SPTrans, opcionalmente atualizando o cruzalinhas
+    
+    Uso: python sptscraper.py COMANDO [id]   (use o comando HELP para info) """
 import os
 import urllib2
 from BeautifulSoup import BeautifulSoup
@@ -278,59 +281,6 @@ class SptScraper:
         if not self.silent:
             print(string)
             #logging.debug(string)
-            
-#        
-#                
-#def geraCSV(linhas, stream):
-#    writer = csv.writer(stream)    
-#    for linha in linhas:
-#        _log("Sleeping...")
-#        time.sleep(20 + random.uniform(1, 10))
-#        _log("Iniciando linha: %s" % linha["nome"])
-#        writer.writerow([linha["nome"].encode("utf-8"),
-#                         linha["url"],
-#                         [p for p in linha["pontos"]]])
-#
-#
-#def _getPontos(url):
-#    """Retorna o generator de uma coleção de pontos (latitude e longitude) para uma
-#    linha de ônibus, identificada pela URL"""
-#    _log("Processando linha: " + url)
-#    urlDs = re.sub(r"&TpDiaID=.", "&TpDiaID=0", url, 1) # Garante rota de dia da semana
-#    if url != urlDs:
-#        url = urlDs
-#        _log("Link convertido para segunda-feira:" + url)
-#    html = urllib2.urlopen(url).read()
-#    # Os pontos estão na string JavaScript coor, que consiste em uma lista de  
-#    # latitudes e longitudes, separados por || e convertidos para inteiros
-#    # (i.e., multiplicados por 1 milhão). 
-#    lista_js = re.search(r'var coor = "(.*?)"', html).group(1)
-#    if not lista_js:
-#        _log("Aviso: linha sem pontos. URL: " + url)
-#        return
-#    lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
-#    i = iter(lista)
-#    for lat in i:
-#        yield (lat, i.next())
-##    return [(lat, i.next()) for lat in i]
-#
-
-#
-#            
-#
-#if __name__ == "__main__":
-#    print "Gerando linhas.csv..."
-#    linhas = getLinhas()
-#    nargs = len(sys.argv)    
-#    if nargs > 2 or (nargs==2 and not isdigit(sys.argv[1])):
-#        print "Uso: scraper.py [no. de linhas a pular no inicio]"
-#        sys.exit()
-#    if nargs == 2:
-#        for i in range(0, int(sys.argv[1])):
-#            _log("Pulando: %s" % linhas.next()["nome"])
-#    arquivoCsv = open("linhas.csv", "ab")
-#    geraCSV(linhas, arquivoCsv)
-#    arquivoCsv.close()
 
     def main(self):
         parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
