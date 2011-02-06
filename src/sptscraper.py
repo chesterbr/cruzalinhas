@@ -120,8 +120,6 @@ class SptScraper:
                     arq = open(os.path.join(self.html_dir, nomearq), "w")
                     arq.writelines(html)
                     time.sleep(1)
-        
-        # 
                 
     def get_pontos_linha(self, id):
         """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
@@ -361,7 +359,15 @@ Comandos:
             parser.print_help()
         elif cmd == 'info':
             print "Entries at the local downloaded index: %s" % (len(self.lista_linhas()))
-            print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())
+            print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
+        elif cmd == 'download':
+            print "Baixando página-índice..."
+            numlinhas = self.download_index()
+            print "Existem %s linhas no índice. Interpretando..." % numlinhas
+            for linha in self.lista_linhas():
+                print "Baixando linha id=%s (%s)..." % (linha.id, linha.nome)
+                self.download_linha(linha.id)
+            print "Download concluído"
         else:
             print "Comando ainda não implementado"
          
