@@ -83,24 +83,22 @@ class SptScraper:
         return numLinhas
     
     def lista_linhas(self):
-        """Retorna uma lista com o nome e a URL de cada linha, a partir da página-índice
-        (que já deve ter sido baixada via download_index) """
+        """Retorna um dicionário cujas chaves são os IDs das linhas e os valores
+           são os nomes, a partir da última página-índice baixada) """
         html_file = os.path.join(self.html_dir, self.index_file)
         if not os.path.exists(html_file):
-            return []
+            return {}
         html = open(html_file).read()
         soup = BeautifulSoup(html)
-        linhas = []
+        linhas = {}
         for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
             if elem["class"] == "linkLinha" and elem.string:
                 nome = elem.string.replace("Linha: ", "").strip()
             elif elem["class"] == "linkDetalhes":
                 parsed_url = urlparse.urlparse(self.base_href + elem["href"])
                 params = dict([part.split('=') for part in parsed_url[4].split('&')])
-                linha = {
-                    "nome" : nome,
-                    "id" : params["CdPjOID"] }
-                linhas.append(linha)
+                id = params["CdPjOID"]
+                linhas[id] = nome
         return linhas
 
     def download_linha(self, id):
@@ -308,15 +306,16 @@ Comandos:
         if cmd == "help":
             parser.print_help()
         elif cmd == 'info':
-            print "Entries at the local downloaded index: %s" % (len(self.lista_linhas()))
-            print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
+            print "Linhas no index.html local: %s" % (len(self.lista_linhas()))
+            print "Atualizações pendentes no banco local (%s): %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
         elif cmd == 'download':
             print "Baixando página-índice..."
             numlinhas = self.download_index()
             print "Existem %s linhas no índice. Interpretando..." % numlinhas
-            for linha in self.lista_linhas():
-                print "Baixando linha id=%s (%s)..." % (linha.id, linha.nome)
-                self.download_linha(linha.id)
+            linhas = self.lista_linhas()
+            for id in sorted(linhas.keys()):
+                print "Baixando linha id=%s (%s)..." % (id, linhas[id])
+                self.download_linha(linhas[id])
             print "Download concluído"
         else:
             print "Comando ainda não implementado"

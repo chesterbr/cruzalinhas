@@ -82,19 +82,17 @@ class TestSptScraper(unittest.TestCase):
 #        TODO quebrar esse teste em dois: um que lida com arquivos locais, outro com
 #        downloads 
         lista_linhas = self.scraper.lista_linhas()
-        self.assertEquals([], lista_linhas)
+        self.assertEquals({}, lista_linhas)
         shutil.copytree("../test_files", DIR)
         lista_linhas = self.scraper.lista_linhas()
         self.assertTrue(lista_linhas)
-        self.assertTrue(lista_linhas[0]["id"].isdigit())
-        self.assertTrue(lista_linhas[0]["id"]>0)
-        self.assertTrue(lista_linhas[0]["nome"])
+        self.assertTrue(lista_linhas.keys()[0].isdigit())
+        self.assertTrue(lista_linhas.keys()[0]>0)
+        self.assertTrue(lista_linhas.values()[0])
          
-    def testa_download_linha(self):
+    def test_download_linha(self):
         os.mkdir(DIR)
-        shutil.copyfile("../test_files/index.html", os.path.join(DIR, "index.html"))
-        lista_linhas = self.scraper.lista_linhas()
-        id = lista_linhas[0]["id"]
+        id = str(ID_LINHA_1)
         self.scraper.download_linha(id)
         self.assertTrue(os.path.exists(os.path.join(self.scraper.html_dir, id+"-M-U-I.html")))
         self.assertTrue(os.path.exists(os.path.join(self.scraper.html_dir, id+"-M-S-I.html")))
