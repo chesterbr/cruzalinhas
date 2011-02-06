@@ -1,17 +1,17 @@
 Tarefas:
 
 sptscraper:
-- Dividir o teste em um que depende da SPTrans e um com arquivos locais
-- Geohashes
-- Implementar ruas
-- Implementar # de paradas (tem que ver como varia)
 - Testar parse 
 - Implementar list
 - Implementar dump
+- Implementar ruas
+- Geohashes
+- Implementar # de paradas (tem que ver como varia)
 - Implementar upload
+- Dividir o teste em um que depende da SPTrans e um com arquivos locais
 
 cruzalinhas:
-- Rever models.py para comportar novas infos, geohashes pré-calculados
+- Rever models.py para comportar novas infos e geohashes pré-calculados
 - Implementar uma página que recebe uma linha (sujeita a login) e inclui/altera/exclui
 - Acrescentar combo de horário no front-end e buscar de acordo.
 - Página que exibe infos da linha no front-end

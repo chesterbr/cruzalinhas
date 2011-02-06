@@ -302,7 +302,7 @@ Comandos:
   parse         Lê os HTMLs e executa inclusões/alterações/exclusões no banco.
   list          Imprime uma lista JSON dos IDs das linhas no banco.
   dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
-  upload        Sobe as atualizações pendentes do banco local para o cruzalinhas.
+  upload        Sobe as atualizações pendentes do banco para o cruzalinhas.
             '''))
         parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
         parser.add_argument("comando", nargs = 1,
