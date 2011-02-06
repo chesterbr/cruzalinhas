@@ -31,6 +31,7 @@ import sqlite3
 import time
 import argparse
 import textwrap
+import random
 try:
     import json
 except ImportError:
@@ -104,9 +105,7 @@ class SptScraper:
     def download_linha(self, id):
         """Baixa os arquivos relacionados a uma linha identificado por "id". Os arquivos são
            salvos no formato id-tipo-dia-sentido.html, onde tipo é M(apa) ou I(nfo), dia é
-           U(til), S(abado) ou D(omingo/feriado) e sentido é I(da) ou V(olta)
-           
-           Por ora, apenas o mapa está implementado """
+           U(til), S(abado) ou D(omingo/feriado) e sentido é I(da) ou V(olta)"""
         
         self._assert_html_dir()
         for sentido in [0,1]:
@@ -117,10 +116,15 @@ class SptScraper:
                     else:
                         url = self.base_href + "detalheLinha.asp?TpDiaID=%s&CdPjOID=%s&TpDiaIDpar=%s&DfSenID=%s" % (dia, id, dia, sentido + 1)
                     nomearq = "%s-%s-%s-%s.html" % (id, tipo, "USD"[dia], "IV"[sentido])
-                    html = urllib2.urlopen(url).read()
+                    try:
+                        html = urllib2.urlopen(url).read()
+                    except:
+                        print "Erro ao baixar: " + url
+                        raise
                     arq = open(os.path.join(self.html_dir, nomearq), "w")
                     arq.writelines(html)
-                    time.sleep(1)
+                    time.sleep(random.uniform(0,1.5))
+
                 
     def get_pontos_linha(self, id):
         """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
@@ -238,6 +242,8 @@ class SptScraper:
         return result
     
     def html_to_banco(self, lista_ids):
+        """Atualiza o banco, inserindo/alterando os HTMLs que constem na
+           lista e excluindo dele os que não estiverem nela"""
         lista_ordenada = sorted(lista_ids)
         for id in lista_ordenada:
             info = self.get_info_linha(id)
@@ -290,17 +296,22 @@ linhas.sqlite, que pode ser levado para outros aplicativos, transformado em
 JSON ou ser usado para atualizar o cruzalinhas.
 
 Comandos:
-  info          Mostra dados sobre os arquivos baixados e o banco local.
-  download [id] Baixa os HTMLs da SPTrans (iniciando pelo id)
-  parse [id]    Varre os HTMLs das linhas (ou apenas uma) e atualiza o banco.
+  info          Mostra a quantidade de atualizações pendentes para upload.
+  download [id] Baixa os HTMLs da SPTrans (do início ou a partir do id).
+  parse         Lê os HTMLs e executa inclusões/alterações/exclusões no banco.
   list          Imprime uma lista JSON dos IDs das linhas no banco.
   dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
-  upload        Atualiza o cruzalinahs com os dados do banco local.
+  upload        Sobe as atualizações pendentes do banco local para o cruzalinhas.
             '''))
         parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
         parser.add_argument("comando", nargs = 1,
                             choices = ["help", "info","download", "parse", "list", "dump", "upload"],
                             help = "Comandos (vide acima)")
+        parser.add_argument("id",
+                            metavar = "id",
+                            type = int,
+                            nargs = "?",
+                            help = "id da linha (opcional para alguns comandos)")
         arguments = parser.parse_args()
         cmd = arguments.comando[0];
         if cmd == "help":
@@ -309,14 +320,34 @@ Comandos:
             print "Linhas no index.html local: %s" % (len(self.lista_linhas()))
             print "Atualizações pendentes no banco local (%s): %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
         elif cmd == 'download':
-            print "Baixando página-índice..."
-            numlinhas = self.download_index()
-            print "Existem %s linhas no índice. Interpretando..." % numlinhas
+            if not arguments.id:
+                print "Preparando para apagar HTMLs baixados (Ctrl+C para cancelar)..."
+                time.sleep(5)
+                print "Apagando HTMLs antigos..."
+                self.clean_html()
+                print "Baixando página-índice..."
+                numlinhas = self.download_index()
+                print "Existem %s linhas no índice. Interpretando..." % numlinhas
+                id_inicial = None
+            else:
+                print "Retomando download a partir do id %s..." % arguments.id
+                id_inicial = str(arguments.id)
             linhas = self.lista_linhas()
             for id in sorted(linhas.keys()):
+                if id_inicial and id != id_inicial:
+                    continue
+                id_inicial = None
                 print "Baixando linha id=%s (%s)..." % (id, linhas[id])
-                self.download_linha(linhas[id])
+                self.download_linha(id)
             print "Download concluído"
+        elif cmd == "parse":
+            atualizacoes = self.conta_linhas_alteradas_banco()
+            print "Atualizações pendentes no banco: %s. Analisando HTMLs..." % atualizacoes
+            self.html_to_banco(lista_ids)
+            novas_atualizacoes = self.conta_linhas_alteradas_banco() - atualizacoes
+            print "Parse concluído. Novas atualizacoes: %s" % novas_atualizacoes
+#        elif cmd == "list":
+#            pass
         else:
             print "Comando ainda não implementado"
          

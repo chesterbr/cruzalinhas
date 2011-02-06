@@ -5,9 +5,7 @@ sptscraper:
 - Geohashes
 - Implementar ruas
 - Implementar # de paradas (tem que ver como varia)
-- Testar download
-- Implementar download id
-- Implementar parse 
+- Testar parse 
 - Implementar list
 - Implementar dump
 - Implementar upload
