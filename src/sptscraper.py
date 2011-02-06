@@ -298,6 +298,7 @@ JSON ou ser usado para atualizar o cruzalinhas.
 Comandos:
   info          Mostra a quantidade de atualizações pendentes para upload.
   download [id] Baixa os HTMLs da SPTrans (do início ou a partir do id).
+  resume        Baixa os HTMLs a partir do último salvo
   parse         Lê os HTMLs e executa inclusões/alterações/exclusões no banco.
   list          Imprime uma lista JSON dos IDs das linhas no banco.
   dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
@@ -305,7 +306,7 @@ Comandos:
             '''))
         parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
         parser.add_argument("comando", nargs = 1,
-                            choices = ["help", "info","download", "parse", "list", "dump", "upload"],
+                            choices = ["help", "info","download", "resume", "parse", "list", "dump", "upload"],
                             help = "Comandos (vide acima)")
         parser.add_argument("id",
                             metavar = "id",
@@ -316,10 +317,21 @@ Comandos:
         cmd = arguments.comando[0];
         if cmd == "help":
             parser.print_help()
-        elif cmd == 'info':
+        if cmd == 'info':
             print "Linhas no index.html local: %s" % (len(self.lista_linhas()))
             print "Atualizações pendentes no banco local (%s): %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
-        elif cmd == 'download':
+        if cmd == "resume":
+            max_id = 0
+            for arq in os.listdir(self.html_dir):
+                match = re.search("(\d*)\-[IM]-[USD]-[IV]\.html", arq)
+                if match and int(match.group(1)) > max_id:
+                    max_id = int(match.group(1))
+            if max_id == 0:
+                print 'Não há download para continuar, tente "download"'
+            else:
+                cmd = "download"
+                arguments.id = max_id
+        if cmd == 'download':
             if not arguments.id:
                 print "Preparando para apagar HTMLs baixados (Ctrl+C para cancelar)..."
                 time.sleep(5)
@@ -340,7 +352,7 @@ Comandos:
                 print "Baixando linha id=%s (%s)..." % (id, linhas[id])
                 self.download_linha(id)
             print "Download concluído"
-        elif cmd == "parse":
+        if cmd == "parse":
             atualizacoes = self.conta_linhas_alteradas_banco()
             print "Atualizações pendentes no banco: %s. Analisando HTMLs..." % atualizacoes
             self.html_to_banco(lista_ids)
@@ -348,8 +360,8 @@ Comandos:
             print "Parse concluído. Novas atualizacoes: %s" % novas_atualizacoes
 #        elif cmd == "list":
 #            pass
-        else:
-            print "Comando ainda não implementado"
+#        else:
+#            print "Comando ainda não implementado"
          
 if __name__ == '__main__':
     SptScraper().main()
