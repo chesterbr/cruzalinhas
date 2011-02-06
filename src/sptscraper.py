@@ -26,7 +26,8 @@ import urlparse
 import re
 import sqlite3
 import time
-import optparse
+import argparse
+import textwrap
 try:
     import json
 except ImportError:
@@ -334,12 +335,35 @@ class SptScraper:
 #    arquivoCsv.close()
 
     def main(self):
-        p = optparse.OptionParser()
-        #p.add_option('--info', '-p', default="world")
-        options, arguments = p.parse_args()
-#        print "sptscraper"
-        print "Entries at the local downloaded index: %s" % (len(self.lista_linhas()))
-        print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())
+        parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                         description=textwrap.dedent('''\
+Baixa e interpreta os dados de linhas de transporte público do site da SPTrans.
+
+Os arquivos HTML são interpretados e o resultado é armazenado no arquivo
+linhas.sqlite, que pode ser levado para outros aplicativos, transformado em
+JSON ou ser usado para atualizar o cruzalinhas.
+
+Comandos:
+  info          Mostra dados sobre os arquivos baixados e o banco local.
+  download [id] Baixa os HTMLs da SPTrans (iniciando pelo id)
+  parse [id]    Varre os HTMLs das linhas (ou apenas uma) e atualiza o banco.
+  list          Imprime uma lista JSON dos IDs das linhas no banco.
+  dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
+  upload        Atualiza o cruzalinahs com os dados do banco local.
+            '''))
+        parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
+        parser.add_argument("comando", nargs = 1,
+                            choices = ["help", "info","download", "parse", "list", "dump", "upload"],
+                            help = "Comandos (vide acima)")
+        arguments = parser.parse_args()
+        cmd = arguments.comando[0];
+        if cmd == "help":
+            parser.print_help()
+        elif cmd == 'info':
+            print "Entries at the local downloaded index: %s" % (len(self.lista_linhas()))
+            print "Updates on local db (%s) waiting for upload: %s" % (self.db_name, self.conta_linhas_alteradas_banco())
+        else:
+            print "Comando ainda não implementado"
          
 if __name__ == '__main__':
     SptScraper().main()
