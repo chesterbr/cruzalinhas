@@ -67,6 +67,7 @@ class TestSptScraper(unittest.TestCase):
     def test_download_index(self):
         num_linhas = self.scraper.download_index()
         self.assertTrue(num_linhas > 0)
+        self.assertEquals(num_linhas, len(self.scraper.lista_linhas()))
         self.assertTrue(os.path.exists(os.path.join(self.scraper.html_dir, self.scraper.index_file)))
 
     def test_download_index_invalido(self):

@@ -3,3 +3,4 @@
 .tmp*
 *.csv
 src/linhas.sqlite
+src/html

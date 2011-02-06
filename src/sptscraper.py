@@ -74,7 +74,7 @@ class SptScraper:
         soup = BeautifulSoup(html)
         numLinhas = 0
         for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
-            if elem["class"] == "linkLinha":
+            if elem["class"] == "linkLinha" and elem.string:
                 numLinhas += 1
         if numLinhas > 0:
             self._assert_html_dir()
@@ -92,7 +92,7 @@ class SptScraper:
         soup = BeautifulSoup(html)
         linhas = []
         for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
-            if elem["class"] == "linkLinha":
+            if elem["class"] == "linkLinha" and elem.string:
                 nome = elem.string.replace("Linha: ", "").strip()
             elif elem["class"] == "linkDetalhes":
                 parsed_url = urlparse.urlparse(self.base_href + elem["href"])
