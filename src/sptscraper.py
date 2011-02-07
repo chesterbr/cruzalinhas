@@ -373,16 +373,17 @@ Comandos:
             print json.dumps(self.lista_ids_banco(inclui_deletadas=False))
         if cmd == "dump":
             self.silent = True
-            print "{"
-            primeira = True
-            for id in sorted(self.lista_ids_banco(inclui_deletadas=False)):
-                if not primeira:
-                    print ","
-                primeira = False
-                print str(id) + ":" + json.dumps(self.get_banco(id))
-            print "}"
-#        elif cmd == "list":
-#            pass
+            if arguments.id:
+                print json.dumps(self.get_banco(arguments.id))
+            else:
+                print "{"
+                primeira = True
+                for id in sorted(self.lista_ids_banco(inclui_deletadas=False)):
+                    if not primeira:
+                        print ","
+                    primeira = False
+                    print str(id) + ":" + json.dumps(self.get_banco(id))
+                print "}"
 #        else:
 #            print "Comando ainda não implementado"
          
