@@ -209,7 +209,11 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(2, len(ids_banco))
         self.scraper.deleta_banco(id2)
         dados = self.scraper.get_banco(ids_banco[1])
-        self.assertEqual(last_update, dados["last_update"])    
+        self.assertEqual(last_update, dados["last_update"])
+        ids_banco = self.scraper.lista_ids_banco()
+        self.assertEqual(2, len(ids_banco))
+        ids_banco = self.scraper.lista_ids_banco(inclui_deletadas=False)
+        self.assertEqual(1, len(ids_banco))    
         
     def test_html_to_banco(self):
         shutil.copytree("../test_files", DIR)

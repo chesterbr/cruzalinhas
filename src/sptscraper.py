@@ -179,11 +179,15 @@ class SptScraper:
         info["tempo"] = {"ida": {"util": {}, "sabado": {}, "domingo": {}},
                          "volta": {"util": {}, "sabado": {}, "domingo": {}}}
         tempos = soup.find("table", id="tabelaTempo").findAll("tr")
-        for sentido in [0,1]:
-            for dia in [0,1,2]:
-                for periodo in [0,1,2]:
-                    info["tempo"][self.SENTIDOS[sentido]][self.DIAS[dia]][self.PERIODOS[periodo]] = \
-                        tempos[dia+2].findAll("td")[1+periodo+3*sentido].string.strip()
+        try:
+            for sentido in [0,1]:
+                for dia in [0,1,2]:
+                    for periodo in [0,1,2]:
+                        info["tempo"][self.SENTIDOS[sentido]][self.DIAS[dia]][self.PERIODOS[periodo]] = \
+                            tempos[dia+2].findAll("td")[1+periodo+3*sentido].string.strip()
+        except AttributeError:
+            del(info["tempo"])
+            self._log(u"Aviso: linha id=%s (%s) não tem tempos de viagem" % (id, info["numero"]))
 
         
         return info
@@ -197,9 +201,14 @@ class SptScraper:
         self._cursor.close() 
         self._conn.close()
     
-    def lista_ids_banco(self):
+    def lista_ids_banco(self, inclui_deletadas=True):
+        """Recupera os IDs cadastrados no banco, como uma lista de integers. Por default
+           inclui linhas deletadas, mas pode ser chamado com inclui_deletadas=False"""
         self._init_banco()
-        self._cursor.execute("select id from linhas order by id");
+        if inclui_deletadas:
+            self._cursor.execute("select id from linhas order by id");
+        else:
+            self._cursor.execute("select id from linhas where deleted='false' order by id");
         lista_ids = self._cursor.fetchall()
         self._close_banco()
         return [i[0] for i in lista_ids]
@@ -246,11 +255,13 @@ class SptScraper:
            lista e excluindo dele os que não estiverem nela"""
         lista_ordenada = sorted(lista_ids)
         for id in lista_ordenada:
+            self._log("Parseando HTMLs da linha id=%s" % id)
             info = self.get_info_linha(id)
             pontos = self.get_pontos_linha(id)
             self.atualiza_banco(id, info, pontos)
         for id in self.lista_ids_banco():
-            if id not in lista_ordenada:
+            if int(id) not in lista_ordenada and str(id) not in lista_ordenada:
+                self._log("Marcando para remoção linha id=%s" % id)
                 self.deleta_banco(id) 
                 
     def upload_banco(self, fn_upload):
@@ -355,9 +366,21 @@ Comandos:
         if cmd == "parse":
             atualizacoes = self.conta_linhas_alteradas_banco()
             print "Atualizações pendentes no banco: %s. Analisando HTMLs..." % atualizacoes
-            self.html_to_banco(lista_ids)
-            novas_atualizacoes = self.conta_linhas_alteradas_banco() - atualizacoes
-            print "Parse concluído. Novas atualizacoes: %s" % novas_atualizacoes
+            self.html_to_banco(self.lista_linhas().keys())
+            print "Parse concluído."
+        if cmd == "list":
+            self.silent = True
+            print json.dumps(self.lista_ids_banco(inclui_deletadas=False))
+        if cmd == "dump":
+            self.silent = True
+            print "{"
+            primeira = True
+            for id in sorted(self.lista_ids_banco(inclui_deletadas=False)):
+                if not primeira:
+                    print ","
+                primeira = False
+                print str(id) + ":" + json.dumps(self.get_banco(id))
+            print "}"
 #        elif cmd == "list":
 #            pass
 #        else:
