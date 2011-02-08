@@ -3,6 +3,15 @@ Tarefas:
 sptscraper:
 - Implementar ruas
 - Geohashes
+    - Criar get_hashes(pontos), que retorna um set dos hashes (usar o models.py como dica)
+	- Alterar o atualiza_banco para guardar uma nova coluna (hashes), com os mesmos índices
+	  dos pontos, mas só contendo os hashes
+	- Criar um "popula_tabela_hashes", que popula uma tabela com 2 colunas (hash e linhas):
+		limpa tabela de hashes
+		para cada linha não-deletada na tabela de linhas:
+			acumula hashes num set
+			para cada hash no set:
+				insere ou acrescenta a linha na tabela de hashes
 - Implementar # de paradas (tem que ver como varia)
 - Implementar upload
 - Dividir o teste em um que depende da SPTrans e um com arquivos locais
