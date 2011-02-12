@@ -122,6 +122,15 @@ class TestSptScraper(unittest.TestCase):
         self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][0])) < 90)
         self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][1])) < 90)
         
+    def test_get_hashes(self):
+        shutil.copytree("../test_files", DIR)
+        id = ID_LINHA_1
+        pontos = self.scraper.get_pontos_linha(id)
+        hashes = self.scraper.get_hashes(pontos["util"]["ida"])
+        self.assertTrue(len(hashes)>0)
+        [self.assertTrue(hash.startswith("6g")) for hash in hashes]
+        [self.assertTrue(len(hash)==6) for hash in hashes]
+        
     def test_get_info_linha(self):
         shutil.copytree("../test_files", DIR)
         id = ID_LINHA_1

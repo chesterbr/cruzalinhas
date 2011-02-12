@@ -32,6 +32,7 @@ import time
 import argparse
 import textwrap
 import random
+import geohash
 try:
     import json
 except ImportError:
@@ -191,6 +192,24 @@ class SptScraper:
 
         
         return info
+    
+    def get_hashes(self, pontos):
+        """Dada a lista de pontos (i.e., de pares de coordenadas) que compõe o desenho de
+           um trajeto, calcula os geohashes das "caixas" que contém esse trajeto com exatos
+           6 caracteres (o que, segundo http://en.wikipedia.org/wiki/Geohash, faz com uqe
+           o "erro" seja de ~0.6km, bem razoável para uma busca por proximidade a pé).
+           O retorno é um conjunto sem repetições destes geohashes"""
+        hashes = set()
+        pontoAnt = None
+        for ponto in pontos:
+            if pontoAnt:
+                hash = str(geohash.Geohash((pontoAnt[1], pontoAnt[0])) + 
+                           geohash.Geohash((ponto[1], ponto[0])))[0:6]
+                if len(hash) == 6:
+                    hashes.add(hash)
+            pontoAnt = ponto
+        
+        return hashes
     
     def _init_banco(self):
         self._conn = sqlite3.connect(self.db_name)
