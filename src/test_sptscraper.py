@@ -183,7 +183,7 @@ class TestSptScraper(unittest.TestCase):
         dados = self.scraper.get_banco(ids_banco[1])
         self.assertEqual(pontos2, dados["pontos"])
         self.assertNotEqual(pontos1, dados["pontos"])
-        hashes = dados["hashes"]["util"]["volta"]
+        hashes = dados["hashes"]
         self.assertTrue(len(hashes)>0)
         [self.assertTrue(hash.startswith("6g"), hash) for hash in hashes]
         [self.assertTrue(len(hash)==6, hash) for hash in hashes]

@@ -249,14 +249,14 @@ class SptScraper:
         
     def get_hashes_pontos(self, pontos):
         """Idem a get_hashes, mas atua em todos os trajetos possíveis para uma linha, isto
-           é, num array no formato pontos[dia][sentido] = [[x1,y1], [x2,y2]...], e também
-           guarda os hashes como lista e não como set (para poder serializar)"""
-        hashes = {}
+           é, num array no formato pontos[dia][sentido] = [[x1,y1], [x2,y2]...].
+           O retorno é a lista dos hashes que abrigam todos os trajetos, independente de
+           sentido ou linha. É uma lista e não um conjunto para permitir serialização JSON. """
+        hashes = set()
         for dia in self.DIAS:
-            hashes[dia] = {}
             for sentido in self.SENTIDOS:
-                hashes[dia][sentido] = list(self.get_hashes(pontos[dia][sentido]))
-        return hashes                
+                hashes.update(self.get_hashes(pontos[dia][sentido]))
+        return list(hashes)                
 
     
     def deleta_banco(self, id):
