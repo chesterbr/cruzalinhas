@@ -29,6 +29,7 @@ import time
 from mock import Mock
 
 DIR = "../tmp/"
+DB = "../tmp/linhas.sqlite"
 ID_LINHA_1 = 53106   
 ID_LINHA_2 = 58520 
     
@@ -39,6 +40,7 @@ class TestSptScraper(unittest.TestCase):
     def setUp(self):
         self.scraper = sptscraper.SptScraper()
         self.scraper.html_dir = DIR
+        self.scraper.db_name = DB
         self.scraper.silent = True
         if os.path.exists(self.scraper.db_name):
             os.remove(self.scraper.db_name)
