@@ -128,8 +128,8 @@ class TestSptScraper(unittest.TestCase):
         pontos = self.scraper.get_pontos_linha(id)
         hashes = self.scraper.get_hashes(pontos["util"]["ida"])
         self.assertTrue(len(hashes)>0)
-        [self.assertTrue(hash.startswith("6g")) for hash in hashes]
-        [self.assertTrue(len(hash)==6) for hash in hashes]
+        [self.assertTrue(hash.startswith("6g"), "hash %s devia comecar com 6g" % hash) for hash in hashes]
+        [self.assertTrue(len(hash)==6, "hash %s tinha que ter tamanho 6" % hash) for hash in hashes]
         
     def test_get_info_linha(self):
         shutil.copytree("../test_files", DIR)
@@ -178,6 +178,10 @@ class TestSptScraper(unittest.TestCase):
         dados = self.scraper.get_banco(ids_banco[1])
         self.assertEqual(pontos2, dados["pontos"])
         self.assertNotEqual(pontos1, dados["pontos"])
+        hashes = dados["hashes"]["util"]["volta"]
+        self.assertTrue(len(hashes)>0)
+        [self.assertTrue(hash.startswith("6g"), "hash %s devia comecar com 6g" % hash) for hash in hashes]
+        [self.assertTrue(len(hash)==6, "hash %s tinha que ter tamanho 6" % hash) for hash in hashes]
         # update (só atualiza o last_update se mudarem os dados)
         dados = self.scraper.get_banco(ids_banco[0])
         last_update = dados["last_update"]

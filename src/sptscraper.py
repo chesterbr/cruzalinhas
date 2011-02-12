@@ -193,7 +193,7 @@ class SptScraper:
         
         return info
     
-    def get_hashes(self, pontos):
+    def get_hashes(self, trajeto):
         """Dada a lista de pontos (i.e., de pares de coordenadas) que compõe o desenho de
            um trajeto, calcula os geohashes das "caixas" que contém esse trajeto com exatos
            6 caracteres (o que, segundo http://en.wikipedia.org/wiki/Geohash, faz com uqe
@@ -201,7 +201,7 @@ class SptScraper:
            O retorno é um conjunto sem repetições destes geohashes"""
         hashes = set()
         pontoAnt = None
-        for ponto in pontos:
+        for ponto in trajeto:
             if pontoAnt:
                 hash = str(geohash.Geohash((pontoAnt[1], pontoAnt[0])) + 
                            geohash.Geohash((ponto[1], ponto[0])))[0:6]
@@ -214,7 +214,7 @@ class SptScraper:
     def _init_banco(self):
         self._conn = sqlite3.connect(self.db_name)
         self._cursor = self._conn.cursor()
-        self._cursor.execute("create table if not exists linhas(id integer primary key, deleted boolean, last_update integer, last_upload integer, info text, pontos text)")
+        self._cursor.execute("create table if not exists linhas(id integer primary key, deleted boolean, last_update integer, last_upload integer, info text, pontos text, hashes text)")
     
     def _close_banco(self):
         self._cursor.close() 
@@ -237,13 +237,27 @@ class SptScraper:
         dados = self.get_banco(id)
         self._init_banco()
         if not dados:
-            ti = (id, json.dumps(info), json.dumps(pontos),)
-            self._cursor.execute("insert into linhas (id,deleted,last_update,last_upload,info,pontos) values (?,'false',1,0,?,?)", ti)
+            hashes = self.get_hashes_pontos(pontos)
+            ti = (id, json.dumps(info), json.dumps(pontos), json.dumps(hashes), )
+            self._cursor.execute("insert into linhas (id,deleted,last_update,last_upload,info,pontos,hashes) values (?,'false',1,0,?,?,?)", ti)
         elif (dados["info"] != info) or (dados["pontos"] != pontos):
-            tu = (dados["last_update"] + 1, json.dumps(info), json.dumps(pontos),id,)
-            self._cursor.execute("update linhas set deleted='false',last_update=?,info=?,pontos=? where id=?", tu)
+            hashes = self.get_hashes_pontos(pontos)
+            tu = (dados["last_update"] + 1, json.dumps(info), json.dumps(pontos), json.dumps(hashes), id,)
+            self._cursor.execute("update linhas set deleted='false',last_update=?,info=?,pontos=?,hashes=? where id=?", tu)
         self._conn.commit()
         self._close_banco()
+        
+    def get_hashes_pontos(self, pontos):
+        """Idem a get_hashes, mas atua em todos os trajetos possíveis para uma linha, isto
+           é, num array no formato pontos[dia][sentido] = [[x1,y1], [x2,y2]...], e também
+           guarda os hashes como lista e não como set (para poder serializar)"""
+        hashes = {}
+        for dia in self.DIAS:
+            hashes[dia] = {}
+            for sentido in self.SENTIDOS:
+                hashes[dia][sentido] = list(self.get_hashes(pontos[dia][sentido]))
+        return hashes                
+
     
     def deleta_banco(self, id):
         """Marca um registro no banco como deletado (não apaga fisicamente)"""
@@ -267,6 +281,7 @@ class SptScraper:
         result = dict(zip([x[0] for x in self._cursor.description], r))
         result["info"] = json.loads(result["info"])
         result["pontos"] = json.loads(result["pontos"])
+        result["hashes"] = json.loads(result["hashes"])
         return result
     
     def html_to_banco(self, lista_ids):
