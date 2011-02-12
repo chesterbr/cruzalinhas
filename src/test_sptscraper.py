@@ -115,12 +115,15 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(pontos["util"]["ida"], pontos["sabado"]["ida"])
         self.assertEqual(pontos["util"]["volta"], pontos["domingo"]["volta"])
         self.assertNotEquals(pontos["util"]["ida"], pontos["domingo"]["volta"])
-        self.assertTrue(math.fabs(float(pontos["util"]["ida"][0][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["util"]["ida"][0][1])) < 90)
-        self.assertTrue(math.fabs(float(pontos["sabado"]["volta"][1][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["sabado"]["volta"][1][1])) < 90)
-        self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][0])) < 90)
-        self.assertTrue(math.fabs(float(pontos["domingo"]["ida"][2][1])) < 90)
+        for dia in self.scraper.DIAS:
+            for sentido in self.scraper.SENTIDOS:
+                for ponto in pontos[dia][sentido]:
+                    self.assertTrue(ponto[0])
+                    self.assertTrue(ponto[1])
+                    self.assertTrue(ponto[0] > -24000000, ponto)
+                    self.assertTrue(ponto[0] < -22000000, ponto)
+                    self.assertTrue(ponto[1] > -47000000, ponto)
+                    self.assertTrue(ponto[1] < -45000000, ponto)
         
     def test_get_hashes(self):
         shutil.copytree("../test_files", DIR)
@@ -128,8 +131,8 @@ class TestSptScraper(unittest.TestCase):
         pontos = self.scraper.get_pontos_linha(id)
         hashes = self.scraper.get_hashes(pontos["util"]["ida"])
         self.assertTrue(len(hashes)>0)
-        [self.assertTrue(hash.startswith("6g"), "hash %s devia comecar com 6g" % hash) for hash in hashes]
-        [self.assertTrue(len(hash)==6, "hash %s tinha que ter tamanho 6" % hash) for hash in hashes]
+        [self.assertTrue(hash.startswith("6g"), hash) for hash in hashes]
+        [self.assertTrue(len(hash)==6, hash) for hash in hashes]
         
     def test_get_info_linha(self):
         shutil.copytree("../test_files", DIR)
@@ -180,8 +183,8 @@ class TestSptScraper(unittest.TestCase):
         self.assertNotEqual(pontos1, dados["pontos"])
         hashes = dados["hashes"]["util"]["volta"]
         self.assertTrue(len(hashes)>0)
-        [self.assertTrue(hash.startswith("6g"), "hash %s devia comecar com 6g" % hash) for hash in hashes]
-        [self.assertTrue(len(hash)==6, "hash %s tinha que ter tamanho 6" % hash) for hash in hashes]
+        [self.assertTrue(hash.startswith("6g"), hash) for hash in hashes]
+        [self.assertTrue(len(hash)==6, hash) for hash in hashes]
         # update (só atualiza o last_update se mudarem os dados)
         dados = self.scraper.get_banco(ids_banco[0])
         last_update = dados["last_update"]

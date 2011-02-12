@@ -147,7 +147,7 @@ class SptScraper:
                 if not lista_js:
                     pontosDS = []
                 else:
-                    lista = [float(x) / 1000000 for x in lista_js.split(r"||")]
+                    lista = [int(x) for x in lista_js.split(r"||")]
                     pontosDS = [[a,b] for (a,b) in zip(lista[::2], lista[1::2])]
                 pontos[self.DICT_DIAS[dia]][self.DICT_SENTIDOS[sentido]] = pontosDS
         return pontos
@@ -203,8 +203,8 @@ class SptScraper:
         pontoAnt = None
         for ponto in trajeto:
             if pontoAnt:
-                hash = str(geohash.Geohash((pontoAnt[1], pontoAnt[0])) + 
-                           geohash.Geohash((ponto[1], ponto[0])))[0:6]
+                hash = str(geohash.Geohash((pontoAnt[1] / 1000000.0, pontoAnt[0] / 1000000.0)) + 
+                           geohash.Geohash((ponto[1] / 1000000.0, ponto[0] / 1000000.0)))[0:6]
                 if len(hash) == 6:
                     hashes.add(hash)
             pontoAnt = ponto
@@ -408,7 +408,7 @@ Comandos:
         if cmd == "dump":
             self.silent = True
             if arguments.id:
-                print json.dumps(self.get_banco(arguments.id))
+                print json.dumps(self.get_banco(arguments.id), separators=(',',':'))
             else:
                 print "{"
                 primeira = True
@@ -416,7 +416,7 @@ Comandos:
                     if not primeira:
                         print ","
                     primeira = False
-                    print str(id) + ":" + json.dumps(self.get_banco(id))
+                    print str(id) + ":" + json.dumps(self.get_banco(id), separators=(',',':'))
                 print "}"
 #        else:
 #            print "Comando ainda não implementado"
