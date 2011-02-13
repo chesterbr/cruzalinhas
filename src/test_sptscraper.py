@@ -262,16 +262,13 @@ class TestSptScraper(unittest.TestCase):
         info2 = self.scraper.get_info_linha(id2)
         pontos1 = self.scraper.get_pontos_linha(id1)
         pontos2 = self.scraper.get_pontos_linha(id2)
-        # Adiciona um segmento comum nas linhas (para ficar com o geohash ele)
-        print self.scraper.get_hashes([[-23674434, -46632641], [-23674618, -46632817]])
+        # Adiciona um segmento comum nas linhas (para ficar com o geohash ele em ambas)
         pontos1["util"]["ida"].extend([[-23674434, -46632641], [-23674618, -46632817]])
         pontos2["domingo"]["volta"].extend([[-23674434, -46632641], [-23674618, -46632817]])
         self.scraper.atualiza_banco(id1, info1, pontos1)
         self.scraper.atualiza_banco(id2, info2, pontos2)
         linha1 = self.scraper.get_banco(id1)
         linha2 = self.scraper.get_banco(id2)
-        print linha1["hashes"]
-        print linha2["hashes"]
         for hash in linha1["hashes"]:
             linhas = self.scraper.get_linhas_tabela_hashes(hash)
             self.assertFalse(id1 in linhas, str(id1) + "," + str(linhas))

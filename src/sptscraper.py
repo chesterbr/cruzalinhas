@@ -21,7 +21,8 @@
 """ Utilitário que baixa e interpreta os dados de itinerários de ônibus
     do site da SPTrans, opcionalmente atualizando o cruzalinhas
     
-    Uso: python sptscraper.py COMANDO [id]   (use o comando HELP para info) """
+    Uso: python sptscraper.py COMANDO [id]   (use o comando help para info) """
+import sys
 import os
 import urllib2
 from BeautifulSoup import BeautifulSoup
@@ -57,6 +58,119 @@ class SptScraper:
     
     _conn = None
     _cursor = None
+    
+    def main(self):
+        def write(string):
+            """Imprime sem enter no final e desliga os logs (conveniência)"""
+            self.silent = True
+            sys.stdout.write(string)
+        parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                         description=textwrap.dedent('''\
+Baixa e interpreta os dados de linhas de transporte público do site da SPTrans.
+
+Os arquivos HTML são interpretados e o resultado é armazenado no arquivo
+linhas.sqlite, que pode ser levado para outros aplicativos, transformado em
+JSON ou ser usado para atualizar o cruzalinhas.
+
+Comandos:
+  info          Mostra a quantidade de atualizações pendentes para upload.
+  download [id] Baixa os HTMLs da SPTrans (do início ou a partir do id).
+  resume        Baixa os HTMLs a partir do último salvo
+  parse         Lê os HTMLs e executa inclusões/alterações/exclusões no banco.
+  list          Imprime uma lista JSON dos IDs das linhas no banco.
+  dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
+  hashes        Imprime o JSON dos hashes no banco (com as linhas de cada um)
+  upload        Sobe as atualizações pendentes do banco para o cruzalinhas.
+            '''))
+        parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
+        parser.add_argument("comando", nargs = 1,
+                            choices = ["help", "info","download", "resume", "parse", "list", "dump", "hashes", "upload"],
+                            help = "Comandos (vide acima)")
+        parser.add_argument("id",
+                            metavar = "id",
+                            type = int,
+                            nargs = "?",
+                            help = "id da linha (opcional para alguns comandos)")
+        arguments = parser.parse_args()
+        cmd = arguments.comando[0];
+        if cmd == "help":
+            parser.print_help()
+        if cmd == 'info':
+            print "Info para banco (%s) e HTMLs (%s):" % (self.db_name, self.html_dir)
+            linhas = len(self.lista_linhas())
+            conta = self.conta_pendencias_banco()
+            print "  Linhas no index.html local: %s" % (linhas)
+            print "  Atualizações de linhas pendentes no banco: %s" % conta["linhas"]            
+            print "  Atualizações de hashes pendentes no banco: %s" % conta["hashes"]            
+        if cmd == "resume":
+            max_id = 0
+            for arq in os.listdir(self.html_dir):
+                match = re.search("(\d*)\-[IM]-[USD]-[IV]\.html", arq)
+                if match and int(match.group(1)) > max_id:
+                    max_id = int(match.group(1))
+            if max_id == 0:
+                print 'Não há download para continuar, tente "download"'
+            else:
+                cmd = "download"
+                arguments.id = max_id
+        if cmd == 'download':
+            if not arguments.id:
+                print "Preparando para apagar HTMLs baixados (Ctrl+C para cancelar)..."
+                time.sleep(5)
+                print "Apagando HTMLs antigos..."
+                self.clean_html()
+                print "Baixando página-índice..."
+                numlinhas = self.download_index()
+                print "Existem %s linhas no índice. Interpretando..." % numlinhas
+                id_inicial = None
+            else:
+                print "Retomando download a partir do id %s..." % arguments.id
+                id_inicial = str(arguments.id)
+            linhas = self.lista_linhas()
+            for id in sorted(linhas.keys()):
+                if id_inicial and id != id_inicial:
+                    continue
+                id_inicial = None
+                print "Baixando linha id=%s (%s)..." % (id, linhas[id])
+                self.download_linha(id)
+            print "Download concluído"
+        if cmd == "parse":
+            self.html_to_banco(self.lista_linhas().keys())
+            self.repopula_tabela_hashes()
+            print "Parse concluído."
+        if cmd == "list":
+            print json.dumps(self.lista_ids_banco(inclui_deletadas=False), separators=(',',':'))
+        if cmd == "dump":
+            if arguments.id:
+                linhas = [arguments.id]
+            else:
+                linhas = sorted(self.lista_ids_banco(inclui_deletadas=False))
+            write("{")
+            primeira = True
+            for id in linhas:
+                if not primeira:
+                    write(",")
+                primeira = False
+                linha = self.get_banco(id)
+                del(linha["id"])
+                del(linha["last_update"])
+                del(linha["last_upload"])
+                del(linha["hashes"])
+                del(linha["deleted"])
+                write(str(id) + ":" + json.dumps(linha, separators=(',',':')))
+            write("}")
+        if cmd == "hashes":
+            write("{")
+            primeira = True
+            for hash in self.list_tabela_hashes():
+                if not primeira:
+                    write(",")
+                primeira = False
+                write('"' + str(hash) + '":' + json.dumps(self.get_linhas_tabela_hashes(hash), separators=(',',':')))
+            write("}")
+            
+#        else:
+#            print "Comando ainda não implementado"
     
     def _assert_html_dir(self):
         if not os.path.exists(self.html_dir):
@@ -285,10 +399,15 @@ class SptScraper:
         result["hashes"] = json.loads(result["hashes"])
         return result
     
-    def get_linhas_tabela_hashes(self, id):
+    def list_tabela_hashes(self):
         self._init_banco()
-        t = (id,)
-        self._cursor.execute("select linhas from hashes where hash = ?", t);
+        lista_hashes = self._cursor.execute("select hash from hashes order by hash").fetchall()
+        self._close_banco()
+        return [i[0] for i in lista_hashes]
+        
+    def get_linhas_tabela_hashes(self, hash):
+        self._init_banco()
+        self._cursor.execute("select linhas from hashes where hash = ?", (hash,));
         r = self._cursor.fetchone()
         self._close_banco()
         if not r:
@@ -310,6 +429,7 @@ class SptScraper:
         self._conn.commit()
         for linha in self._cursor.execute("select id, hashes from linhas where deleted='false'").fetchall():
             id_linha = linha[0]
+            self._log("Atualizando tabela de hashes para linha id=%s" % id_linha)
             for hash in json.loads(linha[1]):
                 self._cursor.execute("select linhas from hashes where hash=?", (hash, ))
                 r = self._cursor.fetchone()
@@ -358,109 +478,22 @@ class SptScraper:
                 else:
                     self._log("Erro no upload - %s" % msg)
     
-    def conta_linhas_alteradas_banco(self):
-        """Diz quantas linhas temos que subir (porque mudaram)"""
+    def conta_pendencias_banco(self):
+        """Diz quantas linhas/hashes temos que subir (porque mudaram)"""
         self._init_banco()
         self._cursor.execute("select count(*) from linhas where last_update != last_upload");
-        r = self._cursor.fetchone()
+        r1 = self._cursor.fetchone()
+        self._cursor.execute("select count(*) from hashes where last_update != last_upload");
+        r2 = self._cursor.fetchone()
         self._close_banco()
-        return r[0]
+        return {"linhas": r1[0], "hashes": r2[0]}
     
     
     def _log(self, string):
         if not self.silent:
             print(string)
-            #logging.debug(string)
+            #logging.debug(string)    
 
-    def main(self):
-        parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
-                                         description=textwrap.dedent('''\
-Baixa e interpreta os dados de linhas de transporte público do site da SPTrans.
-
-Os arquivos HTML são interpretados e o resultado é armazenado no arquivo
-linhas.sqlite, que pode ser levado para outros aplicativos, transformado em
-JSON ou ser usado para atualizar o cruzalinhas.
-
-Comandos:
-  info          Mostra a quantidade de atualizações pendentes para upload.
-  download [id] Baixa os HTMLs da SPTrans (do início ou a partir do id).
-  resume        Baixa os HTMLs a partir do último salvo
-  parse         Lê os HTMLs e executa inclusões/alterações/exclusões no banco.
-  list          Imprime uma lista JSON dos IDs das linhas no banco.
-  dump [id]     Imprime o JSON das linhas no banco (ou apenas de uma).
-  upload        Sobe as atualizações pendentes do banco para o cruzalinhas.
-            '''))
-        parser.usage = "%(prog)s COMANDO [id]  (para ajuda: %(prog)s help)"
-        parser.add_argument("comando", nargs = 1,
-                            choices = ["help", "info","download", "resume", "parse", "list", "dump", "upload"],
-                            help = "Comandos (vide acima)")
-        parser.add_argument("id",
-                            metavar = "id",
-                            type = int,
-                            nargs = "?",
-                            help = "id da linha (opcional para alguns comandos)")
-        arguments = parser.parse_args()
-        cmd = arguments.comando[0];
-        if cmd == "help":
-            parser.print_help()
-        if cmd == 'info':
-            print "Linhas no index.html local: %s" % (len(self.lista_linhas()))
-            print "Atualizações pendentes no banco local (%s): %s" % (self.db_name, self.conta_linhas_alteradas_banco())            
-        if cmd == "resume":
-            max_id = 0
-            for arq in os.listdir(self.html_dir):
-                match = re.search("(\d*)\-[IM]-[USD]-[IV]\.html", arq)
-                if match and int(match.group(1)) > max_id:
-                    max_id = int(match.group(1))
-            if max_id == 0:
-                print 'Não há download para continuar, tente "download"'
-            else:
-                cmd = "download"
-                arguments.id = max_id
-        if cmd == 'download':
-            if not arguments.id:
-                print "Preparando para apagar HTMLs baixados (Ctrl+C para cancelar)..."
-                time.sleep(5)
-                print "Apagando HTMLs antigos..."
-                self.clean_html()
-                print "Baixando página-índice..."
-                numlinhas = self.download_index()
-                print "Existem %s linhas no índice. Interpretando..." % numlinhas
-                id_inicial = None
-            else:
-                print "Retomando download a partir do id %s..." % arguments.id
-                id_inicial = str(arguments.id)
-            linhas = self.lista_linhas()
-            for id in sorted(linhas.keys()):
-                if id_inicial and id != id_inicial:
-                    continue
-                id_inicial = None
-                print "Baixando linha id=%s (%s)..." % (id, linhas[id])
-                self.download_linha(id)
-            print "Download concluído"
-        if cmd == "parse":
-            atualizacoes = self.conta_linhas_alteradas_banco()
-            print "Atualizações pendentes no banco: %s. Analisando HTMLs..." % atualizacoes
-            self.html_to_banco(self.lista_linhas().keys())
-            print "Parse concluído."
-        if cmd == "list":
-            self.silent = True
-            print json.dumps(self.lista_ids_banco(inclui_deletadas=False))
-        if cmd == "dump":
-            self.silent = True
-            if arguments.id:
-                print json.dumps(self.get_banco(arguments.id), separators=(',',':'))
-            else:
-                print "{"
-                primeira = True
-                for id in sorted(self.lista_ids_banco(inclui_deletadas=False)):
-                    if not primeira:
-                        print ","
-                    primeira = False
-                    print str(id) + ":" + json.dumps(self.get_banco(id), separators=(',',':'))
-                print "}"
-#        else:
-#            print "Comando ainda não implementado"
          
 if __name__ == '__main__':
     SptScraper().main()
