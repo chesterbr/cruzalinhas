@@ -399,9 +399,13 @@ Comandos:
         result["hashes"] = json.loads(result["hashes"])
         return result
     
-    def list_tabela_hashes(self):
+    def list_tabela_hashes(self, inclui_atualizadas=True):
+        if inclui_atualizadas:
+            q = "select hash from hashes order by hash"
+        else:
+            q = "select hash from hashes where last_update != last_upload order by hash"
         self._init_banco()
-        lista_hashes = self._cursor.execute("select hash from hashes order by hash").fetchall()
+        lista_hashes = self._cursor.execute(q).fetchall()
         self._close_banco()
         return [i[0] for i in lista_hashes]
         
@@ -459,7 +463,7 @@ Comandos:
                 self._log("Marcando para remoção linha id=%s" % id)
                 self.deleta_banco(id) 
                 
-    def upload_banco(self, fn_upload):
+    def upload_linhas_banco(self, fn_upload):
         for id in self.lista_ids_banco():
             dados = self.get_banco(id)
             if dados["last_update"] != dados["last_upload"]:
@@ -467,7 +471,7 @@ Comandos:
                     msg = "Linha id=%s (DELETED)" % id
                 else: 
                     msg = "Linha id=%s, codigo=%s" % (id, dados["info"]["numero"])
-                self._log("Iniciando upload - %s" % msg)                
+                self._log("Iniciando upload de linha - %s" % msg)                
                 if fn_upload(dados):
                     t = (id,)
                     self._init_banco()
@@ -477,6 +481,18 @@ Comandos:
                     self._log("Upload OK - %s" % msg)
                 else:
                     self._log("Erro no upload - %s" % msg)
+    
+    def upload_hashes_banco(self, fn_upload):
+        for hash in self.list_tabela_hashes(inclui_atualizadas=False):
+            self._log("Iniciando upload - hash %s " % hash)                
+            if fn_upload(hash, self.get_linhas_tabela_hashes(hash)):
+                self._init_banco()
+                self._cursor.execute("update hashes set last_upload=last_update where hash=?", (hash, ))
+                self._conn.commit()
+                self._close_banco()  
+                self._log("Upload OK - hash %s" % hash)
+            else:
+                self._log("Erro no upload - hash %s" % hash)
     
     def conta_pendencias_banco(self):
         """Diz quantas linhas/hashes temos que subir (porque mudaram)"""

@@ -240,19 +240,19 @@ class TestSptScraper(unittest.TestCase):
         pontos1 = self.scraper.get_pontos_linha(id1)
         id2 = ID_LINHA_2
         info2 = self.scraper.get_info_linha(id2)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.html_to_banco([id1,id2])
-        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(2, self.scraper.conta_pendencias_banco()["linhas"])
         mock_fn_upload = Mock()
         mock_fn_upload.return_value = True 
-        self.scraper.upload_banco(mock_fn_upload)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.upload_linhas_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.html_to_banco([id1,id2])
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.html_to_banco([id1])
-        self.assertEqual(1, self.scraper.conta_linhas_alteradas_banco())
-        self.scraper.upload_banco(mock_fn_upload)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(1, self.scraper.conta_pendencias_banco()["linhas"])
+        self.scraper.upload_linhas_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         
     def test_tabela_hashes(self):
         shutil.copytree("../test_files", DIR)
@@ -291,7 +291,7 @@ class TestSptScraper(unittest.TestCase):
             linhas = self.scraper.get_linhas_tabela_hashes(hash)
             self.assertTrue(id2 in linhas, str(id2) + "," + str(linhas))
 
-    def test_upload_banco(self):
+    def test_upload_linhas(self):
         shutil.copytree("../test_files", DIR)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
@@ -299,25 +299,55 @@ class TestSptScraper(unittest.TestCase):
         id2 = ID_LINHA_2
         info2 = self.scraper.get_info_linha(id2)
         pontos2 = self.scraper.get_pontos_linha(id2)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.atualiza_banco(id1, info1, pontos1)
-        self.assertEqual(1, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(1, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.atualiza_banco(id2, info1, pontos1)
-        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(2, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.atualiza_banco(id2, info2, pontos2)
-        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(2, self.scraper.conta_pendencias_banco()["linhas"])
         mock_fn_upload = Mock()
         mock_fn_upload.return_value = True 
-        self.scraper.upload_banco(mock_fn_upload)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.upload_linhas_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.atualiza_banco(id1, info1, pontos1)
-        self.scraper.upload_banco(mock_fn_upload)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.scraper.upload_linhas_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         self.scraper.atualiza_banco(id1, info1, pontos2)
         self.scraper.deleta_banco(id2)
-        self.assertEqual(2, self.scraper.conta_linhas_alteradas_banco())
-        self.scraper.upload_banco(mock_fn_upload)
-        self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
+        self.assertEqual(2, self.scraper.conta_pendencias_banco()["linhas"])
+        self.scraper.upload_linhas_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
+
+    def test_upload_hashes(self):
+        shutil.copytree("../test_files", DIR)
+        id1 = ID_LINHA_1
+        id2 = ID_LINHA_2
+        info1 = self.scraper.get_info_linha(id1)
+        info2 = self.scraper.get_info_linha(id2)
+        pontos1 = self.scraper.get_pontos_linha(id1)
+        pontos2 = self.scraper.get_pontos_linha(id2)
+        # Adiciona um segmento comum nas linhas (para ficar com o geohash ele em ambas)
+        pontos1["util"]["ida"].extend([[-23674434, -46632641], [-23674618, -46632817]])
+        pontos2["domingo"]["volta"].extend([[-23674434, -46632641], [-23674618, -46632817]])
+        self.scraper.repopula_tabela_hashes()
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["hashes"])
+        self.scraper.atualiza_banco(id1, info1, pontos1)
+        self.scraper.repopula_tabela_hashes()
+        self.assertEqual(18, self.scraper.conta_pendencias_banco()["hashes"])
+        self.scraper.atualiza_banco(id2, info2, pontos2)
+        self.scraper.repopula_tabela_hashes()
+        self.assertEqual(54, self.scraper.conta_pendencias_banco()["hashes"])
+        mock_fn_upload_fail = Mock(side_effect = lambda hash,linhas: hash != "6gyf7m")
+        self.scraper.upload_hashes_banco(mock_fn_upload_fail)
+        self.assertEqual(1, self.scraper.conta_pendencias_banco()["hashes"])
+        mock_fn_upload = Mock()
+        mock_fn_upload.return_value = True 
+        self.scraper.upload_hashes_banco(mock_fn_upload)
+        self.assertEqual(0, self.scraper.conta_pendencias_banco()["hashes"])
+        self.scraper.deleta_banco(id2)
+        self.scraper.repopula_tabela_hashes()
+        self.assertEqual(54, self.scraper.conta_pendencias_banco()["hashes"])
 
         
         

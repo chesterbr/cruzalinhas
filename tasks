@@ -2,18 +2,20 @@ Tarefas:
 
 sptscraper:
 - Implementar ruas
-- Geohashes
-	- no comando parse, chamar o repopulador de hashes
-	- no upload_banco receber uma segunda função de up, após subir as alterações de linhas
-		- para cada hash no banco que tenha last_upload!=last_update
-			- executar a função de up e se ela voltar true, setar last_uload = last_update
-- Implementar # de paradas (tem que ver como varia)
-- Implementar upload
-- Dividir o teste em um que depende da SPTrans e um com arquivos locais
+- Implementar # de paradas (tem que ver como varia em termos de dia/sentido)
+- Implementar comando de upload
+- Dividir o teste em um case que depende da SPTrans e um com arquivos locais
 
 cruzalinhas:
 - Rever models.py para comportar novas infos e geohashes pré-calculados
 - Implementar uma página que recebe uma linha (sujeita a login) e inclui/altera/exclui
+- Implementar uma página que recebe um hash (sujeita a login) e atualiza
 - Acrescentar combo de horário no front-end e buscar de acordo.
 - Página que exibe infos da linha no front-end
 - Pensar numa UI que comporte ida/volta
+
+geral:
+- Documentar dependência (ex.: lib de mocks - http://www.voidspace.org.uk/python/mock/ ?)
+            
+
+                                
