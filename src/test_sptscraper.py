@@ -254,6 +254,45 @@ class TestSptScraper(unittest.TestCase):
         self.scraper.upload_banco(mock_fn_upload)
         self.assertEqual(0, self.scraper.conta_linhas_alteradas_banco())
         
+    def test_tabela_hashes(self):
+        shutil.copytree("../test_files", DIR)
+        id1 = ID_LINHA_1
+        id2 = ID_LINHA_2
+        info1 = self.scraper.get_info_linha(id1)
+        info2 = self.scraper.get_info_linha(id2)
+        pontos1 = self.scraper.get_pontos_linha(id1)
+        pontos2 = self.scraper.get_pontos_linha(id2)
+        # Adiciona um segmento comum nas linhas (para ficar com o geohash ele)
+        print self.scraper.get_hashes([[-23674434, -46632641], [-23674618, -46632817]])
+        pontos1["util"]["ida"].extend([[-23674434, -46632641], [-23674618, -46632817]])
+        pontos2["domingo"]["volta"].extend([[-23674434, -46632641], [-23674618, -46632817]])
+        self.scraper.atualiza_banco(id1, info1, pontos1)
+        self.scraper.atualiza_banco(id2, info2, pontos2)
+        linha1 = self.scraper.get_banco(id1)
+        linha2 = self.scraper.get_banco(id2)
+        print linha1["hashes"]
+        print linha2["hashes"]
+        for hash in linha1["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertFalse(id1 in linhas, str(id1) + "," + str(linhas))
+        for hash in linha2["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertFalse(id2 in linhas, str(id2) + "," + str(linhas))
+        self.scraper.repopula_tabela_hashes()
+        for hash in linha1["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertTrue(id1 in linhas, str(id1) + "," + str(linhas))
+        for hash in linha2["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertTrue(id2 in linhas, str(id2) + "," + str(linhas))
+        self.scraper.deleta_banco(id1)
+        self.scraper.repopula_tabela_hashes()        
+        for hash in linha1["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertFalse(id1 in linhas, str(id1) + "," + str(linhas))
+        for hash in linha2["hashes"]:
+            linhas = self.scraper.get_linhas_tabela_hashes(hash)
+            self.assertTrue(id2 in linhas, str(id2) + "," + str(linhas))
 
     def test_upload_banco(self):
         shutil.copytree("../test_files", DIR)

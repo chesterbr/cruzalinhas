@@ -3,12 +3,10 @@ Tarefas:
 sptscraper:
 - Implementar ruas
 - Geohashes
-	- Criar um "popula_tabela_hashes", que popula uma tabela com 2 colunas (hash e linhas):
-		limpa tabela de hashes
-		para cada linha não-deletada na tabela de linhas:
-			acumula hashes num set
-			para cada hash no set:
-				insere ou acrescenta a linha na tabela de hashes
+	- no comando parse, chamar o repopulador de hashes
+	- no upload_banco receber uma segunda função de up, após subir as alterações de linhas
+		- para cada hash no banco que tenha last_upload!=last_update
+			- executar a função de up e se ela voltar true, setar last_uload = last_update
 - Implementar # de paradas (tem que ver como varia)
 - Implementar upload
 - Dividir o teste em um que depende da SPTrans e um com arquivos locais

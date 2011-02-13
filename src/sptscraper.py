@@ -215,6 +215,7 @@ class SptScraper:
         self._conn = sqlite3.connect(self.db_name)
         self._cursor = self._conn.cursor()
         self._cursor.execute("create table if not exists linhas(id integer primary key, deleted boolean, last_update integer, last_upload integer, info text, pontos text, hashes text)")
+        self._cursor.execute("create table if not exists hashes(hash char(6) primary key, last_update integer, last_upload integer, linhas text)")
     
     def _close_banco(self):
         self._cursor.close() 
@@ -283,6 +284,46 @@ class SptScraper:
         result["pontos"] = json.loads(result["pontos"])
         result["hashes"] = json.loads(result["hashes"])
         return result
+    
+    def get_linhas_tabela_hashes(self, id):
+        self._init_banco()
+        t = (id,)
+        self._cursor.execute("select linhas from hashes where hash = ?", t);
+        r = self._cursor.fetchone()
+        self._close_banco()
+        if not r:
+            return []
+        else:
+            return json.loads(r[0])
+            
+    def repopula_tabela_hashes(self):
+        """Repopula a tabela de hashes com as linhas ativas no banco"""
+        ids = self.lista_ids_banco(inclui_deletadas=False)
+        self._init_banco()
+        self._cursor.execute("select max(last_update) from hashes")
+        last_update = self._cursor.fetchone()[0]
+        if last_update:
+            last_update += 1
+        else:
+            last_update = 1
+        self._cursor.execute("update hashes set last_update=?,linhas='[]'", (last_update, ))
+        self._conn.commit()
+        for linha in self._cursor.execute("select id, hashes from linhas where deleted='false'").fetchall():
+            id_linha = linha[0]
+            for hash in json.loads(linha[1]):
+                self._cursor.execute("select linhas from hashes where hash=?", (hash, ))
+                r = self._cursor.fetchone()
+                if not r:
+                    self._cursor.execute("insert into hashes (hash,linhas,last_update,last_upload) values (?,?,?,0)",
+                                         (hash, "[%s]" % id_linha, last_update, ))
+                else:
+                    linhas = json.loads(r[0])
+                    linhas.append(id_linha)
+                    self._cursor.execute("update hashes set linhas=?,last_update=? where hash=?",
+                                         (json.dumps(linhas, separators=(',',':')), last_update, hash, ))
+            self._conn.commit()
+        self._close_banco()     
+        
     
     def html_to_banco(self, lista_ids):
         """Atualiza o banco, inserindo/alterando os HTMLs que constem na
