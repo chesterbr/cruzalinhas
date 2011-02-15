@@ -58,7 +58,7 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
         # Recupera as chaves das linhas que passam pelo geohash do ponto
-        hash = models.calculaNearhash(lng, lat)
+        hash = str(Geohash((lng, lat)))[0:6]
         chave_memcache = "hash_linhas_keys_" + hash;
         client = memcache.Client()
         linhas_keys = client.get(chave_memcache)
@@ -88,22 +88,41 @@ class LinhasQuePassamPage(webapp.RequestHandler):
             client.add(chave_memcache, linha_obj)
         return linha_obj
 
+# sptcrawler
 
-# Crawler stuff
-
-class ClearCachePage(webapp.RequestHandler):
+class UploadLinhaPage(webapp.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Limpando cache...')
-        memcache.Client().flush_all()
-        self.response.out.write('Ok')
+        if self.request.get("deleted") == "true":
+            linha = Linha.all().filter("id =", self.request.get("id")).fetch(1)
+            if linha:
+                linha.delete()
+            print "LINHA DELETE OK " + linha
+        else:
+            linha = Linha(id = int(self.request.get("id")),
+                          info = self.request.get("info"),
+                          pontos = self.request.get("pontos"),
+                          hashes = self.request.get("hashes"))
+            linha.put()
+            print "LINHA UPLOAD OK " + linha
+                      
+class UploadHashPage(webapp.RequestHandler):
+    def get(self):
+        if self.request.get("deleted") == "true":
+            hash = Hash.all().filter("linha =", self.request.get("linha")).fetch(1)
+            if hash:
+                hash.delete()
+            print "HASH DELETE OK " + hash
+        else:
+            hash = Hash(hash = int(self.request.get("hash")),
+                        linhas = self.request.get("linhas"))
+            print "HASH UPLOAD OK " + hash
 
 class ZapPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Apagando pontos...')
-        while Ponto.all().fetch(1):
-            db.delete(Ponto.all().fetch(100))
+        self.response.out.write('Apagando hashes...')
+        while Hash.all().fetch(1):
+            db.delete(Hash.all().fetch(100))
         self.response.out.write('Apagando linhas...')
         while Linha.all().fetch(1):
             db.delete(Linha.all().fetch(100))
@@ -115,130 +134,13 @@ class RobotsPage(webapp.RequestHandler):
         self.response.out.write('Disallow: /linhasquepassam.json\n')
         self.response.out.write('Disallow: /linha.json\n')
 
-# Desnormalizando os dados que ja estao la (gambiarra)
-
-class ListaPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        for linha in Linha.all():
-            self.response.out.write('<a href="/linha.json?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
-
-class GeraHashPage(webapp.RequestHandler):
-    def get(self):
-        """Popula os objetos Hash para os pontos de uma linha"""
-        self.response.headers['Content-Type'] = 'text/plain'
-        key = self.request.get("key")
-        linha = Linha.get(db.Key(key))
-        self.response.out.write('Linha: %s\n' % linha.nome)
-        # Percorre os pontos dessa linha, processando os hashes dos segmentos
-        nearhashAnterior = ""
-        for ponto in linha.pontos:
-            if ponto.nearhash:
-                if ponto.nearhash == nearhashAnterior:
-                    self.response.out.write('hash repetido, pulando %s\n' % ponto.nearhash)
-                    continue       
-                nearhashAnterior = ponto.nearhash     
-#                if len(ponto.nearhash) != 6:
-#                    self.response.out.write('hash curto, pulando %s\n' % ponto.nearhash)
-                # Se ja existe objeto para o hash, pega ele, senao cria um novo
-                hashLista = Hash.all().filter("hash =", ponto.nearhash).fetch(1)
-                if hashLista:
-                    self.response.out.write('Hash: %s ja existia \n' % ponto.nearhash)
-                    hash = hashLista[0]
-                else:
-                    self.response.out.write('Hash: %s criado \n' % ponto.nearhash)
-                    hash = Hash(hash=ponto.nearhash)
-                    
-                # Se a linha ainda nao esta associada ao objeto-hash, associa
-                if str(linha.key()) not in hash.linhas:
-                    self.response.out.write('Linha adicionada a lista\n')
-                    hash.linhas.append(str(linha.key()))
-                    hash.put()
-                    
-                
-class ListaGeraHashPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        for linha in Linha.all():
-            self.response.out.write('<a href="/gerahash?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
-                            
-# populando caches
-class ListaGeraCachePage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        if self.request.get("hashes"):
-            for hash in Hash.all():
-                self.response.out.write('<a href="/cachehash?hash=%s">%s</a><br/>' % (hash.hash, hash.hash))
-        else:
-            for linha in Linha.all():
-                self.response.out.write('<a href="/cachelinha?key=%s">%s</a><br/>' % (str(linha.key()), linha.nome))
-
-
-class CacheHashPage(webapp.RequestHandler):
-    def get(self):
-        hash = self.request.get("hash")
-        chave_memcache = "hash_linhas_keys_" + hash
-        client = memcache.Client()
-        linhas_keys = client.get(chave_memcache)
-        if linhas_keys is None:
-            result = Hash.all().filter("hash =", hash).fetch(999)
-            self.response.out.write("count %d " % len(result))
-            linhas_keys = result[0].linhas if result else []
-            client.add(chave_memcache, linhas_keys)   
-            self.response.out.write("gerou cache de %s " % chave_memcache)
-        else:
-            self.response.out.write("ja tinha cache de %s " % chave_memcache)
-                        
-class CacheLinhaPage(webapp.RequestHandler):
-    def get(self):
-        key = self.request.get("key")
-        client = memcache.Client()
-        chave_memcache = "linha_json_" + key
-        linha_obj = client.get(chave_memcache)
-        if linha_obj is None:
-            linha = Linha.get(db.Key(key))
-            linha_obj = {
-                          "key" : str(linha.key()),
-                          "nome" : linha.nome,
-                          "url" : linha.url,
-                          "hashes" : linha.hashes()}
-            client.add(chave_memcache, linha_obj)
-            self.response.out.write("gerou cache de %s " % chave_memcache)
-        else:
-            self.response.out.write("ja tinha cache de %s " % chave_memcache)
-        chave_memcache = "pontos_json_" + key;
-        pontos_json = client.get(chave_memcache)
-        if pontos_json is None:
-            linha = Linha.get(db.Key(key))
-            pontos = Ponto.all().filter("linha = ", linha).order("ordem")
-            pontos_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
-            client.add(chave_memcache, pontos_json)
-            self.response.out.write("gerou cache de %s " % chave_memcache)
-        else:
-            self.response.out.write("ja tinha cache de %s " % chave_memcache)
-        
-        
-        
+            
 application = webapp.WSGIApplication([
                                       # Site (páginas abertas fora do /static)
                                       ('/', MainPage),
                                       ('/robots.txt', RobotsPage),
                                       ('/linha.json', LinhaPage),
-                                      ('/linhasquepassam.json', LinhasQuePassamPage),
-                                      
-                                      # Geração de hashes
-                                      ('/listagerahash', ListaGeraHashPage),
-                                      ('/gerahash', GeraHashPage),
-
-                                      # Cacheador (phasing out)
-                                      ('/listageracache', ListaGeraCachePage),
-                                      ('/cachehash', CacheHashPage),
-                                      ('/cachelinha', CacheLinhaPage),
-#                                      
-                                      # Debug / Manutenção
-#                                      ('/zap', ZapPage),
-                                      ('/clearcache', ClearCachePage),
-                                      ('/lista', ListaPage)], debug=True)
+                                      ('/linhasquepassam.json', LinhasQuePassamPage)])
 
 def main():
     run_wsgi_app(application)
