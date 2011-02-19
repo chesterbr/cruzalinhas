@@ -15,7 +15,7 @@ cruzalinhas:
 - Pensar numa UI que comporte ida/volta
 
 geral:
-- Documentar dependência (ex.: lib de mocks - http://www.voidspace.org.uk/python/mock/ ?)
+- Documentar dependência (easy_install simplejson mock)
             
 
                                 

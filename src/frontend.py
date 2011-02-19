@@ -18,15 +18,11 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 #
-from django.utils import simplejson
-from geohash import Geohash
-from google.appengine.api import memcache
-from google.appengine.ext import webapp, db
+from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-from models import Linha, Ponto, Hash
-import scraper
-import models
+from models import Linha, Hash
 import os
+from dao import Dao
 from google.appengine.ext.webapp import template
 
 class MainPage(webapp.RequestHandler):    
@@ -34,19 +30,17 @@ class MainPage(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'text/html'
         path = os.path.join(os.path.dirname(__file__), 'static', 'cruzalinhas.html')
         self.response.out.write(template.render(path, {}))
+
+# API
+# TODO compatibilizar com a versão antiga (os novos crio num v2 ou algo assim
+# (basta extrair do JSON a parte que interessa, considerar default dia útil e ida)
         
 class LinhaPage(webapp.RequestHandler):        
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
         key = self.request.get("key")
-        chave_memcache = "pontos_json_" + key;
-        client = memcache.Client()
-        pontos_json = client.get(chave_memcache)
-        if pontos_json is None:
-            linha = Linha.get(db.Key(key))
-            pontos = Ponto.all().filter("linha = ", linha).order("ordem")
-            pontos_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
-            client.add(chave_memcache, pontos_json)
+        dao = Dao()
+        pontos_json = dao.get_pontos_linha(key)
         callback = self.request.get("callback");
         if callback:
             pontos_json = callback + "(" + pontos_json + ");"            
@@ -57,38 +51,14 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
-        # Recupera as chaves das linhas que passam pelo geohash do ponto
-        hash = str(Geohash((lng, lat)))[0:6]
-        chave_memcache = "hash_linhas_keys_" + hash;
-        client = memcache.Client()
-        linhas_keys = client.get(chave_memcache)
-        if linhas_keys is None:
-            result = Hash.all().filter("hash =", hash).fetch(1)
-            linhas_keys = result[0].linhas if result else []
-            client.add(chave_memcache, linhas_keys)        
-        # Converte elas para objetos no formato da resposta e devolve como JSON
-        linhas_obj = [self._linha_obj(key) for key in linhas_keys]
-        linhas_json = simplejson.dumps(linhas_obj)
+        dao = Dao()
+        linhas_info = dao.get_info_linhas(lat, lng)
         callback = self.request.get("callback");
         if callback:
-            linhas_json = callback + "(" + linhas_json + ");"
-        self.response.out.write(linhas_json)
-    def _linha_obj(self, key):
-        """Monta info da linha no formato da resposta, usando o cache se possível"""
-        client = memcache.Client()
-        chave_memcache = "linha_json_" + key
-        linha_obj = client.get(chave_memcache)
-        if linha_obj is None:
-            linha = Linha.get(db.Key(key))
-            linha_obj = {
-                          "key" : str(linha.key()),
-                          "nome" : linha.nome,
-                          "url" : linha.url,
-                          "hashes" : linha.hashes()}
-            client.add(chave_memcache, linha_obj)
-        return linha_obj
+            linhas_info = callback + "(" + linhas_info + ");"
+        self.response.out.write(linhas_info)
 
-# sptcrawler
+# Métodos de upload para o crawler
 
 class UploadLinhaPage(webapp.RequestHandler):
     def get(self):
@@ -117,23 +87,23 @@ class UploadHashPage(webapp.RequestHandler):
                         linhas = self.request.get("linhas"))
             print "HASH UPLOAD OK " + hash
 
-class ZapPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Apagando hashes...')
-        while Hash.all().fetch(1):
-            db.delete(Hash.all().fetch(100))
-        self.response.out.write('Apagando linhas...')
-        while Linha.all().fetch(1):
-            db.delete(Linha.all().fetch(100))
-        self.response.out.write('Ok')
+# Não sei se vou ficar com esse cara, ele é perigoso
+#class ZapPage(webapp.RequestHandler):
+#    def get(self):
+#        self.response.headers['Content-Type'] = 'text/plain'
+#        self.response.out.write('Apagando hashes...')
+#        while Hash.all().fetch(1):
+#            db.delete(Hash.all().fetch(100))
+#        self.response.out.write('Apagando linhas...')
+#        while Linha.all().fetch(1):
+#            db.delete(Linha.all().fetch(100))
+#        self.response.out.write('Ok')
 
 class RobotsPage(webapp.RequestHandler):
     def get(self):
         self.response.out.write('User-agent: *\n')
         self.response.out.write('Disallow: /linhasquepassam.json\n')
         self.response.out.write('Disallow: /linha.json\n')
-
             
 application = webapp.WSGIApplication([
                                       # Site (páginas abertas fora do /static)

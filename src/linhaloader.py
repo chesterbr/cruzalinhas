@@ -31,7 +31,7 @@ python2.5 /usr/local/bin/bulkload_client.py --filename=linhas.csv
 from google.appengine.ext import bulkload
 from google.appengine.api import datastore_types
 from google.appengine.ext import search
-from models import Ponto, Linha
+from models import Hash, Linha
 import geohash
 from google.appengine.api.datastore_types import Text
 
