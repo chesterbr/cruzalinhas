@@ -31,7 +31,7 @@ class MainPage(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'static', 'cruzalinhas.html')
         self.response.out.write(template.render(path, {}))
 
-# API
+# API v1
 # TODO compatibilizar com a versão antiga (os novos crio num v2 ou algo assim
 # (basta extrair do JSON a parte que interessa, considerar default dia útil e ida)
         
@@ -58,35 +58,27 @@ class LinhasQuePassamPage(webapp.RequestHandler):
             linhas_info = callback + "(" + linhas_info + ");"
         self.response.out.write(linhas_info)
 
-# Métodos de upload para o crawler
+# Métodos de upload para o crawler (apenas o admin pode entrar neles)
 
-class UploadLinhaPage(webapp.RequestHandler):
+class TokenPage(webapp.RequestHandler):
     def get(self):
-        if self.request.get("deleted") == "true":
-            linha = Linha.all().filter("id =", self.request.get("id")).fetch(1)
-            if linha:
-                linha.delete()
-            print "LINHA DELETE OK " + linha
-        else:
-            linha = Linha(id = int(self.request.get("id")),
-                          info = self.request.get("info"),
-                          pontos = self.request.get("pontos"),
-                          hashes = self.request.get("hashes"))
-            linha.put()
-            print "LINHA UPLOAD OK " + linha
+        self.response.out.write("<html><body><script src='static/base64.js'></script><script>document.write(Base64.encode(document.cookie));</script></body></html>")
+        
+class UploadLinhaPage(webapp.RequestHandler):
+    def post(self):
+        dao = Dao()
+        self.response.out.write(dao.put_linha(id = self.request.get("id"),
+                                              deleted = self.request.get("deleted"),
+                                              info = self.request.get("info"),
+                                              pontos = self.request.get("pontos"),
+                                              hashes = self.request.get("hashes")))
                       
 class UploadHashPage(webapp.RequestHandler):
-    def get(self):
-        if self.request.get("deleted") == "true":
-            hash = Hash.all().filter("linha =", self.request.get("linha")).fetch(1)
-            if hash:
-                hash.delete()
-            print "HASH DELETE OK " + hash
-        else:
-            hash = Hash(hash = int(self.request.get("hash")),
-                        linhas = self.request.get("linhas"))
-            print "HASH UPLOAD OK " + hash
-
+    def post(self):
+        dao = Dao()
+        self.response.out.write(dao.put_hash(hash = self.request.get("hash"),                                             
+                                             linhas = self.request.get("linhas")))
+        
 # Não sei se vou ficar com esse cara, ele é perigoso
 #class ZapPage(webapp.RequestHandler):
 #    def get(self):
@@ -110,7 +102,13 @@ application = webapp.WSGIApplication([
                                       ('/', MainPage),
                                       ('/robots.txt', RobotsPage),
                                       ('/linha.json', LinhaPage),
-                                      ('/linhasquepassam.json', LinhasQuePassamPage)])
+                                      ('/linhasquepassam.json', LinhasQuePassamPage),
+                                      # Páginas de atualização do sptscraper
+                                      ('/token', TokenPage),
+                                      ('/uploadlinha', UploadLinhaPage),
+                                      ('/uploadhash', UploadHashPage)])
+
+                            
 
 def main():
     run_wsgi_app(application)

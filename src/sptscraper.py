@@ -1,3 +1,4 @@
+#!/usr/bin/python2.5 -O
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2010-2011 Carlos Duarte do Nascimento (Chester)
@@ -22,8 +23,10 @@
     do site da SPTrans, opcionalmente atualizando o cruzalinhas
     
     Uso: python sptscraper.py COMANDO [id]   (use o comando help para info) """
+import base64
 import sys
 import os
+import urllib
 import urllib2
 from BeautifulSoup import BeautifulSoup
 import urlparse
@@ -91,6 +94,14 @@ Comandos:
                             type = int,
                             nargs = "?",
                             help = "id da linha (opcional para alguns comandos)")
+        parser.add_argument("--url",
+                            dest = "url",
+                            nargs = "?",
+                            help = "URL da instalação do cruzalinhas (para fazer upload), sem barra no final. Ex.: --url http://localhost:8080")
+        parser.add_argument("--token",
+                            dest = "token",
+                            nargs = "?",
+                            help = "Token de autenticação do admin (para fazer upload). Obtenha chamando o /token do cruzalinhas no browser")
         arguments = parser.parse_args()
         cmd = arguments.comando[0];
         if cmd == "help":
@@ -168,9 +179,26 @@ Comandos:
                 primeira = False
                 write('"' + str(hash) + '":' + json.dumps(self.get_linhas_tabela_hashes(hash), separators=(',',':')))
             write("}")
+        if cmd == "upload":
+            if not arguments.url:
+                print "Por favor, informe a URL da instalação do cruzalinhas (--url) sem barra no final"
+            elif not arguments.token:
+                print "Por favor, informe o token de autenticação do admin (--token). Para obter, chame /token na instalação do cruzalinhas"
+            else:
+                self.upload_linhas_banco(lambda dados: self._upload(arguments.url+"/uploadlinha",arguments.token,dados))
+                self.upload_hashes_banco(lambda dados: self._upload(arguments.url+"/uploadhash",arguments.token,dados))
             
-#        else:
-#            print "Comando ainda não implementado"
+
+    def _upload(self, url, token, dados):
+        dados_json = {}
+        for param in dados.keys():
+            dados_json[param] = json.dumps(dados[param])
+        request = urllib2.Request(url, dados_json, {"Cookie":base64.b64decode(token)})
+        result = urllib2.urlopen(request,urllib.urlencode(dados)).read()
+        is_ok =  result.startswith("OK")
+        if not is_ok:
+            print result
+        return is_ok
     
     def _assert_html_dir(self):
         if not os.path.exists(self.html_dir):
@@ -484,8 +512,9 @@ Comandos:
     
     def upload_hashes_banco(self, fn_upload):
         for hash in self.list_tabela_hashes(inclui_atualizadas=False):
-            self._log("Iniciando upload - hash %s " % hash)                
-            if fn_upload(hash, self.get_linhas_tabela_hashes(hash)):
+            self._log("Iniciando upload - hash %s " % hash)
+            dados = {"hash":hash, "linhas": self.get_linhas_tabela_hashes(hash)}                
+            if fn_upload(dados):
                 self._init_banco()
                 self._cursor.execute("update hashes set last_upload=last_update where hash=?", (hash, ))
                 self._conn.commit()

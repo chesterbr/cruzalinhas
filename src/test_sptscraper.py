@@ -338,7 +338,7 @@ class TestSptScraper(unittest.TestCase):
         self.scraper.atualiza_banco(id2, info2, pontos2)
         self.scraper.repopula_tabela_hashes()
         self.assertEqual(54, self.scraper.conta_pendencias_banco()["hashes"])
-        mock_fn_upload_fail = Mock(side_effect = lambda hash,linhas: hash != "6gyf7m")
+        mock_fn_upload_fail = Mock(side_effect = lambda dados: dados["hash"] != "6gyf7m")
         self.scraper.upload_hashes_banco(mock_fn_upload_fail)
         self.assertEqual(1, self.scraper.conta_pendencias_banco()["hashes"])
         mock_fn_upload = Mock()

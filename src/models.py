@@ -24,9 +24,9 @@ class Linha(db.Model):
     """Uma linha de ônibus. Ex.: 314V-10 Vila Ema - Metrô Liberdade.
     As infos e pontos são guardadas como JSON"""
     id = db.IntegerProperty(required=True)
-    info = db.StringProperty(required=True)
-    pontos = db.StringProperty(required=True)
-    hashes = db.StringListProperty(required=True)
+    info = db.TextProperty(required=True)
+    pontos = db.TextProperty(required=True)
+    hashes = db.TextProperty(required=True)
     #nome = db.StringProperty(required=True)
     #url = db.StringProperty(required=True)
 #    _hashes_list = db.StringListProperty()
@@ -55,7 +55,7 @@ class Linha(db.Model):
                             
 class Hash(db.Model):
     hash = db.StringProperty(required=True)
-    linhas = db.StringProperty(required=True)                             
+    linhas = db.TextProperty(required=True)                             
                             
 #def calculaNearhash(lng, lat):
 #    """Calcula um geohash para uma coordenada compatível com a propriedade nearhash,

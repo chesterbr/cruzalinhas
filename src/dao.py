@@ -23,6 +23,7 @@ from django.utils import simplejson as json
 from geohash import Geohash
 from models import Linha, Hash
 from google.appengine.api import memcache
+import sys
 
 class Dao:
     """Classe de acesso aos dados das linhas (com uso do memcache e retornando JSON)"""
@@ -49,6 +50,38 @@ class Dao:
             self.cache.add(chave_memcache, linhas_ids)        
         #TODO converter para array json (esse array é python)
         return [self.get_info_linha(linha) for linha in linhas_ids]
+    
+    def put_linha(self, id, deleted, info, pontos, hashes):        
+        """Atualiza uma linha no banco (incluindo delete) e anula seu cache.
+           O cache dos hashes não é atualizado (supõe-se que eles também serão
+           atualizados no final). Retorna mensagem consumível pelo sptscraper"""
+        try:
+            id = int(id)
+            self.cache.delete("info_por_linha_id_%s" % id)
+            if deleted == "true":
+                linha = Linha.all().filter("id =", id).fetch(1)
+                if linha:
+                    linha.delete()
+                    return "OK LINHA DELETE %s " % id
+                else:
+                    return "OK LINHA DELETE %s (NAO EXISTIA)" % id
+            else:
+                linha = Linha(id = id, info = info, pontos = pontos, hashes = hashes)
+                linha.put()
+                return "OK LINHA UPLOAD %s " % id
+        except:
+            return "ERRO LINHA: %s" % sys.exc_info()[1]
+
+    def put_hash(self, hash, linhas):        
+        """Atualiza um hash no banco (mesmo vazio) e anula seu cache.
+           Retorna mensagem consumível pelo sptscraper"""
+        try:
+            self.cache.delete("linhas_por_hash_" + hash)
+            hash = Hash(hash = hash, linhas = linhas)
+            hash.put()
+            return "OK HASH UPLOAD %s " % id
+        except:
+            return "ERRO HASH: %s" % sys.exc_info()[1]
 
     def get_pontos_linha(self, linha_id):
         """Retorna objeto JSON com os pontos do trajeto para cada dia e sentido"""

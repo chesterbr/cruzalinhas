@@ -1,5 +1,6 @@
 .DS_Store
 *.pyc
+*.pyo
 .tmp*
 *.csv
 src/linhas.sqlite
