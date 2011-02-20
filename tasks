@@ -1,15 +1,17 @@
 Tarefas:
 
+(* = em execução)
+
 sptscraper:
 - Implementar ruas
 - Implementar # de paradas (tem que ver como varia em termos de dia/sentido)
-- Implementar comando de upload
 - Dividir o teste em um case que depende da SPTrans e um com arquivos locais
 
 cruzalinhas:
 *- Rever models.py para comportar novas infos e geohashes pré-calculados
-- Implementar uma página que recebe uma linha (sujeita a login) e inclui/altera/exclui
-- Implementar uma página que recebe um hash (sujeita a login) e atualiza
+- Bug: linha/hash com mesmo id/hash não está dando update
+- Bug: hash está indo com aspas a mais
+- Fazer a API "v1" retornar apenas a parte relevante da lista de linhas e da info da linha (considerar ida/semana)
 - Acrescentar combo de horário no front-end e buscar de acordo.
 - Página que exibe infos da linha no front-end
 - Pensar numa UI que comporte ida/volta

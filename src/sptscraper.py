@@ -192,9 +192,9 @@ Comandos:
     def _upload(self, url, token, dados):
         dados_json = {}
         for param in dados.keys():
-            dados_json[param] = json.dumps(dados[param])
-        request = urllib2.Request(url, dados_json, {"Cookie":base64.b64decode(token)})
-        result = urllib2.urlopen(request,urllib.urlencode(dados)).read()
+            dados_json[param] = json.dumps(dados[param], separators=(',',':'))
+        request = urllib2.Request(url, None, {"Cookie":base64.b64decode(token)})
+        result = urllib2.urlopen(request,urllib.urlencode(dados_json)).read()
         is_ok =  result.startswith("OK")
         if not is_ok:
             print result
