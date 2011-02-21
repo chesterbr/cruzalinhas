@@ -198,7 +198,7 @@ Comandos:
                 dados_json[param] = json.dumps(dados[param], separators=(',',':'))
         request = urllib2.Request(url, None, {"Cookie":base64.b64decode(token)})
         result = urllib2.urlopen(request,urllib.urlencode(dados_json)).read()
-        is_ok =  result.startswith("OK")
+        is_ok = result.startswith("OK")
         if not is_ok:
             print result
         return is_ok

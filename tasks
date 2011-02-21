@@ -8,10 +8,8 @@ sptscraper:
 - Dividir o teste em um case que depende da SPTrans e um com arquivos locais
 
 cruzalinhas:
-*- Rever models.py para comportar novas infos e geohashes pré-calculados
-- Bug: linha/hash com mesmo id/hash não está dando update
-- Bug: hash está indo com aspas a mais
-- Fazer a API "v1" retornar apenas a parte relevante da lista de linhas e da info da linha (considerar ida/semana)
+- Fazer a API "v1" retornar apenas a parte relevante da lista de linhas e da info da linha
+  (considerar ida/semana) - a idéia é o sistema funcionar com as novas infos
 - Acrescentar combo de horário no front-end e buscar de acordo.
 - Página que exibe infos da linha no front-end
 - Pensar numa UI que comporte ida/volta

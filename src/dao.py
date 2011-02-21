@@ -61,12 +61,19 @@ class Dao:
             if deleted == "true":
                 linha = Linha.all().filter("id =", id).fetch(1)
                 if linha:
-                    linha.delete()
+                    db.delete(linha)
                     return "OK LINHA DELETE %s " % id
                 else:
                     return "OK LINHA DELETE %s (NAO EXISTIA)" % id
             else:
-                linha = Linha(id = id, info = info, pontos = pontos, hashes = hashes)
+                linha = Linha.all().filter("id =", id).fetch(1)
+                if linha:
+                    linha = linha[0]
+                    linha.info = info
+                    linha.pontos = pontos
+                    linha.hashes = hashes
+                else:
+                    linha = Linha(id = id, info = info, pontos = pontos, hashes = hashes)
                 linha.put()
                 return "OK LINHA UPLOAD %s " % id
         except:
@@ -77,8 +84,13 @@ class Dao:
            Retorna mensagem consumível pelo sptscraper"""
         try:
             self.cache.delete("linhas_por_hash_" + hash)
-            hash = Hash(hash = hash, linhas = linhas)
-            hash.put()
+            hash_obj = Hash.all().filter("hash =", hash).fetch(1)
+            if hash_obj:
+                hash_obj = hash_obj[0]
+                hash_obj.linhas = linhas
+            else:
+                hash_obj = Hash(hash = hash, linhas = linhas)
+            hash_obj.put()
             return "OK HASH UPLOAD %s " % id
         except:
             return "ERRO HASH: %s" % sys.exc_info()[1]
