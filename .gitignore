@@ -3,5 +3,6 @@
 *.pyo
 .tmp*
 *.csv
-src/linhas.sqlite
-src/html
+src/sptscraper/linhas.sqlite
+src/sptscraper/html
+src/index.yaml

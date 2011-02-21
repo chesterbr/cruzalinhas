@@ -1,3 +1,4 @@
+#!/usr/bin/python2.5 -O
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2010-2011 Carlos Duarte do Nascimento (Chester)
@@ -28,8 +29,9 @@ import math
 import time
 from mock import Mock
 
-DIR = "../tmp/"
-DB = "../tmp/linhas.sqlite"
+DIR = "../../tmp/"
+DB = "../../tmp/linhas.sqlite"
+TEST_FILES_DIR = "../../test_files"
 ID_LINHA_1 = 53106   
 ID_LINHA_2 = 58520 
     
@@ -85,7 +87,7 @@ class TestSptScraper(unittest.TestCase):
 #        downloads 
         lista_linhas = self.scraper.lista_linhas()
         self.assertEquals({}, lista_linhas)
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         lista_linhas = self.scraper.lista_linhas()
         self.assertTrue(lista_linhas)
         self.assertTrue(lista_linhas.keys()[0].isdigit())
@@ -110,7 +112,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(self.scraper.html_dir, id+"-I-D-V.html")))
         
     def test_get_pontos_linha(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id = ID_LINHA_1
         pontos = self.scraper.get_pontos_linha(id)
         #todo nomes por extenso?
@@ -128,7 +130,7 @@ class TestSptScraper(unittest.TestCase):
                     self.assertTrue(ponto[1] < -45000000, ponto)
         
     def test_get_hashes(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id = ID_LINHA_1
         pontos = self.scraper.get_pontos_linha(id)
         hashes = self.scraper.get_hashes(pontos["util"]["ida"])
@@ -137,7 +139,7 @@ class TestSptScraper(unittest.TestCase):
         [self.assertTrue(len(hash)==6, hash) for hash in hashes]
         
     def test_get_info_linha(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id = ID_LINHA_1
         info = self.scraper.get_info_linha(id)
         self.assertEqual(info["nome"]["ida"], "CENTER NORTE")
@@ -161,7 +163,7 @@ class TestSptScraper(unittest.TestCase):
         # TODO pensar se vamos ter flag para veículos adaptados
         
     def test_crud_banco(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
         pontos1 = self.scraper.get_pontos_linha(id1)
@@ -234,7 +236,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(1, len(ids_banco))    
         
     def test_html_to_banco(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
         pontos1 = self.scraper.get_pontos_linha(id1)
@@ -255,7 +257,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
         
     def test_tabela_hashes(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id1 = ID_LINHA_1
         id2 = ID_LINHA_2
         info1 = self.scraper.get_info_linha(id1)
@@ -292,7 +294,7 @@ class TestSptScraper(unittest.TestCase):
             self.assertTrue(id2 in linhas, str(id2) + "," + str(linhas))
 
     def test_upload_linhas(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id1 = ID_LINHA_1
         info1 = self.scraper.get_info_linha(id1)
         pontos1 = self.scraper.get_pontos_linha(id1)
@@ -320,7 +322,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(0, self.scraper.conta_pendencias_banco()["linhas"])
 
     def test_upload_hashes(self):
-        shutil.copytree("../test_files", DIR)
+        shutil.copytree(TEST_FILES_DIR, DIR)
         id1 = ID_LINHA_1
         id2 = ID_LINHA_2
         info1 = self.scraper.get_info_linha(id1)
