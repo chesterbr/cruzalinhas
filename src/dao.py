@@ -32,17 +32,19 @@ class Dao:
     
     def get_info_linha(self, linha_id):
         """Retorna objeto JSON com as infos gerais da linha"""
-        chave_memcache = "info_por_linha_id_" + linha_id
+        chave_memcache = "info_por_linha_id_%s" % linha_id
         linha = self.cache.get(chave_memcache)
         if linha is None:
-            linha = Linha.all().filter("id =", linha_id).fetch(1).info
-            self.cache.add(chave_memcache, linha)
+            result = Linha.all().filter("id =", linha_id).fetch(1)
+            if result:
+                linha = result[0].info
+                self.cache.add(chave_memcache, linha)
         return linha
     
     def get_info_linhas(self, lat, lng):
         """Retorna array JSON com a info das linhas que passam num ponto"""
         hash = str(Geohash((lng, lat)))[0:6]
-        chave_memcache = "linhas_por_hash_" + hash;
+        chave_memcache = "linhas_por_hash_%s" % hash;
         linhas_ids = self.cache.get(chave_memcache)
         if linhas_ids is None:
             result = Hash.all().filter("hash =", hash).fetch(1)

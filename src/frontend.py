@@ -24,6 +24,7 @@ from models import Linha, Hash
 import os
 from dao import Dao
 from google.appengine.ext.webapp import template
+from django.utils import simplejson as json
 
 class MainPage(webapp.RequestHandler):    
     def get(self):
@@ -52,8 +53,14 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
         dao = Dao()
-        linhas_info = dao.get_info_linhas(lat, lng)
-        callback = self.request.get("callback");
+        linhas_info = [] 
+        for linha in json.loads(dao.get_info_linhas(lat, lng)):
+            linhas_info.append({"url": "",
+                                "hashes": "",
+                                "nome": linha["nome"]["ida"] + "-" + linha["nome"]["volta"],
+                                "key": ""})
+        linhas_info = json.dumps(linhas_info)
+        callback = self.request.get("callback")
         if callback:
             linhas_info = callback + "(" + linhas_info + ");"
         self.response.out.write(linhas_info)
