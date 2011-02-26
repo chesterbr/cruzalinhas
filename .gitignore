@@ -3,6 +3,7 @@
 *.pyo
 .tmp*
 *.csv
+*.temp
 src/sptscraper/linhas.sqlite
 src/sptscraper/html
 src/index.yaml

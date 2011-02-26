@@ -30,19 +30,30 @@ class Dao:
     
     cache = memcache.Client()
     
-    def get_info_linha(self, linha_id):
-        """Retorna objeto JSON com as infos gerais da linha"""
+    def get_pontos_linha(self, linha_id):
+        """Retorna objeto JSON com os pontos do trajeto para cada dia e sentido"""
+        chave_memcache = "pontos_por_linha_id_%s" % linha_id
+        pontos = self.cache.get(chave_memcache)
+        if pontos is None:
+            result = Linha.all().filter("id =", int(linha_id)).fetch(1)
+            if result:
+                pontos = result[0].pontos
+                self.cache.add(chave_memcache, pontos)
+        return pontos
+
+    def get_info_hashes_linha(self, linha_id):
+        """Retorna objeto JSON com as infos gerais e hashes da linha"""
         chave_memcache = "info_por_linha_id_%s" % linha_id
         linha = self.cache.get(chave_memcache)
         if linha is None:
-            result = Linha.all().filter("id =", linha_id).fetch(1)
+            result = Linha.all().filter("id =", int(linha_id)).fetch(1)
             if result:
-                linha = result[0].info
+                linha = '{"id":%s,"info":%s,"hashes":%s}' % (linha_id, result[0].info,result[0].hashes)
                 self.cache.add(chave_memcache, linha)
         return linha
     
-    def get_info_linhas(self, lat, lng):
-        """Retorna array JSON com a info das linhas que passam num ponto"""
+    def get_info_hashes_linhas(self, lat, lng):
+        """Retorna array JSON com as infos e hashes das linhas que passam num ponto"""
         hash = str(Geohash((lng, lat)))[0:6]
         chave_memcache = "linhas_por_hash_%s" % hash;
         linhas_ids = self.cache.get(chave_memcache)
@@ -50,8 +61,7 @@ class Dao:
             result = Hash.all().filter("hash =", hash).fetch(1)
             linhas_ids = json.loads(result[0].linhas) if result else []
             self.cache.add(chave_memcache, linhas_ids)        
-        #TODO converter para array json (esse array é python)
-        return [self.get_info_linha(linha) for linha in linhas_ids]
+        return json.dumps([json.loads(self.get_info_hashes_linha(linha)) for linha in linhas_ids], separators=(',',':'))
     
     def put_linha(self, id, deleted, info, pontos, hashes):        
         """Atualiza uma linha no banco (incluindo delete) e anula seu cache.
@@ -96,15 +106,4 @@ class Dao:
             return "OK HASH UPLOAD %s " % id
         except:
             return "ERRO HASH: %s" % sys.exc_info()[1]
-
-    def get_pontos_linha(self, linha_id):
-        """Retorna objeto JSON com os pontos do trajeto para cada dia e sentido"""
-        pass
-#        chave_memcache = "pontos_por_linha_id_" + linha_id;
-#        pontos_json = self.cache.get(chave_memcache)
-#        if pontos_json is None:
-#            linha = Linha.get(db.Key(key))
-#            pontos = Ponto.all().filter("linha = ", linha).order("ordem")
-#            pontos_json = simplejson.dumps([(ponto.lat, ponto.lng) for ponto in pontos])
-#            self.cache.add(chave_memcache, pontos_json)
 
