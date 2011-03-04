@@ -1,9 +1,9 @@
-#Sun Feb 20 20:52:06 BRT 2011
+#Fri Mar 04 05:42:10 BRT 2011
 eclipse.preferences.version=1
 encoding//src/aux/build_all_scripts.py=utf-8
-encoding//src/dao.py=utf-8
-encoding//src/frontend.py=utf-8
-encoding//src/models.py=utf-8
+encoding//src/cruzalinhas/dao.py=utf-8
+encoding//src/cruzalinhas/frontend.py=utf-8
+encoding//src/cruzalinhas/models.py=utf-8
 encoding//src/sptscraper/sptscraper.py=utf-8
 encoding//src/sptscraper/test_sptscraper.py=utf-8
 encoding/<project>=utf-8

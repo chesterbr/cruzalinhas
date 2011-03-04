@@ -6,3 +6,4 @@
 src/sptscraper/linhas.sqlite
 src/sptscraper/html
 src/index.yaml
+src/.temp
