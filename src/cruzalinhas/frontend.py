@@ -41,7 +41,9 @@ class LinhaPage(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         key = self.request.get("key")
         dao = Dao()
-        pontos_json = dao.get_pontos_linha(key)
+        pontos = json.loads(dao.get_pontos_linha(key))["util"]["ida"]
+        pontos_json = json.dumps([[float(ponto[0]) / 1000000, float(ponto[1]) / 1000000]
+                                  for ponto in pontos], separators=(',',':'))
         callback = self.request.get("callback");
         if callback:
             pontos_json = callback + "(" + pontos_json + ");"            
@@ -53,12 +55,14 @@ class LinhasQuePassamPage(webapp.RequestHandler):
         lat = float(self.request.get('lat'))
         lng = float(self.request.get('lng'))
         dao = Dao()
-        linhas_info = [] 
-        for linha in json.loads(dao.get_info_linhas(lat, lng)):
-            linhas_info.append({"url": "",
-                                "hashes": "",
-                                "nome": linha["nome"]["ida"] + "-" + linha["nome"]["volta"],
-                                "key": ""})
+        linhas_info = []
+        for linha in json.loads(dao.get_info_hashes_linhas(lat, lng)):
+            linhas_info.append({"url": "http://200.99.150.170/PlanOperWeb/detalheLinha.asp?TpDiaID=0&CdPjOID=%s" % linha["id"],
+                                "hashes": linha["hashes"],
+                                "nome": linha["info"]["numero"] + " " + 
+                                        linha["info"]["nome"]["ida"] + "/" + 
+                                        linha["info"]["nome"]["volta"],
+                                "key": linha["id"]})
         linhas_info = json.dumps(linhas_info)
         callback = self.request.get("callback")
         if callback:

@@ -9,15 +9,12 @@ sptscraper:
 
 cruzalinhas:
 - Verificar se o upload de linhas está respeitando o delete
-*- Fazer a API "v1" retornar apenas a parte relevante da lista de linhas e da info da linha
-  (considerar ida/semana) - a idéia é o sistema funcionar com as novas infos
-- Bug: dao.py não está retornando json (aliás, deveria?)
-- Acrescentar combo de horário no front-end e buscar de acordo.
 - Página que exibe infos da linha no front-end
+- Acrescentar combo de horário no front-end e buscar de acordo.
 - Pensar numa UI que comporte ida/volta
 
 geral:
-- Documentar dependência (easy_install simplejson mock)
+- Documentar dependências (easy_install simplejson mock)
             
 
                                 
