@@ -15,6 +15,7 @@ cruzalinhas:
 
 geral:
 - Documentar dependências (easy_install simplejson mock)
-            
+- Adicionar ref ao http://www.wwwizer.com/ (ver página)
+- Remover links zoados do about            
 
                                 

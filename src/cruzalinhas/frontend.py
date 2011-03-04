@@ -18,10 +18,11 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 #
+import os
+import base64
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from models import Linha, Hash
-import os
 from dao import Dao
 from google.appengine.ext.webapp import template
 from django.utils import simplejson as json
@@ -73,7 +74,8 @@ class LinhasQuePassamPage(webapp.RequestHandler):
 
 class TokenPage(webapp.RequestHandler):
     def get(self):
-        self.response.out.write("<html><body><script src='static/base64.js'></script><script>document.write(Base64.encode(document.cookie));</script></body></html>")
+        cookies = ";".join(["%s=%s" % (k, self.request.cookies[k]) for k in self.request.cookies])        
+        self.response.out.write(base64.b64encode(cookies))
         
 class UploadLinhaPage(webapp.RequestHandler):
     def post(self):
