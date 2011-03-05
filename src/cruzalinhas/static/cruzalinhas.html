@@ -147,7 +147,7 @@
                     Array cujos elementos contém o Nome, URL, chave (<i>key</i>) e lista de geohashes de cada linha.
                     <br/>
                     <b>Exemplo: </b>
-                    <a href="http://cruzalinhas.appspot.com/linhasquepassam.json?lat=-23.546953&lng=-46.638787">linhasquepassam.json?lat=-23.546953&lng=-46.638787</a>
+                    <a href="http://www.cruzalinhas.com/linhasquepassam.json?lat=-23.546953&lng=-46.638787">linhasquepassam.json?lat=-23.546953&lng=-46.638787</a>
                     <br/>
                 </p>
                 <p class="p_api_desc">
@@ -160,7 +160,7 @@
                     Array com os pontos  (latitude, longitude) que compõem o trajeto.
                     <br/>
                     <b>Exemplo: </b>
-                    <a href="http://cruzalinhas.appspot.com/linha.json?key=agtjcnV6YWxpbmhhc3INCxIFTGluaGEYssUPDA">linha.json?key=agtjcnV6YWxpbmhhc3INCxIFTGluaGEYssUPDA</a>
+                    <a href="http://www.cruzalinhas.com/linha.json?key=12967">linha.json?key=12967</a>
                     <br/>
                 </p>
 				<p>Se você for chamar via JavaScript (AJAX), pode passar o nome de uma função no parâmetro <i>callback</i>, e o retorno virá "empacotado" numa chamada a esta função, permitindo chamadas a partir de outros domínios (<a href="http://remysharp.com/2007/10/08/what-is-jsonp/">JSONP</a>).</p>
@@ -184,15 +184,13 @@
                     </script>
                 </p>
                 <p>
-                    Caso queira retribuir financeiramente, pode usar o PayPal ou o Flattr:
+                    Caso queira retribuir financeiramente, pode usar o PayPal:
                 </p>
                 <div id="div_botoes_doar">
                     <div id="div_botao_paypal">
                         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                             <input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----"><input type="image" src="https://www.paypal.com/pt_BR/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - A maneira mais fácil e segura de efetuar pagamentos on-line!"><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
                         </form>
-                    </div>
-                    <div id="div_botao_flattr">
                     </div>
                 </div>
             </div>

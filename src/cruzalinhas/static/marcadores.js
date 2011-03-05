@@ -12,7 +12,7 @@
 // ele deve rodar automaticamente - chque se o .py acima está com permissão de
 // execução).
 // 
-// Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+// Copyright (c) 2010, 2011 Carlos Duarte do Nascimento (Chester)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this 
 // software and associated documentation files (the "Software"), to deal in the Software 
@@ -464,16 +464,9 @@ $(document).ready(function(){
     });
     $("#link_sobre").fancybox({
         'width': 500,
-        'height': 340,
+        'height': 240,
         'autoDimensions': false,
         'autoScale': false,
-        'onComplete': function(){
-            // Delay nesse botão que demora a vida pra carregar
-            // (e não me pergunte por que ele só carrega direito na segunda vez)
-            var botao = '<iframe width="50" scrolling="no" height="60" frameborder="0" src="http://api.flattr.com/button/view/7569643d302675726c3d68747470253341253246253246636865737465722e626c6f672e6272266c6e673d26686964653d30267469746c653d266361743d267461673d26646573633d" border="0" marginheight="0" marginwidth="0" allowtransparency="true"></iframe>';
-            $('#div_botao_flattr').html(botao);
-            $('#div_botao_flattr').html(botao);
-        }
     });
     
     inicializa();

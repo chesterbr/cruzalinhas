@@ -152,9 +152,7 @@ a:visited {
 }
 
 #div_botao_paypal {
-    float: left;
-    margin-right: 16px;
-    margin-top: 24px;
+	margin-left:35px;
 }
 
 .p_linha {

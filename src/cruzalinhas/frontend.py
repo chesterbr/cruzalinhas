@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+# Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this 
 # software and associated documentation files (the "Software"), to deal in the Software 
@@ -27,15 +27,22 @@ from dao import Dao
 from google.appengine.ext.webapp import template
 from django.utils import simplejson as json
 
+# Páginas do site
+
 class MainPage(webapp.RequestHandler):    
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
         path = os.path.join(os.path.dirname(__file__), 'static', 'cruzalinhas.html')
         self.response.out.write(template.render(path, {}))
 
+        
+class RobotsPage(webapp.RequestHandler):
+    def get(self):
+        self.response.out.write('User-agent: *\n')
+        self.response.out.write('Disallow: /linhasquepassam.json\n')
+        self.response.out.write('Disallow: /linha.json\n')
+
 # API v1
-# TODO compatibilizar com a versão antiga (os novos crio num v2 ou algo assim
-# (basta extrair do JSON a parte que interessa, considerar default dia útil e ida)
         
 class LinhaPage(webapp.RequestHandler):        
     def get(self):
@@ -91,24 +98,7 @@ class UploadHashPage(webapp.RequestHandler):
         dao = Dao()
         self.response.out.write(dao.put_hash(hash = self.request.get("hash"),                                             
                                              linhas = self.request.get("linhas")))
-        
-# Não sei se vou ficar com esse cara, ele é perigoso
-#class ZapPage(webapp.RequestHandler):
-#    def get(self):
-#        self.response.headers['Content-Type'] = 'text/plain'
-#        self.response.out.write('Apagando hashes...')
-#        while Hash.all().fetch(1):
-#            db.delete(Hash.all().fetch(100))
-#        self.response.out.write('Apagando linhas...')
-#        while Linha.all().fetch(1):
-#            db.delete(Linha.all().fetch(100))
-#        self.response.out.write('Ok')
 
-class RobotsPage(webapp.RequestHandler):
-    def get(self):
-        self.response.out.write('User-agent: *\n')
-        self.response.out.write('Disallow: /linhasquepassam.json\n')
-        self.response.out.write('Disallow: /linha.json\n')
             
 application = webapp.WSGIApplication([
                                       # Site (páginas abertas fora do /static)

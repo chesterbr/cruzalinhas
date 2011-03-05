@@ -27,45 +27,8 @@ class Linha(db.Model):
     info = db.TextProperty(required=True)
     pontos = db.TextProperty(required=True)
     hashes = db.TextProperty(required=True)
-    #nome = db.StringProperty(required=True)
-    #url = db.StringProperty(required=True)
-#    _hashes_list = db.StringListProperty()
-#    def hashes(self):
-#        """Recupera todos os nearhashes (vide abaixo) dos pontos dessa linha, sem repetir.
-#           Se a propriedade não existir, calcula (foi feito assim pq é um late thought)"""
-#        if not self._hashes_list:
-#            set_hashes = set([ponto.nearhash for ponto in self.pontos])
-#            set_hashes.remove(None) # O 1o. ponto tem nearhash nulo
-#            self._hashes_list = [hash for hash in set_hashes]
-#            self.put()
-#        return self._hashes_list
-
-#class Ponto(db.Model):
-#    """Um ponto geográfico ordenado de uma linha."""
-#    linha = db.ReferenceProperty(Linha, collection_name="pontos")
-#    ordem = db.IntegerProperty(required=True)
-#    lat = db.FloatProperty(required=True)
-#    lng = db.FloatProperty(required=True)
-#    # nearhash é o geohash da caixa que contém este ponto e o anterior, com
-#    # precisão reduzida para 5 caracteres (~2,5Km)
-#    nearhash = db.StringProperty(required=False)
-#    def setNearhash(self, pontoAnt):
-#        self.nearhash = str(geohash.Geohash((pontoAnt.lng, pontoAnt.lat)) + 
-#                            geohash.Geohash((self.lng, self.lat)))[0:6]
                             
 class Hash(db.Model):
     hash = db.StringProperty(required=True)
     linhas = db.TextProperty(required=True)                             
                             
-#def calculaNearhash(lng, lat):
-#    """Calcula um geohash para uma coordenada compatível com a propriedade nearhash,
-#    isto é, algo que, se igual a um nearhash da linha, indica que o ponto passa pela
-#    mesma"""
-#    return str(geohash.Geohash((lng, lat)))[0:6]       
-#    
-#
-#                
-
-    
-
-    

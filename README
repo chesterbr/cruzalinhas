@@ -11,7 +11,7 @@ Ele pode ser acessado em http://cruzalinhas.appspot.com (onde podem ser obtidas
 informações sobre o funcionamento). O código-fonte é livre e pode ser baixado em
 http://github.com/chesterbr/cruzalinhas.
 
-= Dados dos Trajetos
+= Dados dos Trajetos (sptscraper)
 
 Os itinerários das linhas de transporte público administradas pela SPTrans são
 referentes a um serviço PÚBLICO, pago com o SEU e o MEU dinheiro e deveriam estar
@@ -20,11 +20,10 @@ em algum lugar, pois bons serviços como o Google Maps têm essa informação, m
 cidadão comum não tem onde baixar.
 
 Esse tipo de falta de transparência no serviço público é inadmissível[1], fato que
-me levou a desenvolver o scraper.py, módulo independente deste sistema que captura
-os dados das linhas do site da SPTrans e salva no formato CSV. Você também pode
-usar a função getLinhas() para exportar os dados para outro formato, apenas tome
-cuidado para não sobrecarregar o site (uma espera de 20-30s entre requests é bom
-senso)
+me levou a desenvolver o sptscraper.py, módulo independente deste sistema que captura
+os dados das linhas do site da SPTrans, armazena os HTMLs individuais, faz o parse
+para extrair os dados para um banco SQLite e salva os resultados no cruzalinhas
+ou exporta em JSON para você usar como quiser.
 
 [1] http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351
 
@@ -42,6 +41,7 @@ geohash - Escrito por Schuyler Erle, em domínio público
 jquery - Copyright (c) 2010 John Resig, http://jquery.com/
 fancybox - Copyright (c) 2008 - 2010 Janis Skarnelis
 Python JsMin Compress - Copyright (c) 2009 Baruch Even
+argparse - Copyright (c) 2006-2009 Steven J. Bethard
 
 O serviço é prestado na melhor intenção de ajudar as pessoas a se localizar, sem
 qualquer garantia, explícita ou implícita de funcionamento, atualização, precisão
@@ -51,7 +51,7 @@ deve ser sempre consultado para validação da informação mais atualizada.
 = Copyright
 
  cruzalinhas
- Copyright (c) 2010 Carlos Duarte do Nascimento (Chester)
+ Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  software and associated documentation files (the "Software"), to deal in the Software 
