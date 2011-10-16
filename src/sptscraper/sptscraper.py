@@ -23,12 +23,13 @@
     do site da SPTrans, opcionalmente atualizando o cruzalinhas
     
     Uso: python sptscraper.py COMANDO [id]   (use o comando help para info) """
+from BeautifulSoup import BeautifulSoup
+from datetime import datetime
 import base64
 import sys
 import os
 import urllib
 import urllib2
-from BeautifulSoup import BeautifulSoup
 import urlparse
 import re
 import sqlite3
@@ -142,7 +143,7 @@ Comandos:
                 if id_inicial and id != id_inicial:
                     continue
                 id_inicial = None
-                print "Baixando linha id=%s (%s)..." % (id, linhas[id])
+                print "[%s] Baixando linha id=%s (%s)..." % (datetime.now(), id, linhas[id].split()[0])
                 self.download_linha(id)
             print "Download concluído"
         if cmd == "parse":
