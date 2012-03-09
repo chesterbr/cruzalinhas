@@ -1,4 +1,4 @@
-CRUZALINHAS - README
+cruzalinhas - README
 ====================
 
 Introdução
@@ -17,65 +17,48 @@ em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 Preparando o Ambiente e Rodando o Cruzalinhas na sua Máquina
 ------------------------------------------------------------
 
-1. Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o
-   comando:
+1. Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o comando:
 
         python --version
 
-2. Baixe e instale o App Engine SDK Python para a sua plataforma (Windows, Mac
-   ou Linux) de:
+2. Baixe e instale o App Engine SDK Python para a sua plataforma (Windows, Mac ou Linux) de:
 
         http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python
 
-3. Baixe o código do Github, com o comando abaixo (se fez um fork - o que é uma
-   boa - troque "chesterbr" pelo seu id no github):
+3. Baixe o código do Github, com o comando abaixo (se fez um fork - o que é uma boa - troque "chesterbr" pelo seu id no github):
 
         git clone git@github.com:chesterbr/cruzalinhas.git
 
-   O comando vai criar uma pasta "cruzalinhas". Dentro dela há uma pasta "src"
-   com os dois projetos relevantes que vamos mencionar nos passos seguintes:
+    O comando vai criar uma pasta "cruzalinhas". Dentro dela há uma pasta "src" com os dois projetos relevantes que vamos mencionar nos passos seguintes:
 
-        * cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
-        * cruzalinhas/src/cruzalinhas: o site em si
+    * cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
+    * cruzalinhas/src/cruzalinhas: o site em si
 
-4. Rode o site no servidor local. Para isso, abra o Google App Engine Launcher
-   (que veio com o SDK), clique em File, Add Existing Application. Aponte a
-   caixa de diretório para cruzalinhas/src/cruzalinhas e clique no botão "Run".
+4. Rode o site no servidor local. Para isso, abra o Google App Engine Launcher (que veio com o SDK), clique em File, Add Existing Application. Aponte a caixa de diretório para cruzalinhas/src/cruzalinhas e clique no botão "Run".
 
-   Se estiver usando Linux ou preferir a linha de comando, entre em
-   cruzalinhas/src/cruzalinhas e use o comando abaixo:
+    Se estiver usando Linux ou preferir a linha de comando, entre em cruzalinhas/src/cruzalinhas e use o comando abaixo:
 
         dev_appserver.py .
 
-   Em qualquer caso, você pode testar o servidor com http://localhost:8080 (se
-   não mudou a porta), mas vai ver que não tem nenhuma linha em lugar nenhum.
+    Em qualquer caso, você pode testar o servidor com http://localhost:8080 (se não mudou a porta), mas vai ver que não tem nenhuma linha em lugar nenhum.
 
-5. Alimente o seu servidor local com os dados da SPTrans. Vamos usar dados já
-   baixados e processados, pois um download e parse completos do site deles
-   demoram bastante. Siga os passos abaixo:
+5. Alimente o seu servidor local com os dados da SPTrans. Vamos usar dados já baixados e processados, pois um download e parse completos do site deles demoram bastante. Siga os passos abaixo:
 
-    5.1. Com o servidor local rodando (vide passo 4), entre em
-    http://localhost:8080/token
+    5.1. Com o servidor local rodando (vide passo 4), entre em http://localhost:8080/token
 
-    5.2. MARQUE "Sign in as Administrator", coloque qualquer e-mail e clique em
-    "Login"
+    5.2. MARQUE "Sign in as Administrator", coloque qualquer e-mail e clique em "Login"
 
-    5.3. Vai aparecer o token de acesso (uma string gigante). Deixe ele
-    quietinho ali.
+    5.3. Vai aparecer o token de acesso (uma string gigante). Deixe ele quietinho ali.
 
-    5.4. Entre em http://min.us/mWRB4SYJ8, baixe e descompacte o .zip, e mova o
-    arquivo linhas.sqlite para dentro do cruzalinhas/src/sptscraper
+    5.4. Entre em http://min.us/mWRB4SYJ8, baixe e descompacte o .zip, e mova o arquivo linhas.sqlite para dentro do cruzalinhas/src/sptscraper
 
-    5.5. No prompt de comando, navegue até o cruzalinhas/src/sptscraper e
-    digite:
+    5.5. No prompt de comando, navegue até o cruzalinhas/src/sptscraper e digite:
 
         ./sptscraper.py upload --url http://localhost:8080 --token TOKEN
 
-    IMPORTANTE: no comando acima, substitua TOKEN pela string que você
-                obteve no passo 5.3 (copie e cole)
+     IMPORTANTE: no comando acima, substitua TOKEN pela string que vocêobteve no passo 5.3 (copie e cole)
 
-Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas
-ao clicar no mapa!
+     Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas ao clicar no mapa!
    
    
 Dicas para Desenvolvedores
@@ -99,9 +82,9 @@ Dicas para Desenvolvedores
  - Se fizer alguma mudança interessante, pull requests são bem-vindos. Se
    quiser ajudar e não tiver idéias, consulte a lista de issues em aberto:
    
-   https://github.com/chesterbr/cruzalinhas/issues
+       https://github.com/chesterbr/cruzalinhas/issues
    
-   (e avise para que não trabalhemos no mesmo issue ao mesmo tempo)   
+    (e avise para que não trabalhemos no mesmo issue ao mesmo tempo)   
         
         
 Motivação e Extração de Dados dos Trajetos (sptscraper)
