@@ -1,7 +1,8 @@
 CRUZALINHAS - README
---------------------
+====================
 
-=== Introdução
+Introdução
+----------
 
 O cruzalinhas é um experimento que tenta complementar a experiência de
 localização de rotas de transporte público em São Paulo, mostrando todas as
@@ -13,19 +14,20 @@ informações sobre o funcionamento). O código-fonte é livre e pode ser baixad
 em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 
 
-=== Preparando o Ambiente e Rodando o Cruzalinhas na sua Máquina
+Preparando o Ambiente e Rodando o Cruzalinhas na sua Máquina
+------------------------------------------------------------
 
-1) Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o
+1. Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o
    comando:
 
         python --version
 
-2) Baixe e instale o App Engine SDK Python para a sua plataforma (Windows, Mac
+2. Baixe e instale o App Engine SDK Python para a sua plataforma (Windows, Mac
    ou Linux) de:
 
         http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python
 
-3) Baixe o código do Github, com o comando abaixo (se fez um fork - o que é uma
+3. Baixe o código do Github, com o comando abaixo (se fez um fork - o que é uma
    boa - troque "chesterbr" pelo seu id no github):
 
         git clone git@github.com:chesterbr/cruzalinhas.git
@@ -33,10 +35,10 @@ em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
    O comando vai criar uma pasta "cruzalinhas". Dentro dela há uma pasta "src"
    com os dois projetos relevantes que vamos mencionar nos passos seguintes:
 
-        - cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
-        - cruzalinhas/src/cruzalinhas: o site em si
+        * cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
+        * cruzalinhas/src/cruzalinhas: o site em si
 
-4) Rode o site no servidor local. Para isso, abra o Google App Engine Launcher
+4. Rode o site no servidor local. Para isso, abra o Google App Engine Launcher
    (que veio com o SDK), clique em File, Add Existing Application. Aponte a
    caixa de diretório para cruzalinhas/src/cruzalinhas e clique no botão "Run".
 
@@ -48,23 +50,23 @@ em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
    Em qualquer caso, você pode testar o servidor com http://localhost:8080 (se
    não mudou a porta), mas vai ver que não tem nenhuma linha em lugar nenhum.
 
-5) Alimente o seu servidor local com os dados da SPTrans. Vamos usar dados já
-baixados e processados, pois um download e parse completos do site deles
-demoram bastante. Siga os passos abaixo:
+5. Alimente o seu servidor local com os dados da SPTrans. Vamos usar dados já
+   baixados e processados, pois um download e parse completos do site deles
+   demoram bastante. Siga os passos abaixo:
 
-    5.1) Com o servidor local rodando (vide passo 4), entre em
+    5.1. Com o servidor local rodando (vide passo 4), entre em
     http://localhost:8080/token
 
-    5.2) MARQUE "Sign in as Administrator", coloque qualquer e-mail e clique em
+    5.2. MARQUE "Sign in as Administrator", coloque qualquer e-mail e clique em
     "Login"
 
-    5.3) Vai aparecer o token de acesso (uma string gigante). Deixe ele
+    5.3. Vai aparecer o token de acesso (uma string gigante). Deixe ele
     quietinho ali.
 
-    5.4) Entre em http://min.us/mWRB4SYJ8, baixe e descompacte o .zip, e mova o
+    5.4. Entre em http://min.us/mWRB4SYJ8, baixe e descompacte o .zip, e mova o
     arquivo linhas.sqlite para dentro do cruzalinhas/src/sptscraper
 
-    5.5) No prompt de comando, navegue até o cruzalinhas/src/sptscraper e
+    5.5. No prompt de comando, navegue até o cruzalinhas/src/sptscraper e
     digite:
 
         ./sptscraper.py upload --url http://localhost:8080 --token TOKEN
@@ -76,7 +78,8 @@ Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas
 ao clicar no mapa!
    
    
-=== Dicas para Desenvolvedores ===
+Dicas para Desenvolvedores
+--------------------------
 
  - Os arquivos .py do site são bem auto-explicativos: tem um front-end que
    responde requisições AJAX, uma camada de dados e os modelos. O resto são
@@ -101,7 +104,8 @@ ao clicar no mapa!
    (e avise para que não trabalhemos no mesmo issue ao mesmo tempo)   
         
         
-=== Motivação e Extração de Dados dos Trajetos (sptscraper)
+Motivação e Extração de Dados dos Trajetos (sptscraper)
+-------------------------------------------------------
 
 Os itinerários das linhas de transporte público administradas pela SPTrans são
 referentes a um serviço PÚBLICO, pago com o SEU e o MEU dinheiro e deveriam
@@ -122,7 +126,8 @@ de tempos em tempos em:
     http://cruzalinhas.minus.com
     
 
-=== Licença
+Licença
+-------
 
 O código-fonte está disponível sob a licença MIT (vide abaixo). Essencialmente,
 o uso é livre, devendo apenas a nota de copyright abaixo ser reproduzida em
@@ -144,7 +149,8 @@ precisão ou veracidade das informações prestadas. A fonte original é o site
 da SPTrans, que deve ser sempre consultado para validação da informação.
 
 
-=== Copyright Notice / MIT License
+Copyright Notice / MIT License
+------------------------------
 
  cruzalinhas
  Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
