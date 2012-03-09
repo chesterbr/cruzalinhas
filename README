@@ -23,8 +23,7 @@ em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 2) Baixe e instale o App Engine SDK Python para a sua plataforma (Windows, Mac
    ou Linux) de:
 
-        http://code.google.com/appengine/downloads.html#
-        Google_App_Engine_SDK_for_Python
+        http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python
 
 3) Baixe o código do Github, com o comando abaixo (se fez um fork - o que é uma
    boa - troque "chesterbr" pelo seu id no github):
