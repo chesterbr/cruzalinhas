@@ -14,7 +14,7 @@ informações sobre o funcionamento). O código-fonte é livre e pode ser baixad
 em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 
 
-Preparando o Ambiente e Rodando o Cruzalinhas na sua Máquina
+Preparando o ambiente e rrodando o cruzalinhas na sua máquina
 ------------------------------------------------------------
 
 1. Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o comando:
@@ -61,7 +61,7 @@ Preparando o Ambiente e Rodando o Cruzalinhas na sua Máquina
      Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas ao clicar no mapa!
    
    
-Dicas para Desenvolvedores
+Dicas para desenvolvedores
 --------------------------
 
  - Os arquivos .py do site são bem auto-explicativos: tem um front-end que
@@ -87,7 +87,7 @@ Dicas para Desenvolvedores
     (e avise para que não trabalhemos no mesmo issue ao mesmo tempo)   
         
         
-Motivação e Extração de Dados dos Trajetos (sptscraper)
+Motivação e extração de dados dos trajetos (sptscraper)
 -------------------------------------------------------
 
 Os itinerários das linhas de transporte público administradas pela SPTrans são
@@ -104,9 +104,7 @@ SQLite e salva os resultados no cruzalinhas ou exporta em JSON para você usar
 como quiser.
 
 Para quem quiser usar os dados já processados, eles devem ser disponibilizados
-de tempos em tempos em:
-
-    http://cruzalinhas.minus.com
+de tempos em tempos em http://cruzalinhas.minus.com
     
 
 Licença
@@ -119,12 +117,12 @@ cópias/trabalhos derivados.
 Ele inclui cópias inalteradas das seguintes bibliotecas, em conformidade com
 suas licenças:
 
-BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson
-geohash - Escrito por Schuyler Erle, em domínio público
-jquery - Copyright (c) 2010 John Resig, http://jquery.com/
-fancybox - Copyright (c) 2008 - 2010 Janis Skarnelis
-Python JsMin Compress - Copyright (c) 2009 Baruch Even
-argparse - Copyright (c) 2006-2009 Steven J. Bethard
+* BeautifulSoup - Copyright (c) 2004-2010, Leonard Richardson
+* geohash - Escrito por Schuyler Erle, em domínio público
+* jquery - Copyright (c) 2010 John Resig, http://jquery.com/
+* fancybox - Copyright (c) 2008 - 2010 Janis Skarnelis
+* Python JsMin Compress - Copyright (c) 2009 Baruch Even
+* argparse - Copyright (c) 2006-2009 Steven J. Bethard
 
 O serviço é prestado na melhor intenção de ajudar as pessoas a se localizar,
 sem qualquer garantia, explícita ou implícita de funcionamento, atualização,
@@ -132,11 +130,10 @@ precisão ou veracidade das informações prestadas. A fonte original é o site
 da SPTrans, que deve ser sempre consultado para validação da informação.
 
 
-Copyright Notice / MIT License
+Copyright notice / MIT license
 ------------------------------
 
- cruzalinhas
- Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
+ cruzalinhas - Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
