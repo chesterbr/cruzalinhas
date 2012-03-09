@@ -35,7 +35,7 @@ em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
    com os dois projetos relevantes que vamos mencionar nos passos seguintes:
 
         - cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
-        das linhas - cruzalinhas/src/cruzalinhas: o site em si
+        - cruzalinhas/src/cruzalinhas: o site em si
 
 4) Rode o site no servidor local. Para isso, abra o Google App Engine Launcher
    (que veio com o SDK), clique em File, Add Existing Application. Aponte a
