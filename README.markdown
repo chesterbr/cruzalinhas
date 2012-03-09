@@ -13,7 +13,7 @@ Ele pode ser acessado em http://cruzalinhas.com . O código-fonte é livre e pod
 em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 
 
-Preparando o ambiente e rrodando o cruzalinhas na sua máquina
+Preparando o ambiente e rodando o cruzalinhas na sua máquina
 ------------------------------------------------------------
 
 1. Certifique-se de que sua máquina tem Python 2.5 ou superior instalado, com o comando:
@@ -30,8 +30,8 @@ Preparando o ambiente e rrodando o cruzalinhas na sua máquina
 
     O comando vai criar uma pasta "cruzalinhas". Dentro dela há uma pasta "src" com os dois projetos relevantes que vamos mencionar nos passos seguintes:
 
-    * cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
-    * cruzalinhas/src/cruzalinhas: o site em si
+    - cruzalinhas/src/sptscraper: baixa, processa e envia ao site os dados
+    - cruzalinhas/src/cruzalinhas: o site em si
 
 4. Rode o site no servidor local. Para isso, abra o Google App Engine Launcher (que veio com o SDK), clique em File, Add Existing Application. Aponte a caixa de diretório para cruzalinhas/src/cruzalinhas e clique no botão "Run".
 
@@ -129,10 +129,10 @@ precisão ou veracidade das informações prestadas. A fonte original é o site
 da SPTrans, que deve ser sempre consultado para validação da informação.
 
 
-Copyright notice / MIT license
-------------------------------
+Copyright notice and MIT-style license
+--------------------------------------
 
- cruzalinhas - Copyright (c) 2010,2011 Carlos Duarte do Nascimento (Chester)
+ cruzalinhas - Copyright (c) 2010-2012 Carlos Duarte do Nascimento (Chester)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
