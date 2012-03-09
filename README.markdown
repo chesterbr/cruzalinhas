@@ -9,8 +9,7 @@ localização de rotas de transporte público em São Paulo, mostrando todas as
 linhas que passam por um determinado local e/ou as linhas que passam entre
 dois ou mais locais.
 
-Ele pode ser acessado em http://cruzalinhas.appspot.com (onde podem ser obtidas
-informações sobre o funcionamento). O código-fonte é livre e pode ser baixado
+Ele pode ser acessado em http://cruzalinhas.com. O código-fonte é livre e pode ser baixado
 em http://github.com/chesterbr/cruzalinhas (vide licença abaixo).
 
 
