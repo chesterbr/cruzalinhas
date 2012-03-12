@@ -55,9 +55,13 @@ Preparando o ambiente e rodando o cruzalinhas na sua máquina
 
         ./sptscraper.py upload --url http://localhost:8080 --token TOKEN
 
-     IMPORTANTE: no comando acima, substitua TOKEN pela string que vocêobteve no passo 5.3 (copie e cole)
+     IMPORTANTE: no comando acima, substitua TOKEN pela string que você obteve no passo 5.3 (copie e cole)
+     
+     Se ele reclamar do interpretador, acrescente "python" na frente, i.e.:
 
-     Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas ao clicar no mapa!
+        python ./sptscraper.py upload --url http://localhost:8080 --token TOKEN
+
+Pronto! Reinicie o servidor local e você deve começar a ver linhas capturadas ao clicar no mapa!
    
    
 Dicas para desenvolvedores
