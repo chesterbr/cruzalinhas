@@ -73,7 +73,7 @@ class Dao:
             if deleted == "true":
                 linha = Linha.all().filter("id =", id).fetch(1)
                 if linha:
-                    db.delete(linha)
+                    linha.delete()
                     return "OK LINHA DELETE %s " % id
                 else:
                     return "OK LINHA DELETE %s (NAO EXISTIA)" % id
