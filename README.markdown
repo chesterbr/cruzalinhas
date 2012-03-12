@@ -73,8 +73,20 @@ Dicas para desenvolvedores
  
  - O front-end fica em "static" dentro da pasta do site. O javascript fica em
    marcadores.js, que é minificado dentro do all-scripts.js automaticamente
-   caso se use Eclipse (abra o projeto na raiz). Se usar outro ambiente,
-   gere o all-scripts rodando build_all_scripts.py (em cruzalinhas/aux).
+   caso se use Eclipse (importe o projeto na "raiz" /cruzalinhas/, que contém
+   o código do site e do sptscraper).
+
+ - O Eclipse não é obrigatório: se usar outro ambiente,
+   gere o all-scripts rodando o arquivo build_all_scripts.py que está em
+   cruzalinhas/aux (dica: configure sua IDE para rodar ele automaticamente sempre
+   que alterar o marcadores.js ou qualquer js).
+
+ - Qualquer edição do Eclipse vai funcionar bem (o principal objetivo é o auto-
+   minify descrito acima, que já está configurado), mas é uma boa plugar um
+   editor decente de Python, como o PyDev (http://pydev.org). O mesmo vale
+   para HTML e JavaScript - o Aptana Studio (http://aptana.com) é legal se
+   a sua máquina aguentar, caso contrário uma opção é o Amateras 
+   (http://amateras.sourceforge.jp/cgi-bin/fswiki_en/wiki.cgi?page=EclipseHTMLEditor)
    
  - O sptscraper.py pode ser usado para baixar os HTMLs, atualizar o banco
    local e subir só as diferenças. Chame "./sptscraper.py help" para detalhes.
