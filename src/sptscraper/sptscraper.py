@@ -143,7 +143,7 @@ Comandos:
                 if id_inicial and id != id_inicial:
                     continue
                 id_inicial = None
-                print "[%s] Baixando linha id=%s (%s)..." % (datetime.now(), id, linhas[id].split()[0])
+                print "[%s] Baixando linha id=%s (%s)..." % (datetime.now(), id, linhas[id])
                 self.download_linha(id)
             print "Download concluído"
         if cmd == "parse":
