@@ -3,25 +3,25 @@
 #
 # Copyright (c) 2010-2011 Carlos Duarte do Nascimento (Chester)
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the "Software"), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, merge, 
-# publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the "Software"), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify, merge,
+# publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
 # to whom the Software is furnished to do so, subject to the following conditions:
-#     
-# The above copyright notice and this permission notice shall be included in all copies or 
+#
+# The above copyright notice and this permission notice shall be included in all copies or
 # substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-# FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
-# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+# FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 #
 """ Utilitário que baixa e interpreta os dados de itinerários de ônibus
     do site da SPTrans, opcionalmente atualizando o cruzalinhas
-    
+
     Uso: python sptscraper.py COMANDO [id]   (use o comando help para info) """
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime
@@ -41,28 +41,28 @@ import geohash
 try:
     import json
 except ImportError:
-    import simplejson as json 
+    import simplejson as json
 
 class SptScraper:
 
     base_href = r"http://200.99.150.170/PlanOperWeb/"
     pag_linhas = "linhaselecionada.asp"
-    
+
     index_file = "index.html"
     html_dir = "html"
     db_name = "linhas.sqlite"
     silent = False
-    
+
     DIAS = ["util", "sabado", "domingo"]
     SENTIDOS = ["ida", "volta"]
     PERIODOS = ["manha", "entrepico", "tarde"]
-    
+
     DICT_DIAS = dict(zip("USD", DIAS))
     DICT_SENTIDOS = dict(zip("IV", SENTIDOS))
-    
+
     _conn = None
     _cursor = None
-    
+
     def main(self):
         def write(string):
             """Imprime sem enter no final e desliga os logs (conveniência)"""
@@ -112,8 +112,8 @@ Comandos:
             linhas = len(self.lista_linhas())
             conta = self.conta_pendencias_banco()
             print "  Linhas no index.html local: %s" % (linhas)
-            print "  Atualizações de linhas pendentes no banco: %s" % conta["linhas"]            
-            print "  Atualizações de hashes pendentes no banco: %s" % conta["hashes"]            
+            print "  Atualizações de linhas pendentes no banco: %s" % conta["linhas"]
+            print "  Atualizações de hashes pendentes no banco: %s" % conta["hashes"]
         if cmd == "resume":
             max_id = 0
             for arq in os.listdir(self.html_dir):
@@ -188,7 +188,7 @@ Comandos:
             else:
                 self.upload_linhas_banco(lambda dados: self._upload(arguments.url+"/uploadlinha",arguments.token,dados))
                 self.upload_hashes_banco(lambda dados: self._upload(arguments.url+"/uploadhash",arguments.token,dados))
-            
+
 
     def _upload(self, url, token, dados):
         dados_json = {}
@@ -203,18 +203,18 @@ Comandos:
         if not is_ok:
             print result
         return is_ok
-    
+
     def _assert_html_dir(self):
         if not os.path.exists(self.html_dir):
             os.mkdir(self.html_dir)
-    
+
     def clean_html(self):
         """Apaga os downloads já realizados"""
         self._assert_html_dir()
         for file in os.listdir(self.html_dir):
             if file.endswith(".html"):
                 os.unlink(os.path.join(self.html_dir,file))
-        
+
     def download_index(self):
         """Baixa a página-índice (que contém a lista das linhas), verifica sua integridade
         e retorna a quantidade de linhas encontradas."""
@@ -229,7 +229,7 @@ Comandos:
             arq = open(os.path.join(self.html_dir, self.index_file), "w")
             arq.writelines(html)
         return numLinhas
-    
+
     def lista_linhas(self):
         """Retorna um dicionário cujas chaves são os IDs das linhas e os valores
            são os nomes, a partir da última página-índice baixada) """
@@ -241,7 +241,7 @@ Comandos:
         linhas = {}
         for elem in soup.findAll("a", attrs={"class":re.compile("linkLinha|linkDetalhes")}):
             if elem["class"] == "linkLinha" and elem.string:
-                nome = elem.string.replace("Linha: ", "").strip()
+                nome = elem.string.replace("Linha: ", "").replace("&nbsp"," ").strip()
             elif elem["class"] == "linkDetalhes":
                 parsed_url = urlparse.urlparse(self.base_href + elem["href"])
                 params = dict([part.split('=') for part in parsed_url[4].split('&')])
@@ -253,7 +253,7 @@ Comandos:
         """Baixa os arquivos relacionados a uma linha identificado por "id". Os arquivos são
            salvos no formato id-tipo-dia-sentido.html, onde tipo é M(apa) ou I(nfo), dia é
            U(til), S(abado) ou D(omingo/feriado) e sentido é I(da) ou V(olta)"""
-        
+
         self._assert_html_dir()
         for sentido in [0,1]:
             for dia in [0,1,2]:
@@ -272,16 +272,16 @@ Comandos:
                     arq.writelines(html)
                     time.sleep(random.uniform(0,1.5))
 
-                
+
     def get_pontos_linha(self, id):
         """Recupera os pontos do HTML-mapa relacinados a uma linha. O retorno é um dict cujas chaves são os
            dias da semana ("util", "sabado" ou "domingo"), e os valores também são dicts, desta vez cujas
            chaves são "ida" ou "volta", e no último nível temos a lista de pontos. Ex.:
-           
+
                >>>pontos = get_pontos_linha(1234)
                >>>pontos["util"]["ida"]   # dia útil, sentido: ida
                [[10.1, -20.2], [30.3, -40.4], ...]
-               
+
         """
         pontos = dict()
         for dia in "USD":
@@ -300,7 +300,7 @@ Comandos:
 
     def get_info_linha(self, id):
         """Recupera informações de uma linha (nome, número, horários, tempos, ruas,
-           etc.) a partir do HTML dela. Retorna uma hierarquia de dicts, vide teste 
+           etc.) a partir do HTML dela. Retorna uma hierarquia de dicts, vide teste
            unitário para ver as infos que retornam neles"""
         # Info básica (tanto faz qual HTML usar, ela repete em todos)
         arq_info = "%s-I-U-I.html" % id
@@ -336,9 +336,9 @@ Comandos:
             del(info["tempo"])
             self._log(u"Aviso: linha id=%s (%s) não tem tempos de viagem" % (id, info["numero"]))
 
-        
+
         return info
-    
+
     def get_hashes(self, trajeto):
         """Dada a lista de pontos (i.e., de pares de coordenadas) que compõe o desenho de
            um trajeto, calcula os geohashes das "caixas" que contém esse trajeto com exatos
@@ -349,24 +349,24 @@ Comandos:
         pontoAnt = None
         for ponto in trajeto:
             if pontoAnt:
-                hash = str(geohash.Geohash((pontoAnt[1] / 1000000.0, pontoAnt[0] / 1000000.0)) + 
+                hash = str(geohash.Geohash((pontoAnt[1] / 1000000.0, pontoAnt[0] / 1000000.0)) +
                            geohash.Geohash((ponto[1] / 1000000.0, ponto[0] / 1000000.0)))[0:6]
                 if len(hash) == 6:
                     hashes.add(hash)
             pontoAnt = ponto
-        
+
         return hashes
-    
+
     def _init_banco(self):
         self._conn = sqlite3.connect(self.db_name)
         self._cursor = self._conn.cursor()
         self._cursor.execute("create table if not exists linhas(id integer primary key, deleted boolean, last_update integer, last_upload integer, info text, pontos text, hashes text)")
         self._cursor.execute("create table if not exists hashes(hash char(6) primary key, last_update integer, last_upload integer, linhas text)")
-    
+
     def _close_banco(self):
-        self._cursor.close() 
+        self._cursor.close()
         self._conn.close()
-    
+
     def lista_ids_banco(self, inclui_deletadas=True):
         """Recupera os IDs cadastrados no banco, como uma lista de integers. Por default
            inclui linhas deletadas, mas pode ser chamado com inclui_deletadas=False"""
@@ -378,7 +378,7 @@ Comandos:
         lista_ids = self._cursor.fetchall()
         self._close_banco()
         return [i[0] for i in lista_ids]
-    
+
     def atualiza_banco(self, id, info, pontos):
         """Insert ou update do registro do banco correspondente àquele ID"""
         dados = self.get_banco(id)
@@ -393,7 +393,7 @@ Comandos:
             self._cursor.execute("update linhas set deleted='false',last_update=?,info=?,pontos=?,hashes=? where id=?", tu)
         self._conn.commit()
         self._close_banco()
-        
+
     def get_hashes_pontos(self, pontos):
         """Idem a get_hashes, mas atua em todos os trajetos possíveis para uma linha, isto
            é, num array no formato pontos[dia][sentido] = [[x1,y1], [x2,y2]...].
@@ -403,20 +403,20 @@ Comandos:
         for dia in self.DIAS:
             for sentido in self.SENTIDOS:
                 hashes.update(self.get_hashes(pontos[dia][sentido]))
-        return list(hashes)                
+        return list(hashes)
 
-    
+
     def deleta_banco(self, id):
         """Marca um registro no banco como deletado (não apaga fisicamente)"""
         dados = self.get_banco(id)
         if dados["deleted"] == "true":
-            return        
+            return
         self._init_banco()
         t = (dados["last_update"] + 1, id,)
         self._cursor.execute("update linhas set deleted='true',last_update=?,info='{}',pontos='{}'  where id=?", t)
         self._conn.commit()
-        self._close_banco()       
-    
+        self._close_banco()
+
     def get_banco(self, id):
         self._init_banco()
         t = (id,)
@@ -430,7 +430,7 @@ Comandos:
         result["pontos"] = json.loads(result["pontos"])
         result["hashes"] = json.loads(result["hashes"])
         return result
-    
+
     def list_tabela_hashes(self, inclui_atualizadas=True):
         if inclui_atualizadas:
             q = "select hash from hashes order by hash"
@@ -440,7 +440,7 @@ Comandos:
         lista_hashes = self._cursor.execute(q).fetchall()
         self._close_banco()
         return [i[0] for i in lista_hashes]
-        
+
     def get_linhas_tabela_hashes(self, hash):
         self._init_banco()
         self._cursor.execute("select linhas from hashes where hash = ?", (hash,));
@@ -450,7 +450,7 @@ Comandos:
             return []
         else:
             return json.loads(r[0])
-            
+
     def repopula_tabela_hashes(self):
         """Repopula a tabela de hashes com as linhas ativas no banco"""
         ids = self.lista_ids_banco(inclui_deletadas=False)
@@ -478,9 +478,9 @@ Comandos:
                     self._cursor.execute("update hashes set linhas=?,last_update=? where hash=?",
                                          (json.dumps(linhas, separators=(',',':')), last_update, hash, ))
             self._conn.commit()
-        self._close_banco()     
-        
-    
+        self._close_banco()
+
+
     def html_to_banco(self, lista_ids):
         """Atualiza o banco, inserindo/alterando os HTMLs que constem na
            lista e excluindo dele os que não estiverem nela"""
@@ -493,40 +493,40 @@ Comandos:
         for id in self.lista_ids_banco():
             if int(id) not in lista_ordenada and str(id) not in lista_ordenada:
                 self._log("Marcando para remoção linha id=%s" % id)
-                self.deleta_banco(id) 
-                
+                self.deleta_banco(id)
+
     def upload_linhas_banco(self, fn_upload):
         for id in self.lista_ids_banco():
             dados = self.get_banco(id)
             if dados["last_update"] != dados["last_upload"]:
                 if dados["deleted"] == "true":
                     msg = "Linha id=%s (DELETED)" % id
-                else: 
+                else:
                     msg = "Linha id=%s, codigo=%s" % (id, dados["info"]["numero"])
-                self._log("Iniciando upload de linha - %s" % msg)                
+                self._log("Iniciando upload de linha - %s" % msg)
                 if fn_upload(dados):
                     t = (id,)
                     self._init_banco()
                     self._cursor.execute("update linhas set last_upload=last_update where id=?", t)
                     self._conn.commit()
-                    self._close_banco()  
+                    self._close_banco()
                     self._log("Upload OK - %s" % msg)
                 else:
                     self._log("Erro no upload - %s" % msg)
-    
+
     def upload_hashes_banco(self, fn_upload):
         for hash in self.list_tabela_hashes(inclui_atualizadas=False):
             self._log("Iniciando upload - hash %s " % hash)
-            dados = {"hash":hash, "linhas": self.get_linhas_tabela_hashes(hash)}                
+            dados = {"hash":hash, "linhas": self.get_linhas_tabela_hashes(hash)}
             if fn_upload(dados):
                 self._init_banco()
                 self._cursor.execute("update hashes set last_upload=last_update where hash=?", (hash, ))
                 self._conn.commit()
-                self._close_banco()  
+                self._close_banco()
                 self._log("Upload OK - hash %s" % hash)
             else:
                 self._log("Erro no upload - hash %s" % hash)
-    
+
     def conta_pendencias_banco(self):
         """Diz quantas linhas/hashes temos que subir (porque mudaram)"""
         self._init_banco()
@@ -536,13 +536,13 @@ Comandos:
         r2 = self._cursor.fetchone()
         self._close_banco()
         return {"linhas": r1[0], "hashes": r2[0]}
-    
-    
+
+
     def _log(self, string):
         if not self.silent:
             print(string)
-            #logging.debug(string)    
+            #logging.debug(string)
 
-         
+
 if __name__ == '__main__':
     SptScraper().main()
