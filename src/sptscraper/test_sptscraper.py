@@ -32,9 +32,9 @@ from mock import Mock
 DIR = "../../tmp/"
 DB = "../../tmp/linhas.sqlite"
 TEST_FILES_DIR = "../../test_files"
-ID_LINHA_1 = 53106   
-ID_LINHA_2 = 58520 
-    
+ID_LINHA_1 = 75386
+ID_LINHA_2 = 76487
+
 class TestSptScraper(unittest.TestCase):
     
     scraper = None

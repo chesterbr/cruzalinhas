@@ -29,7 +29,7 @@
 	
 	function mudarSentido()
 	{
-		v_pag = "detalheLinha.asp?TpDiaID=0&CdPjOID=53106&TpDiaIDpar=0";
+		v_pag = "detalheLinha.asp?TpDiaID=2&CdPjOID=75386&TpDiaIDpar=2";
 		
 		if (document.JnItinerario.SlOpcaoSentidoIdaID.checked)
 			v_pag = v_pag + "&DfSenID=1";
@@ -42,20 +42,20 @@
 	
     function alterarOpcoes(v_tipo)
 {
-	v_CdPjOID = 53106;
+	v_CdPjOID = 75386;
 	
 	if ( v_tipo != undefined )
-		v_pag = "detalheLinha.asp?TpDiaID="+v_tipo+"&CdPjOID=53106&TpDiaIDpar=0";
+		v_pag = "detalheLinha.asp?TpDiaID="+v_tipo+"&CdPjOID=75386&TpDiaIDpar=2";
 	document.JnItinerario.action = v_pag;
 	document.JnItinerario.submit();
 }
 
 function alterarOpcoesPar(v_tipo)
 {
-	v_CdPjOID = 53106;
+	v_CdPjOID = 75386;
 	
 	if ( v_tipo != undefined )
-		v_pag = "detalheLinha.asp?TpDiaIDpar="+v_tipo+"&CdPjOID=53106&TpDiaID=0";
+		v_pag = "detalheLinha.asp?TpDiaIDpar="+v_tipo+"&CdPjOID=75386&TpDiaID=2";
 	document.JnItinerario.action = v_pag;
 	document.JnItinerario.submit();
 }
@@ -78,6 +78,11 @@ function alterarOpcoesPar(v_tipo)
 	}
 	.tabelaHorarios .minutos{
 		text-align: left;
+	}
+	.horarioAdaptado {
+		font-weight: bolder;
+		color: #071D70;
+		text-transform: capitalize;
 	}
 </style>
 
@@ -108,13 +113,13 @@ function alterarOpcoesPar(v_tipo)
                                         <label for="noLinha" class="noLinha">N&uacute;mero da Linha:</label><label for="nomeLinha" class="nomeLinha">Nome da Linha:</label>
                                         <div class="clear"></div>
                                         <input type="text" id="noLinha" disabled="disabled" value="1016-10" />
-                                        <input type="text" id="nomeLinha" disabled="disabled" value="CENTER NORTE-CEMITERIO DO HORTO" />
+                                        <input type="text" id="nomeLinha" disabled="disabled" value="CEMITERIO DO HORTO - CENTER NORTE" />
                                         <br /><br />
                                         <label for="areCod" class="areCod">Área:</label><label for="consorcio" class="consorcio">Consórcio:</label><label for="empresa" class="empresa">Empresa:</label>
                                         <div class="clear"></div>
                                         <input type="text" id="areCod" disabled="disabled" value="2" />
                                         <input type="text" id="consorcio" disabled="disabled" value="CONSÓRCIO TRANSCOOPER FÊNIX" />
-                                        <input type="text" id="empresa" disabled="disabled" value="TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE" />
+                                        <input type="text" id="empresa" disabled="disabled" value="TRANSCOOPER - COOP. TRANS. PESSOAS E CARGAS DA REG.SUDESTE" />
                                 </div>
                                 
                                 <div class="clear"></div>
@@ -171,10 +176,10 @@ function alterarOpcoesPar(v_tipo)
                                                                                                 <b>Sentido</b>
                                                                                             </td>
                                                                                             <td width="150">
-                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoIdaID" value="1" onclick="mudarSentido()" checked="checked" /> Ponto Inicial
+                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoIdaID" value="1" onclick="mudarSentido()"  /> Ponto Inicial
                                                                                             </td>
                                                                                             <td width="100">
-                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoVoltaID" value="2" onclick="mudarSentido()" /> Ponto Final
+                                                                                                <input type="radio" name="tipoPonto" id="SlOpcaoSentidoVoltaID" value="2" onclick="mudarSentido()" checked="checked"/> Ponto Final
                                                                                             </td>
                                                                                             <td width="100">
                                                                                                 <b>Tipo de Dia</b>
@@ -183,7 +188,7 @@ function alterarOpcoesPar(v_tipo)
                                                                                                 <select name="LtTpDia" onchange=											"alterarOpcoesPar(document.JnItinerario.LtTpDia.value)">
                                </select>
                                <script language="JavaScript">
-							   		preencherCombo("JnItinerario", "LtTpDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","0");
+							   		preencherCombo("JnItinerario", "LtTpDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","2");
                                </script>
                                                                                             </td>
                                                                                         </tr>
@@ -193,157 +198,147 @@ function alterarOpcoesPar(v_tipo)
                                                                                         <tr>
                                                                                                 <th width="100">Faixa Hor&aacute;ria</th>
                                                                                                 <th width="100">Total de Partidas</th>
-                                                                                                <th width="400">Hor&aacute;rios programados dos ve&iacute;culos adaptados <img src="img/layout/icoAcess.gif" /></th>
-                                                                                        </tr>
-                                                                                        
-																						
-                                                                                        <tr>
-                                                                                                <td>04:00 - 04:59</td>
-                                                                                                <td>1</td>
-                                                                                                <td></td>
-                                                                                        </tr>
-                                                                                        
-																						
-                                                                                        <tr>
-                                                                                                <td>05:00 - 05:59</td>
-                                                                                                <td>5</td>
-                                                                                                <td>05:00</td>
+                                                                                                <th width="400" title="Eventualmente, os horários programados poderão divergir do realizado, em função de fatores externos, como, por exemplo, o trânsito">
+																								Hor&aacute;rios programados * (<img src="img/layout/icoAcess.gif" alt="VEÍCULO ACESSÍVEL" /> <span class="horarioAdaptado">Veículo acessível</span>)
+																								
+																								</th>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>06:00 - 06:59</td>
-                                                                                                <td>14</td>
-                                                                                                <td>06:47</td>
+                                                                                                <td>3</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">06:30</span> - 06:40 - 06:50</td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>07:00 - 07:59</td>
-                                                                                                <td>15</td>
-                                                                                                <td></td>
+                                                                                                <td>6</td>
+                                                                                                <td>07:00 - <span class="horarioAdaptado" title="Veículo Adaptado">07:10</span> - 07:20 - <span class="horarioAdaptado" title="Veículo Adaptado">07:30</span> - 07:40 - <span class="horarioAdaptado" title="Veículo Adaptado">07:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>08:00 - 08:59</td>
-                                                                                                <td>12</td>
-                                                                                                <td>08:15</td>
+                                                                                                <td>6</td>
+                                                                                                <td>08:00 - 08:10 - <span class="horarioAdaptado" title="Veículo Adaptado">08:20</span> - 08:30 - 08:40 - <span class="horarioAdaptado" title="Veículo Adaptado">08:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>09:00 - 09:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>09:42</td>
+                                                                                                <td>6</td>
+                                                                                                <td>09:00 - <span class="horarioAdaptado" title="Veículo Adaptado">09:10</span> - 09:20 - <span class="horarioAdaptado" title="Veículo Adaptado">09:30</span> - 09:40 - <span class="horarioAdaptado" title="Veículo Adaptado">09:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>10:00 - 10:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td></td>
+                                                                                                <td>6</td>
+                                                                                                <td>10:00 - 10:10 - 10:20 - <span class="horarioAdaptado" title="Veículo Adaptado">10:30</span> - 10:40 - <span class="horarioAdaptado" title="Veículo Adaptado">10:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>11:00 - 11:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>11:00</td>
+                                                                                                <td>6</td>
+                                                                                                <td>11:00 - <span class="horarioAdaptado" title="Veículo Adaptado">11:10</span> - 11:20 - <span class="horarioAdaptado" title="Veículo Adaptado">11:30</span> - 11:40 - 11:50<br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>12:00 - 12:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>12:18</td>
+                                                                                                <td>6</td>
+                                                                                                <td>12:00 - 12:10 - <span class="horarioAdaptado" title="Veículo Adaptado">12:20</span> - 12:30 - <span class="horarioAdaptado" title="Veículo Adaptado">12:40</span> - <span class="horarioAdaptado" title="Veículo Adaptado">12:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>13:00 - 13:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>13:48</td>
+                                                                                                <td>6</td>
+                                                                                                <td>13:00 - 13:10 - <span class="horarioAdaptado" title="Veículo Adaptado">13:20</span> - 13:30 - 13:40 - <span class="horarioAdaptado" title="Veículo Adaptado">13:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>14:00 - 14:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td></td>
+                                                                                                <td>6</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">14:00</span> - 14:10 - 14:20 - 14:30 - 14:40 - 14:50<br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>15:00 - 15:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>15:12</td>
+                                                                                                <td>6</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">15:00</span> - <span class="horarioAdaptado" title="Veículo Adaptado">15:10</span> - 15:20 - 15:30 - <span class="horarioAdaptado" title="Veículo Adaptado">15:40</span> - 15:50<br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>16:00 - 16:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td>16:36</td>
+                                                                                                <td>6</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">16:00</span> - 16:10 - 16:20 - <span class="horarioAdaptado" title="Veículo Adaptado">16:30</span> - 16:40 - <span class="horarioAdaptado" title="Veículo Adaptado">16:50</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>17:00 - 17:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td></td>
+                                                                                                <td>6</td>
+                                                                                                <td>17:00 - 17:10 - <span class="horarioAdaptado" title="Veículo Adaptado">17:20</span> - 17:30 - 17:40 - 17:50<br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>18:00 - 18:59</td>
-                                                                                                <td>10</td>
-                                                                                                <td></td>
+                                                                                                <td>7</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">18:00</span> - 18:10 - <span class="horarioAdaptado" title="Veículo Adaptado">18:20</span> - 18:30 - 18:38 - <span class="horarioAdaptado" title="Veículo Adaptado">18:46</span><br/>18:54</td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>19:00 - 19:59</td>
-                                                                                                <td>9</td>
-                                                                                                <td></td>
+                                                                                                <td>7</td>
+                                                                                                <td>19:02 - 19:10 - <span class="horarioAdaptado" title="Veículo Adaptado">19:18</span> - 19:26 - 19:34 - <span class="horarioAdaptado" title="Veículo Adaptado">19:42</span><br/>19:50</td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>20:00 - 20:59</td>
                                                                                                 <td>6</td>
-                                                                                                <td>20:10</td>
+                                                                                                <td>20:00 - <span class="horarioAdaptado" title="Veículo Adaptado">20:10</span> - <span class="horarioAdaptado" title="Veículo Adaptado">20:20</span> - <span class="horarioAdaptado" title="Veículo Adaptado">20:30</span> - 20:40 - 20:50<br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>21:00 - 21:59</td>
                                                                                                 <td>6</td>
-                                                                                                <td>21:40</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">21:00</span> - 21:10 - <span class="horarioAdaptado" title="Veículo Adaptado">21:20</span> - 21:30 - <span class="horarioAdaptado" title="Veículo Adaptado">21:42</span> - <span class="horarioAdaptado" title="Veículo Adaptado">21:54</span><br/></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>22:00 - 22:59</td>
-                                                                                                <td>6</td>
-                                                                                                <td></td>
+                                                                                                <td>4</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">22:06</span> - <span class="horarioAdaptado" title="Veículo Adaptado">22:18</span> - <span class="horarioAdaptado" title="Veículo Adaptado">22:30</span> - <span class="horarioAdaptado" title="Veículo Adaptado">22:50</span></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>23:00 - 23:59</td>
-                                                                                                <td>3</td>
-                                                                                                <td>23:20</td>
+                                                                                                <td>2</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">23:10</span> - <span class="horarioAdaptado" title="Veículo Adaptado">23:35</span></td>
                                                                                         </tr>
                                                                                         
 																						
                                                                                         <tr>
                                                                                                 <td>00:00 - 00:59</td>
-                                                                                                <td>2</td>
-                                                                                                <td></td>
+                                                                                                <td>3</td>
+                                                                                                <td><span class="horarioAdaptado" title="Veículo Adaptado">00:00</span> - <span class="horarioAdaptado" title="Veículo Adaptado">00:25</span> - <span class="horarioAdaptado" title="Veículo Adaptado">00:50</span></td>
                                                                                         </tr>
                                                                                         
                                                                                 </table>
+																				<p style="padding-top: 8px">* Eventualmente, os horários programados poderão divergir do realizado, em função de fatores externos, como, por exemplo, o trânsito.</p>
                                                                         </li>
                                                                 </ul>
                                                                 <ul>
@@ -435,7 +430,7 @@ function alterarOpcoesPar(v_tipo)
                                <select name="LtTipoDia" onchange="alterarOpcoes(document.JnItinerario.LtTipoDia.value)">
                                </select>
                                <script language="JavaScript">
-							   		preencherCombo("JnItinerario", "LtTipoDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","0");
+							   		preencherCombo("JnItinerario", "LtTipoDia", "Útil           ,0-|-Sábado         ,1-|-Domingo        ,2-|-","2");
                                </script>
                                                         </dt>
                                                         <dd>
@@ -446,7 +441,7 @@ function alterarOpcoesPar(v_tipo)
                                                                                         
                                             <tr>
                                                 <td width="317">
-                                                    R. FREDERICO ESTEBAN JUNIOR
+                                                    R. FREDERICO ESTEBAN JÚNIOR
                                                 </td>
                                                 <td width="140">
                                                     317 - 1
@@ -459,7 +454,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    AV. SEN. JOSE ERMIRIO DE MORAES
+                                                    AV. SEN. JOSÉ ERMÍRIO DE MORAES
                                                 </td>
                                                 <td width="140">
                                                     922 - 667
@@ -523,7 +518,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. D. TEODOSIO
+                                                    R. D. TEODÓSIO
                                                 </td>
                                                 <td width="140">
                                                     411 - 535
@@ -536,7 +531,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. ANTONIO JOAQUIM DE OLIVEIRA
+                                                    R. ANTÔNIO JOAQUIM DE OLIVEIRA
                                                 </td>
                                                 <td width="140">
                                                     26 - 468
@@ -552,7 +547,7 @@ function alterarOpcoesPar(v_tipo)
                                                     R. BERNARDO FONSECA LOBO
                                                 </td>
                                                 <td width="140">
-                                                    685 - 46
+                                                    349 - 604
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
@@ -562,7 +557,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. MARIO SARDELLI
+                                                    R. MÁRIO SARDELLI
                                                 </td>
                                                 <td width="140">
                                                     1 - 109
@@ -575,7 +570,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. LUIS DE OLIVEIRA BULHOES
+                                                    R. LUÍS DE OLIVEIRA BULHÕES
                                                 </td>
                                                 <td width="140">
                                                     1 - 116
@@ -588,7 +583,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. ANTONIO SIMPLICIO
+                                                    R. ANTÔNIO SIMPLÍCIO
                                                 </td>
                                                 <td width="140">
                                                     323 - 1
@@ -614,7 +609,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. MANOEL SIMOES DA SILVA
+                                                    R. MANOEL SIMÕES DA SILVA
                                                 </td>
                                                 <td width="140">
                                                     100 - 562
@@ -640,7 +635,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. PROF. ARTUR CAMPOS GONCALVES
+                                                    R. PROF. ARTUR CAMPOS GONÇALVES
                                                 </td>
                                                 <td width="140">
                                                     1 - 42
@@ -770,7 +765,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    AV. LUIS DUMONT VILARES
+                                                    AV. LUÍS DUMONT VILARES
                                                 </td>
                                                 <td width="140">
                                                     1731 - 1
@@ -803,13 +798,13 @@ function alterarOpcoesPar(v_tipo)
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
-																									<img border="0" src="img/eventos/IgTpEveSPTrans.GIF" width="15" height="15" alt="CONGESTIONEMENTO NA AV. ZAKI NARCHI SENTIDO AV. SANTOS DUMONT. ÁREA 2"></img>
+																									<img border="0" src="img/eventos/IgTpEveSPTrans.GIF" width="15" height="15" alt="CONGESTIONEMENTO NA AV. ZAKI NARCHI SENTIDO AV. SANTOS DUMONT."></img>
                                                                                     
                                                                                     <a style="text-decoration:underline; cursor:hand" onclick="MostraEvento('2163_i');">Evento no local</a>
                                                     <div class="eventoContent" id="Eve_2163_i" style="display:none;">
                                                     
         												<p>
-                                                            CONGESTIONEMENTO NA AV. ZAKI NARCHI SENTIDO AV. SANTOS DUMONT. ÁREA 2</p>
+                                                            CONGESTIONEMENTO NA AV. ZAKI NARCHI SENTIDO AV. SANTOS DUMONT.</p>
                                                             
                                                         <p>
                                                             CONGESTIONEMENTO NA AV. ZAKI NARCHI SENTIDO AV. SANTOS DUMONT.</p>
@@ -832,7 +827,7 @@ function alterarOpcoesPar(v_tipo)
                                                     AV. OTTO BAUMGART
                                                 </td>
                                                 <td width="140">
-                                                    587 - 171
+                                                    587 - 0
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
@@ -842,7 +837,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    AC. RETORNO2
+                                                    AC. RETORNO1
                                                 </td>
                                                 <td width="140">
                                                     0 - 0
@@ -858,7 +853,7 @@ function alterarOpcoesPar(v_tipo)
                                                     AV. OTTO BAUMGART
                                                 </td>
                                                 <td width="140">
-                                                    108 - 320
+                                                    0 - 0
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
@@ -912,7 +907,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    AV. LUIS DUMONT VILARES
+                                                    AV. LUÍS DUMONT VILARES
                                                 </td>
                                                 <td width="140">
                                                     0 - 1694								
@@ -1092,7 +1087,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. PROF. ARTUR CAMPOS GONCALVES
+                                                    R. PROF. ARTUR CAMPOS GONÇALVES
                                                 </td>
                                                 <td width="140">
                                                     1 - 95								
@@ -1116,7 +1111,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. MANOEL SIMOES DA SILVA
+                                                    R. MANOEL SIMÕES DA SILVA
                                                 </td>
                                                 <td width="140">
                                                     562 - 100								
@@ -1140,7 +1135,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. ANTONIO SIMPLICIO
+                                                    R. ANTÔNIO SIMPLÍCIO
                                                 </td>
                                                 <td width="140">
                                                     1 - 323								
@@ -1152,7 +1147,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. LUIS DE OLIVEIRA BULHOES
+                                                    R. LUÍS DE OLIVEIRA BULHÕES
                                                 </td>
                                                 <td width="140">
                                                     1 - 116								
@@ -1164,7 +1159,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. MARIO SARDELLI
+                                                    R. MÁRIO SARDELLI
                                                 </td>
                                                 <td width="140">
                                                     1 - 109								
@@ -1179,7 +1174,7 @@ function alterarOpcoesPar(v_tipo)
                                                     R. BERNARDO FONSECA LOBO
                                                 </td>
                                                 <td width="140">
-                                                    46 - 685								
+                                                    604 - 349								
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
@@ -1188,7 +1183,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. ANTONIO JOAQUIM DE OLIVEIRA
+                                                    R. ANTÔNIO JOAQUIM DE OLIVEIRA
                                                 </td>
                                                 <td width="140">
                                                     468 - 26								
@@ -1200,7 +1195,7 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. D. TEODOSIO
+                                                    R. D. TEODÓSIO
                                                 </td>
                                                 <td width="140">
                                                     535 - 411								
@@ -1215,7 +1210,7 @@ function alterarOpcoesPar(v_tipo)
                                                     R. COM. ARMANDO PEREIRA
                                                 </td>
                                                 <td width="140">
-                                                    49 - 265								
+                                                    49 - 533								
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
@@ -1224,57 +1219,10 @@ function alterarOpcoesPar(v_tipo)
                                             
                                             <tr>
                                                 <td width="317">
-                                                    R. ELIAS DE SOUSA PINTO
+                                                    R. FREDERICO ESTEBAN JÚNIOR
                                                 </td>
                                                 <td width="140">
-                                                    249 - 1								
-                                                </td>
-                                                <td width="245" class="linhaEvento">
-                                                			<img border="0" src="img/eventos/IgTpEveFeiras.gif" width="15" height="15" alt="FEIRA-LIVRE -Rua Elias de Souza Pinto"></img>
-                                                                                    
-                                                                                    <a style="text-decoration:underline; cursor:hand" onclick="MostraEvento('375_v');">Evento no local</a>
-                                                    <div class="eventoContent" id="Eve_375_v" style="display:none">
-                                                        
-        												<p>
-                                                            FEIRA-LIVRE -Rua Elias de Souza Pinto</p>
-                                                            
-                                                        <p>
-                                                            Realização de feira-livre as quintas-feiras na Rua Elias de Souza Pinto entre a Av. Sen. José Hermínio de Moraes e a rua Com. Armando Pereira.
-</p>
-                                                        
-                                                        <p>
-                                                            Feira Semanal</p>
-                                                        
-                                                        <p>
-                                                            Quinta-feira</p>
-                                                            
-                                                            
-                                                        <p>
-                                                            04:00 at&eacute; 14:00</p>
-                                                        
-                                                    </div>
-																					
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td width="317">
-                                                    AV. SEN. JOSE ERMIRIO DE MORAES
-                                                </td>
-                                                <td width="140">
-                                                    667 - 922								
-                                                </td>
-                                                <td width="245" class="linhaEvento">
-                                                
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td width="317">
-                                                    R. FREDERICO ESTEBAN JUNIOR
-                                                </td>
-                                                <td width="140">
-                                                    1 - 317								
+                                                    317 - 171								
                                                 </td>
                                                 <td width="245" class="linhaEvento">
                                                 
