@@ -147,7 +147,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(info["numero"], "1016-10")
         self.assertEqual(info["area"], "2")
         self.assertEqual(info["consorcio"], u"CONSÓRCIO TRANSCOOPER FÊNIX")
-        self.assertEqual(info["empresa"], u"TRANSCOOPER - COOPERATIVA DE TRANSPORTE DE PESSOAS E CARGAS DA REGIÃO SUDESTE")
+        self.assertEqual(info["empresa"], u"TRANSCOOPER - COOP. TRANS. PESSOAS E CARGAS DA REG.SUDESTE")
         self.assertEqual(info["horario"]["ida"]["sabado"], "05:00-00:20")
         self.assertEqual(info["horario"]["volta"]["domingo"], "06:30-00:50")
         self.assertEqual(info["tempo"]["ida"]["util"]["manha"], "35")
