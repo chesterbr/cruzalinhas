@@ -248,7 +248,7 @@ Comandos:
                 #      /PlanOperWeb/http://olhovivo.sptrans.com.br/linha/1016-10
                 #      Talvez dê pra adicionar direto na interface os links
                 if "detalheLinha.asp" in parsed_url[2]:
-                    params = dict([part.split/PlanOperWeb/http://olhovivo.sptrans.com.br/linha/1016-10('=') for part in parsed_url[4].split('&')])
+                    params = dict([part.split('=') for part in parsed_url[4].split('&')])
                     id = params["CdPjOID"]
                     linhas[id] = nome
         return linhas
