@@ -32,8 +32,8 @@ from mock import Mock
 DIR = "../../tmp/"
 DB = "../../tmp/linhas.sqlite"
 TEST_FILES_DIR = "../../test_files"
-ID_LINHA_1 = 75386
-ID_LINHA_2 = 76487
+ID_LINHA_1 = 81085
+ID_LINHA_2 = 81086
 
 class TestSptScraper(unittest.TestCase):
 
@@ -339,7 +339,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(18, self.scraper.conta_pendencias_banco()["hashes"])
         self.scraper.atualiza_banco(id2, info2, pontos2)
         self.scraper.repopula_tabela_hashes()
-        self.assertEqual(54, self.scraper.conta_pendencias_banco()["hashes"])
+        self.assertEqual(40, self.scraper.conta_pendencias_banco()["hashes"])
         mock_fn_upload_fail = Mock(side_effect = lambda dados: dados["hash"] != "6gyf7m")
         self.scraper.upload_hashes_banco(mock_fn_upload_fail)
         self.assertEqual(1, self.scraper.conta_pendencias_banco()["hashes"])
@@ -349,7 +349,7 @@ class TestSptScraper(unittest.TestCase):
         self.assertEqual(0, self.scraper.conta_pendencias_banco()["hashes"])
         self.scraper.deleta_banco(id2)
         self.scraper.repopula_tabela_hashes()
-        self.assertEqual(54, self.scraper.conta_pendencias_banco()["hashes"])
+        self.assertEqual(40, self.scraper.conta_pendencias_banco()["hashes"])
 
 
 
