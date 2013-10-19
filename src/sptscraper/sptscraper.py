@@ -244,9 +244,13 @@ Comandos:
                 nome = elem.string.replace("Linha: ", "").replace("&nbsp"," ").strip()
             elif elem["class"] == "linkDetalhes":
                 parsed_url = urlparse.urlparse(self.base_href + elem["href"])
-                params = dict([part.split('=') for part in parsed_url[4].split('&')])
-                id = params["CdPjOID"]
-                linhas[id] = nome
+                # TODO Este trecho ignora links do OlhoVivo, que são no formato
+                #      /PlanOperWeb/http://olhovivo.sptrans.com.br/linha/1016-10
+                #      Talvez dê pra adicionar direto na interface os links
+                if "detalheLinha.asp" in parsed_url[2]:
+                    params = dict([part.split/PlanOperWeb/http://olhovivo.sptrans.com.br/linha/1016-10('=') for part in parsed_url[4].split('&')])
+                    id = params["CdPjOID"]
+                    linhas[id] = nome
         return linhas
 
     def download_linha(self, id):
