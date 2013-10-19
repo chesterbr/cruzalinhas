@@ -265,6 +265,11 @@ Comandos:
                     nomearq = "%s-%s-%s-%s.html" % (id, tipo, "USD"[dia], "IV"[sentido])
                     try:
                         html = urllib2.urlopen(url).read()
+                    # FIXME
+                    # urllib2.HTTPError: HTTP Error 500: Internal Server Error
+                    # urllib2.HTTPError: HTTP Error 503: Service Unavailable
+                    # urllib2.URLError: <urlopen error (54, 'Connection reset by peer')>
+                    # urllib2.URLError: <urlopen error (60, 'Operation timed out')>
                     except:
                         print "Erro ao baixar: " + url
                         raise
