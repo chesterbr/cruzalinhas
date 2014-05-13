@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5 -O
+#!/usr/bin/python2.7 -O
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2010-2011 Carlos Duarte do Nascimento (Chester)
