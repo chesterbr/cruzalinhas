@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GtfsEngine::Engine, at: '/gtfs'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

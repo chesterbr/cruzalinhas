@@ -42,3 +42,5 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'guard-rspec', require: false
 end
+
+gem 'gtfs_engine'
