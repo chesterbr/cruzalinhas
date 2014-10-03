@@ -30,7 +30,7 @@ gem 'spring',        group: :development
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+# gem 'unicorn
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -41,6 +41,8 @@ gem 'spring',        group: :development
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'guard-rspec', require: false
+#  gem 'byebug', require:false
 end
 
-gem 'gtfs_engine'
+gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'remove_shared_key_shortcut'
+gem 'gtfs-reader', :github => 'chesterbr/gtfs_reader', :branch => 'utf8_support'

@@ -1,3 +1,26 @@
+GIT
+  remote: git://github.com/chesterbr/gtfs_engine.git
+  revision: aa5c56b07f157cf189b629eb8bc6f5571cfc4aa4
+  branch: remove_shared_key_shortcut
+  specs:
+    gtfs_engine (1.4.0)
+      activerecord-import (~> 0.5)
+      gtfs-reader (~> 0.2)
+      jbuilder (~> 2.1)
+      jsend_wrapper-rails (~> 0.3)
+      rails (~> 4.1)
+
+GIT
+  remote: git://github.com/chesterbr/gtfs_reader.git
+  revision: e8e1fc771097e93f47f7a26a00247da4f9d7f268
+  branch: utf8_support
+  specs:
+    gtfs-reader (0.2.11)
+      activesupport (~> 4.0)
+      colorize (~> 0.7)
+      log4r (~> 1.1)
+      rubyzip (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,17 +70,6 @@ GEM
     execjs (2.2.1)
     ffi (1.9.3)
     formatador (0.2.4)
-    gtfs-reader (0.2.11)
-      activesupport (~> 4.0)
-      colorize (~> 0.7)
-      log4r (~> 1.1)
-      rubyzip (~> 1.1)
-    gtfs_engine (1.4.0)
-      activerecord-import (~> 0.5)
-      gtfs-reader (~> 0.2)
-      jbuilder (~> 2.1)
-      jsend_wrapper-rails (~> 0.3)
-      rails (~> 4.1)
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -178,7 +190,8 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
-  gtfs_engine
+  gtfs-reader!
+  gtfs_engine!
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
