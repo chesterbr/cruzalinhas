@@ -1,11 +1,16 @@
 # Change these
-server 'cruzalinhas', port: 7171, roles: [:web, :app, :db], primary: true
+server 'chester.me', roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@github.com:chesterbr/cruzalinhas.git'
 set :application,     'cruzalinhas'
 set :user,            'chester'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
+
+set :rbenv_type,      :user
+set :rbenv_ruby,      "2.1.2"
+set :rbenv_prefix,    "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins,  %w{rake gem bundle ruby rails}
 
 # Don't change these unless you know what you're doing
 set :pty,             true
