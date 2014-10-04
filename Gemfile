@@ -44,6 +44,14 @@ group :development, :test do
   gem 'byebug', require: false
 end
 
+group :development do
+  gem 'capistrano',         require: false
+  gem 'capistrano-rvm',     require: false
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano3-puma',   require: false
+end
+
 # Had to patch these versions, will point to official ones once/if PRs merged
 gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'remove_shared_key_shortcut'
 gem 'gtfs-reader', :github => 'chesterbr/gtfs_reader', :branch => 'utf8_support'
