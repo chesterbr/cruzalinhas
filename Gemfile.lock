@@ -233,6 +233,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   pr_geohash (~> 1.0.0)
+  puma
   rails (= 4.1.6)
   rspec-rails (~> 3.0.0)
   sass-rails (~> 4.0.3)

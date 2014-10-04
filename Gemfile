@@ -52,6 +52,10 @@ group :development do
   gem 'capistrano3-puma',   require: false
 end
 
+group :production do
+  gem 'puma'
+end
+
 # Had to patch these versions, will point to official ones once/if PRs merged
 gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'remove_shared_key_shortcut'
 gem 'gtfs-reader', :github => 'chesterbr/gtfs_reader', :branch => 'utf8_support'
