@@ -1,5 +1,5 @@
 # Change these
-server 'server', port: 7171, roles: [:web, :app, :db], primary: true
+server 'cruzalinhas', port: 7171, roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@github.com:chesterbr/cruzalinhas.git'
 set :application,     'cruzalinhas'
