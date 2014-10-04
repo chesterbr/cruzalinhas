@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141001231536) do
+ActiveRecord::Schema.define(version: 20141004024109) do
 
   create_table "gtfs_engine_agencies", force: true do |t|
     t.string  "agency_id"
@@ -224,5 +224,13 @@ ActiveRecord::Schema.define(version: 20141001231536) do
   add_index "gtfs_engine_trips", ["service_id"], name: "index_gtfs_engine_trips_on_service_id"
   add_index "gtfs_engine_trips", ["shape_id"], name: "index_gtfs_engine_trips_on_shape_id"
   add_index "gtfs_engine_trips", ["trip_id"], name: "index_gtfs_engine_trips_on_trip_id"
+
+  create_table "trip_geohashes", force: true do |t|
+    t.integer "trip_id"
+    t.string  "geohash"
+  end
+
+  add_index "trip_geohashes", ["geohash", "trip_id"], name: "index_trip_geohashes_on_geohash_and_trip_id", unique: true
+  add_index "trip_geohashes", ["trip_id"], name: "index_trip_geohashes_on_trip_id"
 
 end

@@ -41,8 +41,11 @@ gem 'spring',        group: :development
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'guard-rspec', require: false
-#  gem 'byebug', require:false
+  gem 'byebug', require: false
 end
 
+# Had to patch these versions, will point to official ones once/if PRs merged
 gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'remove_shared_key_shortcut'
 gem 'gtfs-reader', :github => 'chesterbr/gtfs_reader', :branch => 'utf8_support'
+
+gem 'pr_geohash', '~> 1.0.0'
