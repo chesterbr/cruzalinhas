@@ -6,18 +6,19 @@ Aplicativo  e API de acesso a rotas de transporte público de São Paulo, dispon
 
 Os itinerários das linhas de transporte público administradas pela SPTrans são
 referentes a um serviço PÚBLICO, e sempre defendi
-que estes deveriam estar disponíveis de uma forma mais acessível do que o site (ainda mais sabendo que algumas empresas privadas tinham acesso a estes), permitindo a criação de ferramentas que facilitem a vida do usuário.
+que estes deveriam estar disponíveis de uma forma mais acessível do que o site (ainda mais sabendo que algumas empresas privadas tinham acesso), permitindo a criação de ferramentas que facilitem a vida do usuário.
 
-Com o objetivo de libertar essa informação, foi criado um *scraper* - programa
-que capturava os dados das linhas do site da SPTrans, e para demonstrar seu uso,
-o site cruzalinhas, que permite buscar um endereço ou clicar no mapa e rapidamente ver o traçado de linhas (rotas) que passem perto dele. Ao
+Foi criado um programa que capturava os dados diretamente do site da SPTrans (*scraper*) e para demonstrar seu uso,
+o site cruzalinhas.
+
+O cruzalinhas permite buscar um endereço ou clicar no mapa e rapidamente ver o traçado de linhas (rotas) que passem perto dele. Ao
 marcar pontos sucessivos, o sistema "cruza" as linhas que passam entre eles - daí o nome.
 
 Com a [Lei de Acesso à Informação](https://pt.wikipedia.org/wiki/Lei_de_acesso_%C3%A0_informa%C3%A7%C3%A3o) e uma mudança de postura da SPTrans (que criou um [site para desenvolvedores](http://www.sptrans.com.br/desenvolvedores) no qual é possível baixar os itinerários(\*) no [formato GTFS](https://developers.google.com/transit/gtfs/reference)), o *scraper* se tornou obsoleto, e o cruzalinhas foi atualizado para importar os dados diretamente no formato acima.
 
 O sistema de importação e a API (originalmente baseados em [Python](http://www.python.org)/[Google App Engine](https://cloud.google.com/appengine/)) foram refeitos com [Ruby on Rails](http://rubyonrails.org), preservando a compatibilidade com o site (um [aplicativo web de página única](https://en.wikipedia.org/wiki/Single-page_application) feito com HTML e JavaScript) e com aplicativos de terceiros.
 
-<small>(*) embora ainda irregular perante a [lei](http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm) por não "possibilitar o acesso **automatizado** por sistemas externos" (Art. 8º, §3º, III). Mas isso é outro assunto.</small>
+<small>(\*) embora ainda irregular perante a [lei](http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm) por não "possibilitar o acesso **automatizado** por sistemas externos" (Art. 8º, §3º, III). Mas isso é outro assunto.</small>
 
 ## Informações para Desenvolvedores
 
