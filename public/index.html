@@ -74,14 +74,14 @@
                     Se você colocar outros marcadores, o sistema vai mostrar apenas as linhas que passam entre cada um deles. Com isso dá pra montar trajetos e comparar alternativas.
                 </p>
                 <p>
-                    A localização pelo ponto é aproximada por um método <a href="http://en.wikipedia.org/wiki/Geohash">pouco convencional</a>, então podem aparecer linhas próximas (aproveite isso para achar alternativas). Em caso de dúvida, clique no nome da linha e veja os dados dela no <a href="http://www.sptrans.com.br/itinerarios/">site da SPTrans</a>, onde a informação oficial pode ser consultada.
+                    A localização pelo ponto é aproximada por um método <a href="http://en.wikipedia.org/wiki/Geohash">pouco convencional</a>, então podem aparecer linhas próximas (aproveite isso para achar alternativas). Em caso de dúvida, clique no nome da linha e veja a informação oficial e detalhadano <a href="http://www.sptrans.com.br/itinerarios/">site da SPTrans</a>.
                 </p>
                 <p>
                     Lembre-se sempre que o serviço é experimental e <b>não tem qualquer relação com a SPTrans</b>
                     ou com qualquer outra empresa, <b>nem oferece qualquer garantia</b>
-                    de funcionamento ou precisão dos dados 
+                    de funcionamento ou precisão dos dados
                     - sempre <b>confirme</b>
-                    antes de sair por aí! 
+                    antes de sair por aí!
                 </p>
             </div>
             <div id="div_porque">
@@ -104,9 +104,7 @@
                     Infelizmente nenhuma delas listava todas as linhas em um local (ou entre dois locais), daí o projeto. A idéia não é substituir esses sites, e sim complementar o serviço deles.
                 </p>
                 <p>
-                    Além disso, o software mostra <a href="http://github.com/chesterbr/cruzalinhas/blob/master/src/scraper.py">como recuperar</a>
-                    os dados de itinerário das linhas - uma informação que, por ser sobre serviço público, <a href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351">deveria estar disponível em formato apropriado</a>
-                    mas, por algum motivo, não está.
+                    A motivação inicial era recuperar os dados de itinerário das linhas, que inicialmente eram <a href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351" target="_blank">extraídos na marra</a>. Atualmente a SPTrans disponibiliza eles em seu <a href="http://www.sptrans.com.br/desenvolvedores" target="_blank">site para desenvolvedores</a>, mas <a href="https://github.com/chesterbr/cruzalinhas#motiva%C3%A7%C3%A3o" target="_blank">nem sempre foi assim</a>.
                 </p>
             </div>
             <div id="div_como">
@@ -135,7 +133,7 @@
                     no cruzalinhas no seu site*.
                 </p>
                 <p>
-                    Elas são chamadas AJAX simples, nas quais os parâmetros devem ser passados via GET, e o resultado é um <a href="http://www.json.org">objeto JSON</a>: 
+                    Elas são chamadas AJAX simples, nas quais os parâmetros devem ser passados via GET, e o resultado é um <a href="http://www.json.org">objeto JSON</a>:
                 </p>
                 <p class="p_api_desc">
                     <b>URL:</b>
@@ -168,31 +166,6 @@
                     * TERMOS DE USO: Você pode usar essa API no seu site, desde que ele seja público e gratuito, preste serviços à população e <a href="http://en.wikipedia.org/wiki/Don%27t_be_evil">não pratique o mal</a>. Um link para o cruzalinhas (ex.: "powered by cruzalinhas", ou algo que o valha) é de bom tom, assim como mandar um e-mail me falando do seu site. O serviço de API, como todo o resto, é uma cortesia bem-intencionada, não havendo garantia de funcionamento ou precisão dos dados, e eu me reservo o direito de interromper o serviço (mas farei o possível para que isso não aconteça). Não é obrigatório, mas, se possível, faça <i>cache</i>
                     das informações.
                 </p>
-            </div>
-            <div id="div_sobre">
-                <h1>Quem fez?</h1>
-                <p>
-                    O <a target="_blank" href="http://github.com/chesterbr/cruzalinhas">código-fonte</a>
-                    foi escrito pelo <a target="_blank" href="http://chester.blog.br/sobre">Chester</a>. Você pode entrar em contato via <a href="http://twitter.com/chesterbr">Twitter</a>
-                    ou <a href="mailto:cd@pobox.com">e-mail</a>.
-                </p>
-                <p>
-                    Gostou? Pode divulgar usando este link:
-                </p>
-                <p style="text-align:center">
-                    <script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=404ef4a8-a868-4ab0-ba8d-8e4d4c6788cf&amp;type=website&amp;post_services=email%2Cfacebook%2Ctwitter%2Cgbuzz%2Cmyspace%2Cdigg%2Csms%2Cwindows_live%2Cdelicious%2Cstumbleupon%2Creddit%2Cgoogle_bmarks%2Clinkedin%2Cbebo%2Cybuzz%2Cblogger%2Cyahoo_bmarks%2Cmixx%2Ctechnorati%2Cfriendfeed%2Cpropeller%2Cwordpress%2Cnewsvine">
-                    </script>
-                </p>
-                <p>
-                    Caso queira retribuir financeiramente, pode usar o PayPal:
-                </p>
-                <div id="div_botoes_doar">
-                    <div id="div_botao_paypal">
-                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                            <input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----"><input type="image" src="https://www.paypal.com/pt_BR/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - A maneira mais fácil e segura de efetuar pagamentos on-line!"><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                        </form>
-                    </div>
-                </div>
             </div>
             <div id="div_instrucoes">
                 <p>
