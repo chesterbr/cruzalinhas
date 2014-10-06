@@ -5,7 +5,7 @@ class PythonApiController < ApplicationController
                              Rails.configuration.geohash_precision
     trips = TripGeohash.includes(:trip, :trip => :route).where(:geohash => geohash).map { |h|
       {
-        url: "http://www.toape.com.br/#{h.trip.route.route_short_name}/",
+        url: h.sptrans_url,
         hashes: TripGeohash.where(trip: h.trip).pluck(:geohash),
         key: h.trip_id,
         nome: "#{h.trip.route.route_short_name}: #{h.trip.route.route_long_name}"
