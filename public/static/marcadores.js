@@ -1,33 +1,33 @@
 
 //
 // marcadores.js
-// 
+//
 // Contém o código que gerencia os marcadores, carregando as linhas que passam por
 // cada um deles e os dados de cada linha, além de lightboxes e outros detalhes de UI.
-// 
+//
 // IMPORTANTE: Se você MODIFICAR esse arquivo, RODE o build_all_scripts.py, pois
 // o html carrega o all_scripts.js e não esse.
-// 
+//
 // (o Eclipse/Aptana está configurado com um builder apropriado, se tudo correr bem
 // ele deve rodar automaticamente - chque se o .py acima está com permissão de
 // execução).
-// 
+//
 // Copyright (c) 2010, 2011 Carlos Duarte do Nascimento (Chester)
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-// software and associated documentation files (the "Software"), to deal in the Software 
-// without restriction, including without limitation the rights to use, copy, modify, merge, 
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
+// software and associated documentation files (the "Software"), to deal in the Software
+// without restriction, including without limitation the rights to use, copy, modify, merge,
+// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
-//     
-// The above copyright notice and this permission notice shall be included in all copies or 
+//
+// The above copyright notice and this permission notice shall be included in all copies or
 // substantial portions of the Software.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
 
@@ -47,11 +47,11 @@ var marcadores = {
 
     _marcadores: [],
     _cache_linhas: [],
-    
+
     get: function(id){
         return _marcadores[id];
     },
-    
+
     // Adiciona um marcador no mapa (e na lista).
     //
     // Se for um marcador pré-existente que está em drag-and-drop, assume que o
@@ -121,7 +121,7 @@ var marcadores = {
         }
         return id;
     },
-    
+
     mostrou_instrucoes: false,
     atualiza: function(){
         var html = "";
@@ -155,6 +155,20 @@ var marcadores = {
             html += '  <span class="link_remover"><a class="link_remover" title="remove o pino do mapa" href="javascript:void(0)" onClick="javascript:marcadores.remove(' + marcador.id + '); return false">REMOVER</a></span>';
             html += ' </p>';
             if (marcador.linhas) {
+                // Se for único ou não-último, mostra o check "all"
+                if (count == 1 || marcador.ordem < count) {
+                    var num_ocultas = $.grep(marcador.linhas, function(o) {
+                        return marcador.oculta_linha[o.key] || false;
+                    }).length;
+                    var mostra_todas = (num_ocultas > 0);
+                    html += '<div class="legenda_linha">' +
+                            '  <input type="checkbox" title="oculta/exibe todas"' +
+                            (mostra_todas ? '' : ' checked ') +
+                            '   onClick="marcadores.alterna_todas(' +
+                            '     ' + marcador.id + ',' + mostra_todas +')">' +
+                            '</div>' +
+                            '<p class="p_linha" style="float:left;margin:1px;font-variant:small-caps">oculta/mostra todas</p>';
+                };
                 var vazio = true;
                 var linhas_no_marcador = 0;
                 for (j in marcador.linhas) {
@@ -219,7 +233,7 @@ var marcadores = {
                     if (count == 1) {
                         html += this.pmsg("nenhuma linha passa aqui");
                     }
-                    else 
+                    else
                         if (ordem < count) {
                             html += this.pmsg("nenhuma linha passa entre eles");
                         }
@@ -234,10 +248,10 @@ var marcadores = {
         html += 'Com dois ou mais pinos, só aparecem as linhas que passam entre eles.<br/><br/>';
         html += 'Definidos os pinos, use <input type="checkbox" disabled="true" checked="chekced"/> para esconder linhas indesejadas.<br/><br/>';
         html += 'A busca não leva em conta os pontos de ônibus e estações, apenas a proximidade do trajeto.</p>';
-        
+
         $("#div_lista").html(html);
     },
-    
+
     getMarcadorPelaOrdem: function(ordem){
         var ms = this._marcadores;
         for (j in ms) {
@@ -247,7 +261,7 @@ var marcadores = {
         }
         return null;
     },
-    
+
     count: function(){
         var j = 0;
         for (marcador in this._marcadores) {
@@ -255,7 +269,7 @@ var marcadores = {
         }
         return j;
     },
-    
+
     // Aumenta a quantidade de linhas mostrada num marcador e atualiza a listagem
     mais: function(id){
         var marcador = this._marcadores[id];
@@ -264,7 +278,7 @@ var marcadores = {
         }
         this.atualiza();
     },
-    
+
     // Tira um marcador da lista (mas não preenche o buraco dele)
     soft_remove: function(id){
         var marcador = this._marcadores[id];
@@ -276,7 +290,7 @@ var marcadores = {
         marcador.marker.setMap(null);
         delete this._marcadores[id];
     },
-    
+
     // Remove um marcador pra valer (movendo os outros acima na lista)
     remove: function(id){
         var ordem = this._marcadores[id].ordem;
@@ -290,7 +304,7 @@ var marcadores = {
         }
         this.atualiza();
     },
-    
+
     // Se a linha já está no cache desenha e retorna true
     // Caso não esteja (ou esteja mas ainda não tenha carregado), retorna false
     //   (e pede pra carregar se ainda não o fez)
@@ -331,7 +345,7 @@ var marcadores = {
         }
         return false;
     },
-    
+
     // Remove uma linha do mapa, se já estiver desenhada (mas não apaga do cache)
     apagaLinha: function(key){
         c = this._cache_linhas[key];
@@ -340,7 +354,7 @@ var marcadores = {
             delete c.polyline;
         }
     },
-    
+
     // mostra/esconde a linha n do ordem-ésima marcador
     alterna_linha: function(id, key){
         var marcador = this._marcadores[id];
@@ -349,11 +363,21 @@ var marcadores = {
         }
         this.atualiza();
     },
-    
+
+    alterna_todas: function(id, mostra_todas){
+        var marcador = this._marcadores[id];
+        if (marcador) {
+            $.each(marcador.linhas, function(i, linha) {
+                marcador.oculta_linha[linha.key] = !mostra_todas;
+            });
+        }
+        this.atualiza();
+    },
+
     pmsg: function(texto){
         return '<p style="color:red;margin:0px;font-style:italic;text-align:center;">' + texto + "</p>";
     },
-    
+
     _semente_cor: 1,
     proximacor: function(){
         this._semente_cor += 3;
@@ -361,15 +385,15 @@ var marcadores = {
             this._semente_cor -= 62;
         }
         var h = this._semente_cor.toString(4);
-        while (h.length < 3) 
+        while (h.length < 3)
             h = "0" + h;
         var c = h[0] * 256 * 4 + h[1] * 16 * 4 + h[2] * 4;
         cor = c.toString(16)
-        while (cor.length < 3) 
+        while (cor.length < 3)
             cor = "0" + cor;
         return "#" + cor;
     },
-    
+
     corDaLinha: function(linha){
         var c = this._cache_linhas[linha.key];
         if (c && c.cor) {
@@ -378,9 +402,9 @@ var marcadores = {
         else {
             return "#FFF";
         }
-        
+
     },
-    
+
     // Deixa o nome da linha menos feio
     ajustaNome: function(nome){
         // Converte 1a. letra pra upper, outras pra lower
@@ -399,11 +423,11 @@ var marcadores = {
         // Separa ida e volta
         return result.replace("/", " / ");
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 }
 
 // Cria o mapa e associa o click à criação de pontos de trajeto
@@ -429,7 +453,7 @@ function inicializa(){
             $(this).attr("value", "");
         }
     });
-    
+
     marcadores.atualiza();
 }
 
@@ -468,7 +492,7 @@ $(document).ready(function(){
         'autoDimensions': false,
         'autoScale': false,
     });
-    
+
     inicializa();
     $('#form_busca').submit(function(){
         var geocoder = new google.maps.Geocoder();
@@ -486,14 +510,14 @@ $(document).ready(function(){
         })
         return false;
     });
-    
+
     // Pré-abre lightboxes oriundos de links em hash
     if (location.hash) {
         window.setTimeout(function(){
             $("#link_" + location.hash.substring(1)).trigger("click");
         }, 1000);
     }
-    
-    
+
+
 });
 
