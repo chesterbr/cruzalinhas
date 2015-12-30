@@ -1,0 +1,219 @@
+body {
+    font: 16px Helvetica;
+    margin: 0px;
+    padding: 0px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+a:visited {
+    color: blue;
+}
+
+#div_lightboxes {
+    display: none;
+}
+
+#div_instrucoes p {
+    font: 16px Helvetica;
+    float: right;
+    color: #404040;
+    font-style: italic;
+    margin-top: 14px;
+    margin-bottom: 30px;
+}
+
+#div_instrucoes p span {
+    font-style: normal;
+}
+
+.titulo {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 4px;
+    text-align: center;
+}
+
+.subtitulo {
+    font-style: italic;
+    margin-top: -4px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.menu {
+    magin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    text-align: center;
+}
+
+#div_main {
+    margin: 0px;
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    bottom: 100px;
+}
+
+#div_conteudo_wrapper {
+    float: right;
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+}
+
+#div_conteudo {
+    position: absolute;
+    top: 0px;
+    bottom: 12px;
+    left: 0px;
+    right: 0px;
+    margin-left: 250px;
+    margin-right: 12px;
+}
+
+#div_barra_wrapper {
+    position: absolute;
+    min-height: 100%;
+    top: 90px;
+    width: 250px;
+}
+
+#div_barra {
+    position: absolute;
+    top: 0px;
+    bottom: 12px;
+    left: 0px;
+    right: 0px;
+}
+
+#div_lista {
+    margin: 4px;
+    font-size: 12px;
+    height: 100%;
+    min-height: 100%;
+    overflow: auto;
+}
+
+#div_busca {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    padding: 6px;
+    border: 1px solid #000000;
+    vertical-align: middle;
+}
+
+#div_busca_box {
+    position: absolute;
+    left: 8px;
+    right: 118px;
+}
+
+#div_busca input[type = text] {
+    margin-top: 2px;
+    font: 18px Helvetica;
+    width: 100%
+}
+
+#div_busca input[ type = submit] {
+    margin-top: 5px;
+    font: 16px Helvetica;
+    float: right;
+    width: 100px;
+}
+
+.input_instrucoes {
+    color: #CCCCCC;
+    font-style: italic;
+}
+
+#map_canvas {
+    position: absolute;
+    top: 44px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border: 1px solid #000000;
+    border-top: 0px;
+}
+
+#div_botoes_doar {
+    width: 130px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#div_botao_paypal {
+	margin-left:35px;
+}
+
+.p_linha {
+    max-width: 204px;
+}
+
+.legenda_linha {
+    clear: both;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    opacity: 0.5;
+    text-align: center;
+    margin-bottom: 1px;
+    vertical-align: middle;
+}
+
+.legenda_linha input {
+    margin: 3px;
+    padding: 0px;
+}
+
+.link_remover {
+    font-size: xx-small;
+    vertical-align: top;
+}
+
+.destaca_linha {
+    background-color: #FFFF00;
+}
+
+.p_dicas {
+    float: left;
+    font: 14px Helvetica;
+    color: #404040;
+    font-style: italic;
+    margin-right: 8px;
+    margin-left: 8px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.p_dicas input {
+    margin: 0px;
+    padding: 0px;
+}
+
+.p_api_desc {
+    margin-left: 20px;
+	border-left: 3px double grey;
+	padding-left: 4px;
+}
+
+.p_termos {
+	font-size: small;
+}
+
+.texto_novidade {
+    font-color: red;
+    font-size: xx-small;
+    vertical-align: top;
+	font-weight: bold;
+}
