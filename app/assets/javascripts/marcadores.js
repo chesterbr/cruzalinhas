@@ -143,7 +143,7 @@ var marcadores = {
             return;
         }
         this.mostrou_instrucoes = false;
-        for (ordem = 1; ordem <= count; ordem++) {
+        for (ordem = 1; ordem <= count-1; ordem++) {
             var marcador = this.getMarcadorPelaOrdem(ordem);
             if (!marcador) {
                 // estamos no meio de uma remoção, relaxa
