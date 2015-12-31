@@ -1,6 +1,6 @@
 GtfsEngine.sources do |source|
   source.sptrans do
     title 'SPTrans'
-    url '/Users/vinicius/study/source/cruzalinhas/gtfs-sptrans.zip'
+    url '/home/chester/cruzalinhas/source/public/gtfs-sptrans.zip'
   end
 end
