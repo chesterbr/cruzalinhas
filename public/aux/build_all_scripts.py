@@ -26,8 +26,8 @@ import compress
 
 compress.compress(
                   # Scripts a comprimir
-                  ("../../app/assets/javascripts/jquery-1.4.2.min.js",
-                   "../../app/assets/javascripts/marcadores.js",
-                   "../../app/assets/javascripts/jquery.fancybox-1.3.1.pack.js"),
+                  ("../static/jquery-1.4.2.min.js",
+                   "../static/marcadores.js",
+                   "../static/jquery.fancybox-1.3.1.pack.js"),
                   # Script final
                   "../../app/assets/javascripts/all-scripts.js")

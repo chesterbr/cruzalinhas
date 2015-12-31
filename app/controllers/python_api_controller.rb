@@ -11,7 +11,6 @@ class PythonApiController < ApplicationController
         nome: "#{h.trip.route.route_short_name}: #{h.trip.route.route_long_name}"
       }
     }
-
     render json: trips
   end
 
