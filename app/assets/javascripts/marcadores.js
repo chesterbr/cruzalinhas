@@ -39,7 +39,7 @@ if (location.href.indexOf("/static/") != -1) {
 // Gerenciamento dos marcadores
 var map;
 var ICON_URLS = ["", "http://www.google.com/mapfiles/marker_yellow.png", "http://www.google.com/mapfiles/marker_brown.png", "http://www.google.com/mapfiles/marker_green.png", "http://www.google.com/mapfiles/marker_purple.png", "http://www.google.com/mapfiles/marker_grey.png", "http://www.google.com/mapfiles/marker_orange.png", "http://www.google.com/mapfiles/marker_white.png"];
-var IMG_LOADER = '<img src="/static/ajax-loader.gif"/>';
+var IMG_LOADER = '<img src="assets/ajax-loader.gif"/>';
 var LINHAS_INICIAL = 8;
 var LINHAS_INCREMENTO = 30;
 

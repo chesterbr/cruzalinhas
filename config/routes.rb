@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   # users, and can become a thin mapping when/if we rethink the API.
   get 'linhasquepassam' => 'python_api#linhasquepassam'
   get 'linha'           => 'python_api#linha'
+
+  root 'home#index'
 end
