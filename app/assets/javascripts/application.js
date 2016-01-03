@@ -13,4 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require all-scripts
+//= require jquery.fancybox-1.3.1.pack.js
+//= require marcadores.js
