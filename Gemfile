@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.15'
+gem 'rails', '4.2.6'
+gem 'responders'
 gem 'sqlite3'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
@@ -12,7 +13,7 @@ gem 'turbolinks'
 gem 'gtfs_engine'
 gem 'pr_geohash', '~> 1.0.0'
 
-group :development, :test do
+group :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'guard-rspec', require: false
   gem 'byebug', require: false
@@ -20,6 +21,7 @@ end
 
 group :development do
   gem 'spring'
+  gem 'web-console', '~> 2.0'
 end
 
 group :production do
