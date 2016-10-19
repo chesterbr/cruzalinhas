@@ -66,34 +66,11 @@ Existe uma lista de [issues](https://github.com/chesterbr/cruzalinhas/issues), e
 
 ## Licença
 
-O código-fonte está disponível sob a licença MIT, conforme formalizado abaixo. Essencialmente,
+O código-fonte está disponível sob a [licença MIT](LICENSE.md). Essencialmente,
 o uso é livre, devendo apenas a nota de copyright ser reproduzida em
 cópias/trabalhos derivados.
 
 O serviço é prestado na melhor intenção de ajudar as pessoas a se localizar,
 sem qualquer garantia, explícita ou implícita de funcionamento, atualização,
 precisão ou veracidade das informações prestadas. A fonte original são os dados disponibilizados pela SPTrans, cujo site deve ser sempre consultado para validação da informação.
-
-### Legal License Information
-
- cruzalinhas - Copyright (c) 2010-2014 Carlos Duarte do Nascimento (Chester)
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- DEALINGS IN THE SOFTWARE.
-
 
