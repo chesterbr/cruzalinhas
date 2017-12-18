@@ -32,20 +32,23 @@ git clone git@github.com:chesterbr/cruzalinhas.git # (ou seu fork)
 cd cruzalinhas
 rbenv install # (ou qualquer outra coisa que instale Ruby 2.1.2)
 bundle install
-bundle exec db:create db:migrate
+bundle exec rake db:create db:migrate
 ```
 
 ### Atualizando com dados da SPTrans
 
+É preciso se cadastrar no [site para desenvolvedores da SPTrans](http://www.sptrans.com.br/desenvolvedores), baixar uma cópia da base GTFS e apontar para ela no campo `url` do arqivo [`gtfs_engine.rb`](https://github.com/chesterbr/cruzalinhas/blob/master/config/initializers/gtfs_engine.rb)). Daí:
+
 ```bash
-bundle exec sptrans:update
+mkdir -p tmp/cache
+bundle exec sptrans:import
 ```
 
-O comando acima vai baixar uma cópia dos dados disponível no site do cruzalinhas e carregar os dados no seu banco de dados local. No entanto, é recomendável você se cadastrar no [site para desenvolvedores da SPTrans](http://www.sptrans.com.br/desenvolvedores), baixar sua própria cópia e apontar para ela no campo `url` do arqivo [`gtfs_engine.rb`](https://github.com/chesterbr/cruzalinhas/blob/master/config/initializers/gtfs_engine.rb).
+O comando acima vai carregar os dados da SPTrans no seu banco de dados local.
 
 ### Rodando o servidor
 
-Novamente, o esquema padrão Rails: ```bundle exec rails server``` e abra [http://localhost:3000](http://localhost:3000).
+Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localhost:3000](http://localhost:3000).
 
 ### API
 
@@ -59,7 +62,7 @@ do aplicativo original, e por isso não está apropriadamente distribuída nos
 diretórios de assets do Rails. Se você mudar algo, não deixe de rodar
 `python build_all_scripts.py` (em `public/static/aux`), que gera a versão
 concatenada e minificada que o HTML referencia.
-   
+
 ### Contribuindo
 
 Existe uma lista de [issues](https://github.com/chesterbr/cruzalinhas/issues), e você pode acrescentar suas sugestões a ela. Caso resolva trabalhar em algum deles (ou em um novo que você criar), deixe um comentário no issue (para evitar que duas pessoas trabalhem na mesma coisa ao mesmo tempo), faça um *fork* e no final submeta um *pull request*.
@@ -73,4 +76,3 @@ cópias/trabalhos derivados.
 O serviço é prestado na melhor intenção de ajudar as pessoas a se localizar,
 sem qualquer garantia, explícita ou implícita de funcionamento, atualização,
 precisão ou veracidade das informações prestadas. A fonte original são os dados disponibilizados pela SPTrans, cujo site deve ser sempre consultado para validação da informação.
-
