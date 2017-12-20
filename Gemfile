@@ -38,6 +38,9 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# For Rails 4.2 upgrade
+gem 'responders', '~> 2.0'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec', require: false
