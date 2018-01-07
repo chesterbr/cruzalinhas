@@ -55,13 +55,6 @@ Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localh
 
 A referência da API está no próprio site (são apenas duas chamadas), basta clicar no link "API".
 
-
-### Front-end
-
-O front-end fica em `public/static`. A versão atual foi copiada diretamente
-do aplicativo original, e por isso não está apropriadamente distribuída nos
-diretórios de assets do Rails.
-
 ### Contribuindo
 
 Existe uma lista de [issues](https://github.com/chesterbr/cruzalinhas/issues), e você pode acrescentar suas sugestões a ela. Caso resolva trabalhar em algum deles (ou em um novo que você criar), deixe um comentário no issue (para evitar que duas pessoas trabalhem na mesma coisa ao mesmo tempo), faça um *fork* e no final submeta um *pull request*.
