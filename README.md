@@ -30,8 +30,9 @@ A inicialização é a tradicional de qualquer aplicativo Rails:
 ```bash
 git clone git@github.com:chesterbr/cruzalinhas.git # (ou seu fork)
 cd cruzalinhas
-rbenv install # (ou qualquer outra coisa que instale Ruby 2.1.2)
-bundle install
+rbenv install # (ou qualquer outra coisa que instale o ruby em .ruby-version)
+gem install bundler
+bundle
 bundle exec rake db:create db:migrate
 ```
 
