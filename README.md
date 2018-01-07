@@ -60,9 +60,7 @@ A referência da API está no próprio site (são apenas duas chamadas), basta c
 
 O front-end fica em `public/static`. A versão atual foi copiada diretamente
 do aplicativo original, e por isso não está apropriadamente distribuída nos
-diretórios de assets do Rails. Se você mudar algo, não deixe de rodar
-`python build_all_scripts.py` (em `public/static/aux`), que gera a versão
-concatenada e minificada que o HTML referencia.
+diretórios de assets do Rails.
 
 ### Contribuindo
 

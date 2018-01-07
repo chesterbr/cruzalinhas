@@ -5,13 +5,6 @@
 // Contém o código que gerencia os marcadores, carregando as linhas que passam por
 // cada um deles e os dados de cada linha, além de lightboxes e outros detalhes de UI.
 //
-// IMPORTANTE: Se você MODIFICAR esse arquivo, RODE o build_all_scripts.py, pois
-// o html carrega o all_scripts.js e não esse.
-//
-// (o Eclipse/Aptana está configurado com um builder apropriado, se tudo correr bem
-// ele deve rodar automaticamente - chque se o .py acima está com permissão de
-// execução).
-//
 // Copyright (c) 2010, 2011 Carlos Duarte do Nascimento (Chester)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -520,4 +513,3 @@ $(document).ready(function(){
 
 
 });
-
