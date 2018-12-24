@@ -16,7 +16,14 @@ marcar pontos sucessivos, o sistema "cruza" as linhas que passam entre eles - da
 
 Com a [Lei de Acesso à Informação](https://pt.wikipedia.org/wiki/Lei_de_acesso_%C3%A0_informa%C3%A7%C3%A3o) e uma mudança de postura da SPTrans (que criou um [site para desenvolvedores](http://www.sptrans.com.br/desenvolvedores) no qual é possível baixar os itinerários(\*) no [formato GTFS](https://developers.google.com/transit/gtfs/reference)), o *scraper* se tornou obsoleto, e o cruzalinhas foi atualizado para importar os dados diretamente no formato acima.
 
+## Funcionamento
+
 O sistema de importação e a API (originalmente baseados em [Python](http://www.python.org)/[Google App Engine](https://cloud.google.com/appengine/)) foram refeitos com [Ruby on Rails](http://rubyonrails.org), preservando a compatibilidade com o site (um [aplicativo web de página única](https://en.wikipedia.org/wiki/Single-page_application) feito com HTML e JavaScript) e com aplicativos de terceiros.
+
+## Serviços Utilizados
+
+Os mapas são gerados pela comunidade <a href="https://www.openstreetmap.org">OpenStreetMap</a>, e os _tiles_ são servidos pela <a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia Foundation</a> através da biblioteca <a href="https://leafletjs.com">Leaflet</a>, com busca de endereços via <a href="http://www.nominatim.org/">Nominatim</a>, nos termos de uso de cada um destes serviços.
+
 
 <small>(\*) embora ainda irregular perante a [lei](http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm) por não "possibilitar o acesso **automatizado** por sistemas externos" (Art. 8º, §3º, III). Mas isso é outro assunto.</small>
 

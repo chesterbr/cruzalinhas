@@ -59,17 +59,16 @@ var marcadores = {
             ordem = this.count() + 1;
         }
         var id = new Date().getTime();
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: map,
+        marker = L.marker(latlng, {
             draggable: true,
-            icon: ICON_URLS[ordem]
+            icon: L.icon({ iconUrl: ICON_URLS[ordem] })
         });
+        marker.addTo(map);
         m = this;
-        google.maps.event.addListener(marker, "dragend", function(event){
+        marker.on("dragend", function(event){
             var ordem_orig = marcadores._marcadores[id].ordem;
             m.soft_remove(id);
-            m.add(event.latLng, ordem_orig);
+            m.add(event.target.getLatLng(), ordem_orig);
         });
         // Guarda ele na lista
         this._marcadores[id] = {
@@ -90,8 +89,8 @@ var marcadores = {
                 url: "/linhasquepassam.json",
                 dataType: 'json',
                 data: {
-                    lat: latlng.lat(),
-                    lng: latlng.lng()
+                    lat: latlng.lat,
+                    lng: latlng.lng
                 },
                 success: function(data){
                     if (m._marcadores[id]) {
@@ -138,10 +137,6 @@ var marcadores = {
         this.mostrou_instrucoes = false;
         for (ordem = 1; ordem <= count; ordem++) {
             var marcador = this.getMarcadorPelaOrdem(ordem);
-            if (!marcador) {
-                // estamos no meio de uma remoção, relaxa
-                return;
-            }
             html += '<div style="margin-bottom:4px;clear:both;">';
             html += ' <p style="margin:0px; text-align:center;">';
             html += '  <img style="max-height:17px" src="' + ICON_URLS[marcador.ordem] + '"/><br/>';
@@ -277,10 +272,10 @@ var marcadores = {
         var marcador = this._marcadores[id];
         if (marcador.linhas) {
             for (j in marcador.polylines) {
-                marcador.polylines[j].setMap(null);
+                marcador.polylines[j].remove();
             }
         }
-        marcador.marker.setMap(null);
+        marcador.marker.remove();
         delete this._marcadores[id];
     },
 
@@ -293,7 +288,7 @@ var marcadores = {
             var m = this.getMarcadorPelaOrdem(i);
             var linhas = m.linhas;
             this.soft_remove(m.id);
-            this.add(m.marker.position, i - 1, linhas);
+            this.add(m.marker.getLatLng(), i - 1, linhas);
         }
         this.atualiza();
     },
@@ -309,28 +304,23 @@ var marcadores = {
             $.getJSON("/linha.json", {
                 key: linha.key
             }, function(pontos){
-                gpontos = []
-                for (j in pontos) {
-                    gpontos.push(new google.maps.LatLng(pontos[j][0], pontos[j][1]));
-                }
-                cache[linha.key].pontos = gpontos;
+                cache[linha.key].pontos = pontos;
                 cache[linha.key].cor = marcadores.proximacor();
                 marcadores.atualiza();
             });
         }
         if (c && c.pontos) {
             if (!c.polyline) {
-                c.polyline = new google.maps.Polyline({
-                    map: map,
-                    path: c.pontos,
-                    strokeColor: c.cor,
-                    strokeWeight: 5,
-                    strokeOpacity: 0.5
+                c.polyline = L.polyline(c.pontos, {
+                    color: c.cor,
+                    weight: 5,
+                    opacity: 0.5
                 });
-                google.maps.event.addListener(c.polyline, "mouseover", function(latlng){
+                c.polyline.addTo(map);
+                c.polyline.on("mouseover", function(latlng){
                     $(".p_linha_" + linha.key).addClass("destaca_linha");
                 });
-                google.maps.event.addListener(c.polyline, "mouseout", function(latlng){
+                c.polyline.on("mouseout", function(latlng){
                     $(".p_linha_" + linha.key).removeClass("destaca_linha");
                 });
             }
@@ -343,7 +333,7 @@ var marcadores = {
     apagaLinha: function(key){
         c = this._cache_linhas[key];
         if (c && c.polyline) {
-            c.polyline.setMap(null);
+            c.polyline.remove();
             delete c.polyline;
         }
     },
@@ -416,25 +406,20 @@ var marcadores = {
         // Separa ida e volta
         return result.replace("/", " / ");
     }
-
-
-
-
-
 }
 
 // Cria o mapa e associa o click à criação de pontos de trajeto
 function inicializa(){
-    centro_sp = new google.maps.LatLng(-23.548153, -46.633101);
-    map = new google.maps.Map(document.getElementById("map_canvas"), {
-        zoom: 13,
-        scaleControl: true,
-        center: centro_sp,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+    map = L.map('map_canvas').setView([-23.548153, -46.633101], 13);
+    var Wikimedia = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
+      attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+      minZoom: 1,
+      maxZoom: 19
     });
-    google.maps.event.addListener(map, "click", function(event){
+    Wikimedia.addTo(map);
+    map.on('click', function(event) {
         if (marcadores.count() <= 5) {
-            marcadores.add(event.latLng);
+            marcadores.add(event.latlng);
         }
         else {
             alert("Desculpe, não consigo colocar mais marcadores");
@@ -488,19 +473,24 @@ $(document).ready(function(){
 
     inicializa();
     $('#form_busca').submit(function(){
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            'address': $('#text_busca').val() + ", São Paulo, SP"
-        }, function(results, status){
-            if (status == google.maps.GeocoderStatus.OK) {
-                latlng = results[0].geometry.location;
-                map.panTo(latlng);
-                marcadores.add(latlng);
+        result = $.getJSON(
+            "https://nominatim.openstreetmap.org/search",
+            {
+                format: "json",
+                limit: 1,
+                q: $('#text_busca').val() + ", São Paulo - SP, Brazil"
+            },
+            function(data) {
+              result = data["0"];
+              if (result) {
+                  latlng = { "lat": result.lat, "lng": result.lon };
+                  map.panTo(latlng);
+                  marcadores.add(latlng);
+              } else {
+                  alert("Não foi possível localizar o endereço.");
+              }
             }
-            else {
-                alert("Não foi possível localizar o endereço (" + status + ")");
-            }
-        })
+        );
         return false;
     });
 
