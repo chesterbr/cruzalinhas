@@ -478,7 +478,11 @@ $(document).ready(function(){
             {
                 format: "json",
                 limit: 1,
-                q: $('#text_busca').val() + ", São Paulo - SP, Brazil"
+                street: $('#text_busca').val(),
+                city: "São Paulo",
+                state: "SP",
+                country: "Brazil"
+
             },
             function(data) {
               result = data["0"];
