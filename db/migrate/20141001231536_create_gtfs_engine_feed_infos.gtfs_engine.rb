@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140406073548)
-class CreateGtfsEngineFeedInfos < ActiveRecord::Migration
+class CreateGtfsEngineFeedInfos < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_feed_infos
 
   def change

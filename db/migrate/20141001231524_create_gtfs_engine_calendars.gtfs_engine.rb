@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140320045232)
-class CreateGtfsEngineCalendars < ActiveRecord::Migration
+class CreateGtfsEngineCalendars < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_calendars
 
   def change

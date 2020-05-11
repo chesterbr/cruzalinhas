@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140320052005)
-class CreateGtfsEngineStops < ActiveRecord::Migration
+class CreateGtfsEngineStops < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_stops
 
   def change

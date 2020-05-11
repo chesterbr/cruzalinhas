@@ -1,4 +1,4 @@
-class CreateTripGeohashes < ActiveRecord::Migration
+class CreateTripGeohashes < ActiveRecord::Migration[4.2]
   def change
     create_table :trip_geohashes do |t|
       t.references :trip, index: true

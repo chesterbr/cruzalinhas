@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140320050100)
-class CreateGtfsEngineShapes < ActiveRecord::Migration
+class CreateGtfsEngineShapes < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_shapes
 
   def change

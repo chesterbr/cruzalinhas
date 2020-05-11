@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140406071922)
-class CreateGtfsEngineFrequencies < ActiveRecord::Migration
+class CreateGtfsEngineFrequencies < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_frequencies
 
   def change

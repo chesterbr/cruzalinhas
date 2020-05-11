@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140401032609)
-class CreateGtfsEngineAgencies < ActiveRecord::Migration
+class CreateGtfsEngineAgencies < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_agencies
 
   def change

@@ -1,5 +1,5 @@
 # This migration comes from gtfs_engine (originally 20140405235947)
-class CreateGtfsEngineFareAttributes < ActiveRecord::Migration
+class CreateGtfsEngineFareAttributes < ActiveRecord::Migration[4.2]
   TABLE = :gtfs_engine_fare_attributes
 
   def change
