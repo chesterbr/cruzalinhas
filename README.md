@@ -36,7 +36,11 @@ A inicialização é a tradicional de qualquer aplicativo Rails:
 ```bash
 git clone git@github.com:chesterbr/cruzalinhas.git # (ou seu fork)
 cd cruzalinhas
-rbenv install # (ou qualquer outra coisa que instale o ruby em .ruby-version)
+# Se você não tem rbenv/ruby-build, vide: https://github.com/rbenv/ruby-build.
+# (para GitHub Codespaces: https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04)
+# Alternativamente, substitua a linha abaixo por qualuer coisia que instale
+# a versão do Ruby em .ruby-version
+rbenv install
 gem install bundler
 bundle
 bundle exec rake db:create db:migrate
@@ -49,8 +53,8 @@ Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro par
 
 ```bash
 mkdir -p tmp/cache
-wget https://openmobilitydata.org/p/sptrans/1049/latest/download gtfs-sptrans.zip
-bundle exec sptrans:import
+wget https://openmobilitydata.org/p/sptrans/1049/latest/download -Ogtfs-sptrans.zip
+bundle exec rake sptrans:import
 ```
 
 O comando acima vai carregar os dados da SPTrans no seu banco de dados local.
