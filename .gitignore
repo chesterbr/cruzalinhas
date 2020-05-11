@@ -15,5 +15,5 @@
 /log/*.log
 /tmp
 
-*.pyc
-public/gtfs-sptrans.zip
+# Ignore downloaded SPTrans data
+gtfs-sptrans.zip
