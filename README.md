@@ -44,10 +44,12 @@ bundle exec rake db:create db:migrate
 
 ### Atualizando com dados da SPTrans
 
-É preciso se cadastrar no [site para desenvolvedores da SPTrans](http://www.sptrans.com.br/desenvolvedores), baixar uma cópia da base GTFS e apontar para ela no campo `url` do arqivo [`gtfs_engine.rb`](https://github.com/chesterbr/cruzalinhas/blob/master/config/initializers/gtfs_engine.rb)). Daí:
+Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados lá, então é só seguir com:
+
 
 ```bash
 mkdir -p tmp/cache
+wget https://openmobilitydata.org/p/sptrans/1049/latest/download gtfs-sptrans.zip
 bundle exec sptrans:import
 ```
 
