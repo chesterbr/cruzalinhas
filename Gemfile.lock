@@ -1,3 +1,16 @@
+GIT
+  remote: https://github.com/chesterbr/gtfs_engine.git
+  revision: 1d55d6b4da5406a89d788ce147a88d350707c6ae
+  branch: replace-around-filter-with-around-action
+  specs:
+    gtfs_engine (1.5.3)
+      activerecord-import (~> 0.19)
+      gtfs_reader (~> 1.2)
+      jbuilder (~> 2.7)
+      jsend_wrapper-rails (~> 0.3)
+      rails (>= 4.1, < 6.0)
+      responders (~> 2.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -86,13 +99,6 @@ GEM
     formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    gtfs_engine (1.5.3)
-      activerecord-import (~> 0.19)
-      gtfs_reader (~> 1.2)
-      jbuilder (~> 2.7)
-      jsend_wrapper-rails (~> 0.3)
-      rails (>= 4.1, < 6.0)
-      responders (~> 2.4)
     gtfs_reader (1.2.0)
       activesupport (>= 4.1, < 6.0)
       colorize (~> 0.8)
@@ -264,7 +270,7 @@ DEPENDENCIES
   capistrano-rbenv
   capistrano3-puma
   coffee-rails
-  gtfs_engine (~> 1.5.3)
+  gtfs_engine!
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails

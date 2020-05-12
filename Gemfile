@@ -60,5 +60,5 @@ group :production do
   gem 'puma'
 end
 
-gem 'gtfs_engine', '~> 1.5.3'
+gem 'gtfs_engine', :git => "https://github.com/chesterbr/gtfs_engine.git", :branch => "replace-around-filter-with-around-action" # until https://github.com/sangster/gtfs_engine/pull/4 gets merged
 gem 'pr_geohash', '~> 1.0.0'
