@@ -1,16 +1,3 @@
-GIT
-  remote: https://github.com/chesterbr/gtfs_engine.git
-  revision: 1d55d6b4da5406a89d788ce147a88d350707c6ae
-  branch: replace-around-filter-with-around-action
-  specs:
-    gtfs_engine (1.5.3)
-      activerecord-import (~> 0.19)
-      gtfs_reader (~> 1.2)
-      jbuilder (~> 2.7)
-      jsend_wrapper-rails (~> 0.3)
-      rails (>= 4.1, < 6.0)
-      responders (~> 2.4)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -46,7 +33,7 @@ GEM
       activemodel (= 5.2.4.3)
       activesupport (= 5.2.4.3)
       arel (>= 9.0)
-    activerecord-import (0.28.2)
+    activerecord-import (1.0.6)
       activerecord (>= 3.2)
     activestorage (5.2.4.3)
       actionpack (= 5.2.4.3)
@@ -99,11 +86,17 @@ GEM
     formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    gtfs_reader (1.2.0)
-      activesupport (>= 4.1, < 6.0)
+    gtfs_engine (2.1.0)
+      activerecord-import (~> 1.0)
+      gtfs_reader (~> 4.0)
+      jbuilder (~> 2.10)
+      jsend_wrapper-rails (~> 0.4)
+      rails (>= 5.0, < 7.0)
+      responders (~> 3.0)
+    gtfs_reader (4.1.0)
+      activesupport (>= 5.0, < 7.0)
       colorize (~> 0.8)
-      log4r (~> 1.1)
-      rubyzip (~> 1.2)
+      rubyzip (~> 2.3)
     guard (2.16.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -131,7 +124,6 @@ GEM
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    log4r (1.1.10)
     loofah (2.6.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -193,9 +185,9 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoc (4.3.0)
-    responders (2.4.1)
-      actionpack (>= 4.2.0, < 6.0)
-      railties (>= 4.2.0, < 6.0)
+    responders (3.0.1)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -217,7 +209,7 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
-    rubyzip (1.3.0)
+    rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.3.0)
@@ -270,14 +262,13 @@ DEPENDENCIES
   capistrano-rbenv
   capistrano3-puma
   coffee-rails
-  gtfs_engine!
+  gtfs_engine (~> 2.1)
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
   pr_geohash (~> 1.0.0)
   puma
   rails (~> 5.2, >= 5.2.4.3)
-  responders (~> 2.0)
   rspec-rails
   sass-rails
   sdoc (~> 0.4.0)

@@ -38,9 +38,6 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# For Rails 4.2 upgrade
-gem 'responders', '~> 2.0'
-
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec', require: false
@@ -60,5 +57,5 @@ group :production do
   gem 'puma'
 end
 
-gem 'gtfs_engine', :git => "https://github.com/chesterbr/gtfs_engine.git", :branch => "replace-around-filter-with-around-action" # until https://github.com/sangster/gtfs_engine/pull/4 gets merged
+gem 'gtfs_engine', '~> 2.1'
 gem 'pr_geohash', '~> 1.0.0'
