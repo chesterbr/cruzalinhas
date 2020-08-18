@@ -54,6 +54,8 @@ Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro par
 bin/rake sptrans:import
 ```
 
+(é preciso ter o `wget` instalado - você provavelmente já tem, mas senão, algo como `brew install wget` ou `sudo apt-get install wget` resolve).
+
 ### Rodando o servidor
 
 Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localhost:3000](http://localhost:3000).
