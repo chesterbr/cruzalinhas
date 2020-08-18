@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0', '>= 5.0.0.1'
+gem 'rails', '~> 6.0', '>= 6.0.3.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -38,9 +38,6 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# For Rails 4.2 upgrade
-gem 'responders', '~> 2.0'
-
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec', require: false
@@ -60,5 +57,5 @@ group :production do
   gem 'puma'
 end
 
-gem 'gtfs_engine', :git => "https://github.com/chesterbr/gtfs_engine.git", :branch => "replace-around-filter-with-around-action" # until https://github.com/sangster/gtfs_engine/pull/4 gets merged
+gem 'gtfs_engine', '~> 2.1'
 gem 'pr_geohash', '~> 1.0.0'

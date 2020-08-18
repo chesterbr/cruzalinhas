@@ -43,21 +43,18 @@ cd cruzalinhas
 rbenv install
 gem install bundler
 bundle
-bundle exec rake db:create db:migrate
+bin/rake db:create db:migrate
 ```
 
 ### Atualizando com dados da SPTrans
 
-Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados lá, então é só seguir com:
-
+Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados, então basta chamar o comando abaixo para baixar os dados mais recentes e atualizar o banco de dados local:
 
 ```bash
-mkdir -p tmp/cache
-wget https://openmobilitydata.org/p/sptrans/1049/latest/download -Ogtfs-sptrans.zip
-bundle exec rake sptrans:import
+bin/rake sptrans:import
 ```
 
-O comando acima vai carregar os dados da SPTrans no seu banco de dados local.
+(é preciso ter o `wget` instalado - você provavelmente já tem, mas senão, algo como `brew install wget` ou `sudo apt-get install wget` resolve).
 
 ### Rodando o servidor
 
