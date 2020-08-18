@@ -26,6 +26,10 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
+# This is needed because `respond_to` was dropped in Rails 4.2, and
+# gtfs_engine uses it somewhere. See https://stackoverflow.com/a/40581849/64635
+gem 'responders'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

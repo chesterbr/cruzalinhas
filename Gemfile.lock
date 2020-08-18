@@ -285,6 +285,7 @@ DEPENDENCIES
   pr_geohash (~> 1.0.0)
   puma
   rails (~> 6.0, >= 6.0.3.2)
+  responders
   rspec-rails
   sass-rails
   sdoc (~> 0.4.0)
