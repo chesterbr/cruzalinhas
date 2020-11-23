@@ -24,7 +24,7 @@ O sistema de importação e a API (originalmente baseados em [Python](http://www
 
 ## Serviços Utilizados
 
-Os mapas são gerados pela comunidade <a href="https://www.openstreetmap.org">OpenStreetMap</a>, e os _tiles_ são servidos pela <a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia Foundation</a> através da biblioteca <a href="https://leafletjs.com">Leaflet</a>, com busca de endereços via <a href="http://www.nominatim.org/">Nominatim</a>, nos termos de uso de cada um destes serviços.
+Os mapas são gerados pela comunidade <a href="https://www.openstreetmap.org">OpenStreetMap</a>, e os _tiles_ são servidos pela <a href="https://www.mapbox.com/">Mapbox</a> através da biblioteca <a href="https://leafletjs.com">Leaflet</a>, com busca de endereços via <a href="http://www.nominatim.org/">Nominatim</a>, nos termos de uso de cada um destes serviços.
 
 ## Informações para Desenvolvedores
 
