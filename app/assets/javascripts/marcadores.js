@@ -411,12 +411,15 @@ var marcadores = {
 // Cria o mapa e associa o click à criação de pontos de trajeto
 function inicializa(){
     map = L.map('map_canvas').setView([-23.548153, -46.633101], 13);
-    var Wikimedia = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
-      attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
-      minZoom: 1,
-      maxZoom: 19
-    });
-    Wikimedia.addTo(map);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiY2hlc3RlcmJyIiwiYSI6ImNraHY2NzkzNDBmZGcyem50cTIxNHd2ZTcifQ.dzV-Z8ETGPfuCmFyocAUVg'
+    }).addTo(map);    
     map.on('click', function(event) {
         if (marcadores.count() <= 5) {
             marcadores.add(event.latlng);
