@@ -56,6 +56,8 @@ bin/rake sptrans:import
 
 (é preciso ter o `wget` instalado - você provavelmente já tem, mas senão, algo como `brew install wget` ou `sudo apt-get install wget` resolve).
 
+Para abrir a página da linha na SPTrans, é preciso saber o código interno ("CdPjOID") atribuído à versão atual dela , o que não consta na base GTFS. Como o site da SPTrans carrega uma lista com todas as linhas ("letreiros") e códigos atuais, o importador baixa essa lista e gera as URLs no banco de dados.
+
 ### Rodando o servidor
 
 Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localhost:3000](http://localhost:3000).
