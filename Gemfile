@@ -30,6 +30,11 @@ gem 'spring',        group: :development
 # gtfs_engine uses it somewhere. See https://stackoverflow.com/a/40581849/64635
 gem 'responders'
 
+# Rails eagerly loads these on prod
+gem 'net-smtp'
+gem 'net-pop'
+gem 'net-imap'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
