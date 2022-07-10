@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/chesterbr/gtfs_reader.git
+  revision: de6892b1a4f6be3e686d8c7ca2cb8bfc03b92e83
+  branch: fix-csv-reading-for-ruby-3
+  specs:
+    gtfs_reader (4.1.0)
+      activesupport (>= 5.0, < 7.0)
+      colorize (~> 0.8)
+      rubyzip (~> 2.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,10 +120,6 @@ GEM
       jsend_wrapper-rails (~> 0.4)
       rails (>= 5.0, < 7.0)
       responders (~> 3.0)
-    gtfs_reader (4.1.0)
-      activesupport (>= 5.0, < 7.0)
-      colorize (~> 0.8)
-      rubyzip (~> 2.3)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -276,6 +282,7 @@ DEPENDENCIES
   capistrano3-puma
   coffee-rails
   gtfs_engine (~> 2.1)
+  gtfs_reader!
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails

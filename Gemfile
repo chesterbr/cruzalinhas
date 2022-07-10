@@ -61,5 +61,7 @@ group :production do
   gem 'puma'
 end
 
+# Remove line above when https://github.com/sangster/gtfs_reader/pull/17 is merged
+gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'fix-csv-reading-for-ruby-3'
 gem 'gtfs_engine', '~> 2.1'
 gem 'pr_geohash', '~> 1.0.0'
