@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_154328) do
+ActiveRecord::Schema[6.1].define(version: 2021_09_15_154328) do
 
   create_table "gtfs_engine_agencies", force: :cascade do |t|
     t.string "agency_id"

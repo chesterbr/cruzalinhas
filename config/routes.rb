@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   get 'linhasquepassam' => 'python_api#linhasquepassam'
   get 'linha'           => 'python_api#linha'
 
-  root 'home#index'  
+  root 'home#index'
 end

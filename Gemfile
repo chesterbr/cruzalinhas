@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 7.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -66,7 +66,8 @@ group :production do
   gem 'puma'
 end
 
-# Remove line above when https://github.com/sangster/gtfs_reader/pull/17 is merged
-gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'fix-csv-reading-for-ruby-3'
-gem 'gtfs_engine', '~> 2.1'
+# Remove line above when upcoming PR is merged
+gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'activesupport-7'
+# Revert line above to "gem 'gtfs_engine', '~> 2.1'" (replace 2.1 with current-ish version) when upcoming PR is merged
+gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'rails-7'
 gem 'pr_geohash', '~> 1.0.0'
