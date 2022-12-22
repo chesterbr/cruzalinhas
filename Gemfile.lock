@@ -62,6 +62,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     builder (3.2.4)
@@ -101,6 +103,9 @@ GEM
     execjs (2.8.1)
     ffi (1.15.5)
     formatador (1.1.0)
+    git (1.13.0)
+      addressable (~> 2.8)
+      rchardet (~> 1.8)
     globalid (1.0.0)
       activesupport (>= 5.0)
     gtfs_engine (2.1.0)
@@ -175,6 +180,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    public_suffix (5.0.1)
     puma (6.0.0)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -211,6 +217,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rchardet (1.8.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -288,6 +295,7 @@ DEPENDENCIES
   capistrano-rbenv
   capistrano3-puma
   coffee-rails
+  git
   gtfs_engine (~> 2.1)
   gtfs_reader (~> 4.1)
   guard-rspec
