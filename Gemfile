@@ -69,6 +69,8 @@ group :production do
   gem 'puma'
 end
 
-gem 'gtfs_reader', '~> 4.1'
+# gem 'gtfs_reader', '~> 4.1'
+# It seems my change didn't make to the gem yet, so I'm using my fork for now
+gem 'gtfs_reader', git: 'https://github.com/chesterbr/gtfs_reader.git', branch: 'master'
 gem 'gtfs_engine', '~> 2.1'
 gem 'pr_geohash', '~> 1.0.0'

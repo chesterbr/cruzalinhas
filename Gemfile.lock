@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/chesterbr/gtfs_reader.git
+  revision: 9a366ea58be62492ca139bc6fb67956a28551646
+  branch: master
+  specs:
+    gtfs_reader (4.1.0)
+      activesupport (>= 5.0, < 7.0)
+      colorize (~> 0.8)
+      rubyzip (~> 2.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -115,10 +125,6 @@ GEM
       jsend_wrapper-rails (~> 0.4)
       rails (>= 5.0, < 7.0)
       responders (~> 3.0)
-    gtfs_reader (4.1.0)
-      activesupport (>= 5.0, < 7.0)
-      colorize (~> 0.8)
-      rubyzip (~> 2.3)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -283,6 +289,7 @@ GEM
     zeitwerk (2.6.6)
 
 PLATFORMS
+  x86_64-darwin-21
   x86_64-darwin-22
   x86_64-linux
 
@@ -297,7 +304,7 @@ DEPENDENCIES
   coffee-rails
   git
   gtfs_engine (~> 2.1)
-  gtfs_reader (~> 4.1)
+  gtfs_reader!
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
