@@ -1,15 +1,15 @@
 <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-16675999-1']);
-  _gaq.push(['_trackPageview']);
-  (function(){
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-  })();
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-16675999-1']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 </script>
 
 <div id="div_main">
@@ -23,17 +23,18 @@
         <a href="#div_oque" id="link_oque">o que é</a>
         - <a href="#div_porque" id="link_porque">por que</a>
         - <a href="#div_como" id="link_como">como funciona</a>
-        - <a href="http://twitter.com/chesterbr" target="_blank">quem fez (contato)</a>
+        - <a href="http://linktr.ee/chesterbr" target="_blank">quem fez (contato)</a>
         - <a href="http://github.com/chesterbr/cruzalinhas" target="_blank">código-fonte</a>
         - <a href="#div_api" id="link_api">API</a>
     </div>
     <div>
         <div id="div_conteudo_wrapper">
-            <div id ="div_conteudo">
+            <div id="div_conteudo">
                 <div id="div_busca">
                     <form id="form_busca">
                         <div id="div_busca_box">
-                            <input type="text" id="text_busca" class="input_instrucoes" value="(ex.: Avenida Paulista, 900)"/>
+                            <input type="text" id="text_busca" class="input_instrucoes"
+                                value="(ex.: Avenida Paulista, 900)" />
                         </div><input type="submit" value="Localizar">
                     </form>
                 </div>
@@ -56,13 +57,18 @@
         <h1>O que é?</h1>
         <p>
             O cruzalinhas permite obter a lista completa
-            das linhas de ônibus municipais que passam por um determinado lugar da cidade de São Paulo. É só colocar o marcador no mapa (clicando ou usando a caixa de busca) e o sistema lista e desenha as linhas.
+            das linhas de ônibus municipais que passam por um determinado lugar da cidade de São Paulo. É só colocar o
+            marcador no mapa (clicando ou usando a caixa de busca) e o sistema lista e desenha as linhas.
         </p>
         <p>
-            Se você colocar outros marcadores, o sistema vai mostrar apenas as linhas que passam entre cada um deles. Com isso dá pra montar trajetos e comparar alternativas.
+            Se você colocar outros marcadores, o sistema vai mostrar apenas as linhas que passam entre cada um deles.
+            Com isso dá pra montar trajetos e comparar alternativas.
         </p>
         <p>
-            A localização pelo ponto é aproximada por um método <a href="http://en.wikipedia.org/wiki/Geohash">pouco convencional</a>, então podem aparecer linhas próximas (aproveite isso para achar alternativas). Em caso de dúvida, clique no nome da linha e veja a informação oficial e detalhadano <a href="http://www.sptrans.com.br/itinerarios/">site da SPTrans</a>.
+            A localização pelo ponto é aproximada por um método <a href="http://en.wikipedia.org/wiki/Geohash">pouco
+                convencional</a>, então podem aparecer linhas próximas (aproveite isso para achar alternativas). Em caso
+            de dúvida, clique no nome da linha e veja a informação oficial e detalhadano <a
+                href="http://www.sptrans.com.br/itinerarios/">site da SPTrans</a>.
         </p>
         <p>
             Lembre-se sempre que o serviço é experimental e <b>não tem qualquer relação com a SPTrans</b>
@@ -75,7 +81,8 @@
     <div id="div_porque">
         <h1>Por que?</h1>
         <p>
-            Quem usa transporte público em São Paulo sabe que existem algumas opções bacanas para se informar, tais como:
+            Quem usa transporte público em São Paulo sabe que existem algumas opções bacanas para se informar, tais
+            como:
         </p>
         <ul>
             <li>
@@ -89,67 +96,95 @@
             </li>
         </ul>
         <p>
-            Infelizmente nenhuma delas listava todas as linhas em um local (ou entre dois locais), daí o projeto. A idéia não é substituir esses sites, e sim complementar o serviço deles.
+            Infelizmente nenhuma delas listava todas as linhas em um local (ou entre dois locais), daí o projeto. A
+            idéia não é substituir esses sites, e sim complementar o serviço deles.
         </p>
         <p>
-            A motivação inicial era recuperar os dados de itinerário das linhas, que inicialmente eram <a href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351" target="_blank">extraídos na marra</a>. Atualmente a SPTrans disponibiliza eles em seu <a href="http://www.sptrans.com.br/desenvolvedores" target="_blank">site para desenvolvedores</a>, mas <a href="https://github.com/chesterbr/cruzalinhas#motiva%C3%A7%C3%A3o" target="_blank">nem sempre foi assim</a>.
+            A motivação inicial era recuperar os dados de itinerário das linhas, que inicialmente eram <a
+                href="http://www.slideshare.net/pedrovalente/extraindo-dados-pblicos-na-marra-3489351"
+                target="_blank">extraídos na marra</a>. Atualmente a SPTrans disponibiliza eles em seu <a
+                href="http://www.sptrans.com.br/desenvolvedores" target="_blank">site para desenvolvedores</a>, mas <a
+                href="https://github.com/chesterbr/cruzalinhas#motiva%C3%A7%C3%A3o" target="_blank">nem sempre foi
+                assim</a>.
         </p>
     </div>
     <div id="div_como">
         <h1>Como funciona?</h1>
         <p>
-            A aplicação foi feita em <a href="http://www.rubyonrails.org/">Ruby On Rails</a>, usando mapas gerados pela comunidade <a href="https://www.openstreetmap.org">OpenStreetMap</a> e <i>tiles</i> servidos pela <a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia Foundation</a> através da biblioteca <a href="https://leafletjs.com">Leaflet</a>, com busca de endereços via <a href="http://www.nominatim.org/">Nominatim</a>.
+            A aplicação foi feita em <a href="http://www.rubyonrails.org/">Ruby On Rails</a>, usando mapas gerados pela
+            comunidade <a href="https://www.openstreetmap.org">OpenStreetMap</a> e <i>tiles</i> servidos pela <a
+                href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia Foundation</a> através da
+            biblioteca <a href="https://leafletjs.com">Leaflet</a>, com busca de endereços via <a
+                href="http://www.nominatim.org/">Nominatim</a>.
         </p>
         <p>
-            Fazer uma busca por proximidade entre um ponto e cada trajeto é complicado: a princípio, seria preciso analisar cada segmento de reta, isso dentro de uma <a href="http://www.movable-type.co.uk/scripts/latlong.html">geometria nada trivial</a>. Entra em cena o <a href="http://en.wikipedia.org/wiki/Geohash">geohash</a>.
+            Fazer uma busca por proximidade entre um ponto e cada trajeto é complicado: a princípio, seria preciso
+            analisar cada segmento de reta, isso dentro de uma <a
+                href="http://www.movable-type.co.uk/scripts/latlong.html">geometria nada trivial</a>. Entra em cena o <a
+                href="http://en.wikipedia.org/wiki/Geohash">geohash</a>.
         </p>
         <p>
-            O que o sistema faz é manter pré-calculado o geohash da caixa que contem cada segmento de reta, num tamanho (6 caracteres) que dá uma margem de manobra menor que 1 Km. A busca é feita sobre o geohash do ponto a ser localizado, reduzido para esse mesmo tamanho.
+            O que o sistema faz é manter pré-calculado o geohash da caixa que contem cada segmento de reta, num tamanho
+            (6 caracteres) que dá uma margem de manobra menor que 1 Km. A busca é feita sobre o geohash do ponto a ser
+            localizado, reduzido para esse mesmo tamanho.
         </p>
         <p>
-            Com isso, localiza-se as linhas, com uma margem de erro compatível com o fato de que o pino pode não cair exatamente sobre um trajeto (e que há interesse em pegar ônibus que passem "perto").
+            Com isso, localiza-se as linhas, com uma margem de erro compatível com o fato de que o pino pode não cair
+            exatamente sobre um trajeto (e que há interesse em pegar ônibus que passem "perto").
         </p>
         <p>
-            Os hashes da linha também são usados localmente para que, caso haja mais de um ponto no mapa, o cliente possa identificar as linhas que conectam cada um deles.
+            Os hashes da linha também são usados localmente para que, caso haja mais de um ponto no mapa, o cliente
+            possa identificar as linhas que conectam cada um deles.
         </p>
     </div>
     <div id="div_api">
         <p>
-            Da mesma forma que eu tinha uma necessidade que os outros sites não atendiam, esse site certamente não vai atender a todos. Se você quer fazer algo diferente com esses trajetos, essa é a sua chance: as chamadas abaixo permitem incluir as mesmas informações que aparecem
+            Da mesma forma que eu tinha uma necessidade que os outros sites não atendiam, esse site certamente não vai
+            atender a todos. Se você quer fazer algo diferente com esses trajetos, essa é a sua chance: as chamadas
+            abaixo permitem incluir as mesmas informações que aparecem
             no cruzalinhas no seu site*.
         </p>
         <p>
-            Elas são chamadas AJAX simples, nas quais os parâmetros devem ser passados via GET, e o resultado é um <a href="http://www.json.org">objeto JSON</a>:
+            Elas são chamadas AJAX simples, nas quais os parâmetros devem ser passados via GET, e o resultado é um <a
+                href="http://www.json.org">objeto JSON</a>:
         </p>
         <p class="p_api_desc">
             <b>URL:</b>
             http://cruzalinhas.appspot.com/linhasquepassam.json
-            <br/>
+            <br />
             <b>Parâmetros: </b>latitude (<i>lat</i>) e longitude (<i>lng</i>).
-            <br/>
+            <br />
             <b>Retorno: </b>
             Array cujos elementos contém o Nome, URL, chave (<i>key</i>) e lista de geohashes de cada linha.
-            <br/>
+            <br />
             <b>Exemplo: </b>
-            <a href="http://www.cruzalinhas.com/linhasquepassam.json?lat=-23.546953&lng=-46.638787">linhasquepassam.json?lat=-23.546953&lng=-46.638787</a>
-            <br/>
+            <a
+                href="http://www.cruzalinhas.com/linhasquepassam.json?lat=-23.546953&lng=-46.638787">linhasquepassam.json?lat=-23.546953&lng=-46.638787</a>
+            <br />
         </p>
         <p class="p_api_desc">
             <b>URL:</b>
             http://cruzalinhas.appspot.com/linha.json
-            <br/>
+            <br />
             <b>Parâmetros: </b>chave da linha (<i>key</i>)
-            <br/>
+            <br />
             <b>Retorno: </b>
-            Array com os pontos  (latitude, longitude) que compõem o trajeto.
-            <br/>
+            Array com os pontos (latitude, longitude) que compõem o trajeto.
+            <br />
             <b>Exemplo: </b>
             <a href="http://www.cruzalinhas.com/linha.json?key=10">linha.json?key=10</a>
-            <br/>
+            <br />
         </p>
-<p>Se você for chamar via JavaScript (AJAX), pode passar o nome de uma função no parâmetro <i>callback</i>, e o retorno virá "empacotado" numa chamada a esta função, permitindo chamadas a partir de outros domínios (<a href="http://remysharp.com/2007/10/08/what-is-jsonp/">JSONP</a>).</p>
+        <p>Se você for chamar via JavaScript (AJAX), pode passar o nome de uma função no parâmetro <i>callback</i>, e o
+            retorno virá "empacotado" numa chamada a esta função, permitindo chamadas a partir de outros domínios (<a
+                href="http://remysharp.com/2007/10/08/what-is-jsonp/">JSONP</a>).</p>
         <p class="p_termos">
-            * TERMOS DE USO: Você pode usar essa API no seu site, desde que ele seja público e gratuito, preste serviços à população e <a href="http://en.wikipedia.org/wiki/Don%27t_be_evil">não pratique o mal</a>. Um link para o cruzalinhas (ex.: "powered by cruzalinhas", ou algo que o valha) é de bom tom, assim como mandar um e-mail me falando do seu site. O serviço de API, como todo o resto, é uma cortesia bem-intencionada, não havendo garantia de funcionamento ou precisão dos dados, e eu me reservo o direito de interromper o serviço (mas farei o possível para que isso não aconteça). Não é obrigatório, mas, se possível, faça <i>cache</i>
+            * TERMOS DE USO: Você pode usar essa API no seu site, desde que ele seja público e gratuito, preste serviços
+            à população e <a href="http://en.wikipedia.org/wiki/Don%27t_be_evil">não pratique o mal</a>. Um link para o
+            cruzalinhas (ex.: "powered by cruzalinhas", ou algo que o valha) é de bom tom, assim como mandar um e-mail
+            me falando do seu site. O serviço de API, como todo o resto, é uma cortesia bem-intencionada, não havendo
+            garantia de funcionamento ou precisão dos dados, e eu me reservo o direito de interromper o serviço (mas
+            farei o possível para que isso não aconteça). Não é obrigatório, mas, se possível, faça <i>cache</i>
             das informações.
         </p>
     </div>
