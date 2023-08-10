@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2021_09_15_154328) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_08_10_004438) do
   create_table "gtfs_engine_agencies", force: :cascade do |t|
     t.string "agency_id"
     t.string "agency_name", null: false
@@ -58,8 +57,8 @@ ActiveRecord::Schema[6.1].define(version: 2021_09_15_154328) do
     t.string "title", null: false
     t.string "url", null: false
     t.string "etag", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["name"], name: "index_gtfs_engine_data_sets_on_name"
     t.index ["url"], name: "index_gtfs_engine_data_sets_on_url"
   end
@@ -213,8 +212,8 @@ ActiveRecord::Schema[6.1].define(version: 2021_09_15_154328) do
   create_table "sptrans_urls", force: :cascade do |t|
     t.string "sigla"
     t.string "url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["sigla"], name: "index_sptrans_urls_on_sigla"
   end
 
