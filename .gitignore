@@ -17,3 +17,5 @@
 
 # Ignore downloaded SPTrans data
 gtfs-sptrans.zip
+
+/config/master.key
