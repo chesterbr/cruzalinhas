@@ -37,8 +37,8 @@ A inicialização é a tradicional de qualquer aplicativo Rails:
 git clone git@github.com:chesterbr/cruzalinhas.git # (ou seu fork)
 cd cruzalinhas
 # Se você não tem rbenv/ruby-build, vide: https://github.com/rbenv/ruby-build.
-# (para GitHub Codespaces: https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04)
-# Alternativamente, substitua a linha abaixo por qualuer coisia que instale
+# (para GitHub Codespaces: rvm install $(cat .ruby-version) - isso se ele já não fizer isso automaticamente)
+# Alternativamente, substitua a linha abaixo por qualuer coisa que instale
 # a versão do Ruby em .ruby-version
 rbenv install
 gem install bundler
