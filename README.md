@@ -1,6 +1,6 @@
 # cruzalinhas
 
-Aplicativo  e API de acesso a rotas de transporte público de São Paulo, disponível em [cruzalinhas.com](http://cruzalinhas.com)
+Aplicativo  e API de acesso a rotas de transporte público de São Paulo, disponível em [cruzalinhas.chester.me](http://cruzalinhas.chester.me)
 
 ## Motivação
 
