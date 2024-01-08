@@ -190,7 +190,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.2.0)
-    nio4r (2.5.9)
+    nio4r (2.7.0)
     nokogiri (1.15.3-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.3-x86_64-linux)
@@ -203,7 +203,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.3)
-    puma (6.3.1)
+    puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
