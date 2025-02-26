@@ -28,39 +28,25 @@ Os mapas são gerados pela comunidade <a href="https://www.openstreetmap.org">Op
 
 ## Informações para Desenvolvedores
 
+### Preparando o ambiente de desenvolvimento
 
-### Baixando e inicializando
-
-A inicialização é a tradicional de qualquer aplicativo Rails:
-
-```bash
-git clone git@github.com:chesterbr/cruzalinhas.git # (ou seu fork)
-cd cruzalinhas
-# Se você não tem rbenv/ruby-build, vide: https://github.com/rbenv/ruby-build.
-# (para GitHub Codespaces: rvm install $(cat .ruby-version) - isso se ele já não fizer isso automaticamente)
-# Alternativamente, substitua a linha abaixo por qualuer coisa que instale
-# a versão do Ruby em .ruby-version
-rbenv install
-gem install bundler
-bundle
-bin/rake db:create db:migrate
-```
-
-### Atualizando com dados da SPTrans
-
-Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados, então basta chamar o comando abaixo para baixar os dados mais recentes e atualizar o banco de dados local:
+Assumindo que você já tenha o [rbenv com ruby-build](https://github.com/rbenv/ruby-build) e `wget` instalados (é o caso do GitHub Codespaces):
 
 ```bash
-bin/rake sptrans:import
+rbenv install -s && bundle && bin/rake db:create db:migrate && bin/rake sptrans:import
 ```
 
-(é preciso ter o `wget` instalado - você provavelmente já tem, mas senão, algo como `brew install wget` ou `sudo apt-get install wget` resolve).
-
-Para abrir a página da linha na SPTrans, é preciso saber o código interno ("CdPjOID") atribuído à versão atual dela , o que não consta na base GTFS. Como o site da SPTrans carrega uma lista com todas as linhas ("letreiros") e códigos atuais, o importador baixa essa lista e gera as URLs no banco de dados.
+(alternativamente, troque o `rbenv install -s` por seu método predileto para instalar a versão do Ruby em `.ruby-version`)
 
 ### Rodando o servidor
 
 Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localhost:3000](http://localhost:3000).
+
+### Atualizando com dados da SPTrans
+
+Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados, e a inicialização acima já baixa eles e popula o banco de dados local. Se preciso, rode `bin/rake sptrans:import` para atualizar novamente.
+
+Para abrir a página da linha na SPTrans, é preciso saber o código interno ("CdPjOID") atribuído à versão atual dela , o que não consta na base GTFS. Como o site da SPTrans carrega uma lista com todas as linhas ("letreiros") e códigos atuais, o importador baixa essa lista e gera as URLs no banco de dados.
 
 ### API
 
