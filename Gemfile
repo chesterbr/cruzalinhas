@@ -74,3 +74,4 @@ gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'activesupport
 # Revert line above to "gem 'gtfs_engine', '~> 2.1'" (replace 2.1 with current-ish version) when upcoming PR is merged
 gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'rails-7'
 gem 'pr_geohash', '~> 1.0.0'
+gem 'csv'
