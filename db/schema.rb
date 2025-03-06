@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_08_10_004438) do
+ActiveRecord::Schema[7.2].define(version: 2023_08_10_004438) do
   create_table "gtfs_engine_agencies", force: :cascade do |t|
     t.string "agency_id"
     t.string "agency_name", null: false
@@ -223,5 +223,4 @@ ActiveRecord::Schema[7.1].define(version: 2023_08_10_004438) do
     t.index ["geohash", "trip_id"], name: "index_trip_geohashes_on_geohash_and_trip_id", unique: true
     t.index ["trip_id"], name: "index_trip_geohashes_on_trip_id"
   end
-
 end

@@ -26,8 +26,9 @@ Rails.application.configure do
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
-  # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  # I know, not usual on a prod app, but assets here are minimal, not worth precompmiling or upgrading to
+  # the assets pipelinen of the week
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -49,7 +50,10 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # config.force_ssl = true
+
+  # We are using nginx to SSL-terminate, no need to either force or assume
+  config.force_ssl = false
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
