@@ -1,0 +1,31 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ansible configs
+        uses: actions/checkout@v4
+        with:
+          repository: chesterbr/chester-ansible-configs
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H 82.25.70.224 >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: >
+          ansible-playbook cruzalinhas.yml
+          -i hosts
+          --tags update_app
+          --private-key ~/.ssh/deploy_key
