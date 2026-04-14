@@ -44,7 +44,7 @@ Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localh
 
 ### Atualizando com dados da SPTrans
 
-Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o OpenMobilityData mantém a última versão dos dados, e a inicialização acima já baixa eles e popula o banco de dados local. Se preciso, rode `bin/rake sptrans:import` para atualizar novamente.
+Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o MobilityDatabase.org mantém a última versão dos dados, e a inicialização acima já baixa eles e popula o banco de dados local. Se preciso, rode `bin/rake sptrans:import` para atualizar novamente.
 
 Para abrir a página da linha na SPTrans, é preciso saber o código interno ("CdPjOID") atribuído à versão atual dela , o que não consta na base GTFS. Como o site da SPTrans carrega uma lista com todas as linhas ("letreiros") e códigos atuais, o importador baixa essa lista e gera as URLs no banco de dados.
 

@@ -3,7 +3,7 @@ namespace :sptrans do
   task :import => :environment do
     puts "### STEP 1 OF 2 - Importing GTFS data from OpenMobilityData"
     FileUtils.mkdir_p "tmp/cache"
-    next unless system("echo 'Downloading...'; wget https://openmobilitydata.org/p/sptrans/1049/latest/download -O/tmp/gtfs-sptrans.zip")
+    next unless system("echo 'Downloading...'; wget https://files.mobilitydatabase.org/mdb-8/latest.zip -O/tmp/gtfs-sptrans.zip")
     Rake::Task["db:reset"].invoke
     Rake::Task["gtfs_engine:update"].invoke
     Rake::Task["geohashes:rehash"].invoke
