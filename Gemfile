@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.2'
+gem 'rails', '~> 8.1.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -70,8 +70,8 @@ group :production do
 end
 
 # Remove line above when upcoming PR is merged
-gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'activesupport-7'
+gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'activesupport-8'
 # Revert line above to "gem 'gtfs_engine', '~> 2.1'" (replace 2.1 with current-ish version) when upcoming PR is merged
-gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'rails-7'
+gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'rails-8'
 gem 'pr_geohash', '~> 1.0.0'
 gem 'csv'
