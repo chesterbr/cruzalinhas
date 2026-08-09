@@ -9,7 +9,13 @@ Bundler.require(*Rails.groups)
 module Cruzalinhas
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
+    config.load_defaults 8.1
+
+    # gtfs_engine's Sources DSL (config/initializers/gtfs_engine.rb) resolves its
+    # model constants (Agency, Trip, etc.) through a dynamic method_missing/BasicObject
+    # chain that doesn't play well with Zeitwerk's lazy autoloading, so it still needs
+    # its explicit `require "gtfs_engine/agency"` style requires to work.
+    config.add_autoload_paths_to_load_path = true
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.

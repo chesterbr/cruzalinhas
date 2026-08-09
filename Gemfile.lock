@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/chesterbr/gtfs_engine.git
-  revision: 6e672fe9cad059fffa654c36ee20890e3219a23e
+  revision: 7dd52a958d25af9eef58bbf1448b199e467bd9e3
   branch: rails-8
   specs:
     gtfs_engine (2.1.0)
