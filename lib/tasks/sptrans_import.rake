@@ -1,3 +1,5 @@
+require "net/http"
+
 namespace :sptrans do
   desc 'Imports data downloaded from SPTrans'
   task :import => :environment do
@@ -5,7 +7,7 @@ namespace :sptrans do
     FileUtils.mkdir_p "tmp/cache"
     next unless system("echo 'Downloading...'; wget https://files.mobilitydatabase.org/mdb-8/latest.zip -O/tmp/gtfs-sptrans.zip")
     Rake::Task["db:reset"].invoke
-    Rake::Task["gtfs_engine:update"].invoke
+    GtfsImport.call("/tmp/gtfs-sptrans.zip")
     Rake::Task["geohashes:rehash"].invoke
     File.delete("/tmp/gtfs-sptrans.zip")
 
