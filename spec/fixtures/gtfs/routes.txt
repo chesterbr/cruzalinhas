@@ -1,0 +1,3 @@
+﻿"route_id","agency_id","route_short_name","route_long_name","route_type"
+"1012-10","1","1012-10","Term. Jd. Britania - Jd. Monte Belo","3"
+"CPTM L10","1","CPTM L10","Rio Grande da Serra - Brás","2"

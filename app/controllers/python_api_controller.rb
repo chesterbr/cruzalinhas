@@ -16,7 +16,7 @@ class PythonApiController < ApplicationController
   end
 
   def linha
-    trip   = GtfsEngine::Trip.find(params[:key])
+    trip   = Trip.find(params[:key])
     shapes = trip.shapes.order(:shape_pt_sequence).
              select(:shape_pt_lat, :shape_pt_lon)
     points = shapes.map { |s| [s.shape_pt_lat, s.shape_pt_lon] }

@@ -26,10 +26,6 @@ gem 'jbuilder', '~> 2.0'
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
-# This is needed because `respond_to` was dropped in Rails 4.2, and
-# gtfs_engine uses it somewhere. See https://stackoverflow.com/a/40581849/64635
-gem 'responders'
-
 # Rails eagerly loads these on prod
 gem 'net-smtp'
 gem 'net-pop'
@@ -69,9 +65,6 @@ group :production do
   gem 'puma'
 end
 
-# Remove line above when upcoming PR is merged
-gem 'gtfs_reader', :github => 'chesterbr/gtfs_reader', :branch => 'activesupport-8'
-# Revert line above to "gem 'gtfs_engine', '~> 2.1'" (replace 2.1 with current-ish version) when upcoming PR is merged
-gem 'gtfs_engine', :github => 'chesterbr/gtfs_engine', :branch => 'rails-8'
 gem 'pr_geohash', '~> 1.0.0'
 gem 'csv'
+gem 'rubyzip'

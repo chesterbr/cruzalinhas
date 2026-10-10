@@ -2,7 +2,7 @@ namespace :geohashes do
   desc "Recalculates the hashes for the first trip of each route"
   task rehash: :environment do
     TripGeohash.delete_all
-    GtfsEngine::Route.all.each do |route|
+    Route.all.each do |route|
       next if route.trips.empty?
       puts "#{route.route_short_name} #{route.route_long_name}"
       trip = route.trips.first

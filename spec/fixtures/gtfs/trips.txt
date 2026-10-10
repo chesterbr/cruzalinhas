@@ -1,0 +1,4 @@
+"route_id","service_id","trip_id","trip_headsign","direction_id","shape_id"
+"1012-10","USD","1012-10-0","Jd. Monte Belo","0","85940"
+"1012-10","USD","1012-10-1","Term. Jd. Britania","1","85941"
+"CPTM L10","USD","CPTM L10-0","Rio Grande da Serra","0",""

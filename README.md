@@ -9,7 +9,7 @@ referentes a um serviço PÚBLICO, e sempre defendi
 que estes deveriam estar disponíveis de uma forma mais acessível do que o site (ainda mais sabendo que algumas empresas privadas tinham acesso), permitindo a criação de ferramentas que facilitem a vida do usuário.
 
 Foi criado um programa que capturava os dados diretamente do site da SPTrans (*scraper*) e para demonstrar seu uso,
-o site cruzalinhas.
+o site cruzalinhas ([mais detalhes neste post](https://chester.me/archives/2010/06/cruzalinhas/)).
 
 O cruzalinhas permite buscar um endereço ou clicar no mapa e rapidamente ver o traçado de linhas (rotas) que passem perto dele. Ao
 marcar pontos sucessivos, o sistema "cruza" as linhas que passam entre eles - daí o nome.
@@ -44,7 +44,7 @@ Novamente, o esquema padrão Rails: ```bin/rails server``` e abra [http://localh
 
 ### Atualizando com dados da SPTrans
 
-Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o MobilityDatabase.org mantém a última versão dos dados, e a inicialização acima já baixa eles e popula o banco de dados local. Se preciso, rode `bin/rake sptrans:import` para atualizar novamente.
+Embora a SPTrans tenha disponibilizado os dados GTFS, eles exigem o cadastro para baixar o arquivo, tornando a automação de projetos como este difícil. Felizmente, o MobilityDatabase.org mantém a última versão dos dados, e a inicialização acima já baixa eles e popula o banco de dados local. Se preciso, rode `bin/rake sptrans:import` para atualizar novamente. Do GTFS, o importador só lê as linhas (`routes.txt`), viagens (`trips.txt`) e trajetos (`shapes.txt`).
 
 Para abrir a página da linha na SPTrans, é preciso saber o código interno ("CdPjOID") atribuído à versão atual dela , o que não consta na base GTFS. Como o site da SPTrans carrega uma lista com todas as linhas ("letreiros") e códigos atuais, o importador baixa essa lista e gera as URLs no banco de dados.
 
