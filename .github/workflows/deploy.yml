@@ -21,7 +21,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H 82.25.70.224 >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$(ansible-inventory -i hosts --list | jq -r '.production.hosts[0]')" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: >
